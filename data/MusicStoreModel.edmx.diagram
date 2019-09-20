@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6a60301fdca848c7b6e0d399aed70f74" Name="Diagram1" ZoomLevel="59">
+        <EntityTypeShape EntityType="MusicStoreDBModel.Album" Width="1.5" PointX="12.875" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Employee" Width="1.5" PointX="10.375" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Genre" Width="1.5" PointX="12.875" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Group_countries" Width="1.5" PointX="8.75" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Group" Width="1.5" PointX="10.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Purchase" Width="1.5" PointX="12.875" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Song" Width="1.5" PointX="18.125" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.sysdiagram" Width="1.5" PointX="21" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Album_Songs" Width="1.5" PointX="15.5" PointY="4.125" IsExpanded="true" />
+        <AssociationConnector Association="MusicStoreDBModel.FK_Album_Songs_Albums" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicStoreDBModel.FK_Albums_Genres" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicStoreDBModel.FK_Albums_Groups" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicStoreDBModel.FK_Albums_Purchases" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicStoreDBModel.FK_Purchases_Employees" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicStoreDBModel.FK_Groups_Group_countries" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicStoreDBModel.FK_Album_Songs_Songs" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
