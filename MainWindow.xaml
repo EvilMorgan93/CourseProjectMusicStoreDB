@@ -5,20 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusicStoreDB_App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid>
-
-        <Button Name="button" Content="Показать" HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Width="91" Height="40" Click="Button_Click"/>
-        <ListView Name="list_view" HorizontalAlignment="Left" Height="224" Margin="10,10,0,0" VerticalAlignment="Top" Width="774">
+        Title="Music Store Database" Height="800" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <StackPanel>
+        <ToolBar Height="20" VerticalAlignment="Top" >
+            <TextBlock Text="Файл" Margin="4,0,0,0" />
+        </ToolBar>
+        <ListView Name="list_view" ItemsSource="{Binding songs}" HorizontalAlignment="Left" Height="224" Margin="10,10,0,0" VerticalAlignment="Top" Width="774">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Название песни" Width="150"/>
+                    <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding id_song}"/>
+                    <GridViewColumn Header="Название песни" Width="120" DisplayMemberBinding="{Binding song_title}"/>
+                    <GridViewColumn Header="Длительность" Width="100" DisplayMemberBinding="{Binding song_duration}"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="add_button" Content="Добавить" HorizontalAlignment="Left" Margin="10,345,0,0" VerticalAlignment="Top" Width="91" Height="40" Click="Add_Click"/>
-        <TextBox x:Name="text_box" HorizontalAlignment="Left" Height="56" Margin="10,284,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="126" FontSize="32"/>
-        <TextBox Name="text_box1" HorizontalAlignment="Left" Height="23" Margin="162,284,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" />
-        <Button x:Name="delete_button" Content="Удалить" HorizontalAlignment="Left" Margin="162,345,0,0" VerticalAlignment="Top" Width="91" Height="40" Click="Delete_Click"/>
-    </Grid>
+        <Grid Height="150" Margin="15,10,800,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Name="button" Content="Обновить" Click="Refresh_Click" Margin="8,5,8.4,5.4"/>
+            <Button Grid.Column="1" Grid.Row="0" x:Name="add_button" Content="Добавить" Click="Add_Click" Margin="7.6,5,8,5.4"/>
+            <Button Grid.Column="2" Grid.Row="0" x:Name="delete_button" Content="Удалить" Click="Delete_Click" Margin="8,5,8.4,5.4"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="4,10,48.4,10" x:Name="text_box" TextWrapping="Wrap" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Stretch"/>
+            <TextBox Grid.Row="2" FontSize="20" FontWeight="DemiBold" Grid.Column="1" Margin="4,10.2,0,10" Name="text_box1" HorizontalAlignment="Left" TextWrapping="Wrap" Width="120" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Название песни: " VerticalAlignment="Center" TextAlignment="Right"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Продолжительность: " VerticalAlignment="Center" TextAlignment="Right"/>
+        </Grid>
+    </StackPanel>
 </Window>
