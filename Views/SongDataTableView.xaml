@@ -1,0 +1,48 @@
+﻿<Window x:Class="MusicStoreDB_App.SongDataTableView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MusicStoreDB_App"
+        mc:Ignorable="d"
+        Title="Music Store Database" Height="800" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <StackPanel>
+        <ToolBar Height="30" VerticalAlignment="Top" Margin="0,0,400,0">
+            <ComboBox Name="comboBoxTableChoose" Width="100" Margin="5,0,5,0">
+                <TextBlock Text="Песни"/>
+                <TextBlock Text="Работники"/>
+                <TextBlock Text="Жанры"/>
+                <TextBlock Text="Страны"/>
+            </ComboBox>
+            <Button Content="Выход" Margin="5,2,0,1.6" Click="Exit_Click" Width="49" />
+        </ToolBar>
+        <ListView Name="songsListView" ItemsSource="{Binding songs}" HorizontalAlignment="Left" Height="224" Margin="10,10,0,0" VerticalAlignment="Top" Width="774">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding id_song}"/>
+                    <GridViewColumn Header="Название песни" Width="120" DisplayMemberBinding="{Binding song_title}"/>
+                    <GridViewColumn Header="Длительность" Width="100" DisplayMemberBinding="{Binding song_duration}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Grid Height="150" Margin="15,10,800,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Content="Обновить" Click="Refresh_ClickAsync" Margin="8,5,8.4,5.4"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="Добавить" Click="Add_ClickAsync" Margin="7.6,5,8,5.4"/>
+            <Button Grid.Column="2" Grid.Row="0" Content="Удалить" Click="Delete_ClickAsync" Margin="8,5,8.4,5.4"/>
+            <TextBox Grid.Row="1" AcceptsReturn="False" MaxLength="28" Grid.Column="1" Grid.ColumnSpan="2" Margin="4,10,10,10" x:Name="textBoxTitle" TextWrapping="Wrap" FontSize="17" FontWeight="DemiBold" HorizontalAlignment="Stretch"/>
+            <TextBox Grid.Row="2" AcceptsReturn="False" MaxLength="8" FontSize="17" FontWeight="DemiBold" Grid.Column="1" Margin="4,10,2,10.4" Name="textBoxDuration" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Название песни: " VerticalAlignment="Center" TextAlignment="Right" Margin="0,16.6,0.4,17"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Продолжительность: " VerticalAlignment="Center" TextAlignment="Right" Margin="0,17,0.4,17.4"/>
+        </Grid>
+    </StackPanel>
+</Window>

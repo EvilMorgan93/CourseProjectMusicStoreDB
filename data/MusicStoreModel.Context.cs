@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MusicStoreDB_App.data
+namespace MusicStoreDB_App.Data
 {
     using System;
     using System.Data.Entity;

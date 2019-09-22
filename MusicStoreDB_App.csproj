@@ -64,7 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\SongDataTableView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -72,56 +72,56 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="data\Album.cs">
+    <Compile Include="Data\Album.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\Album_Songs.cs">
+    <Compile Include="Data\Album_Songs.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\Employee.cs">
+    <Compile Include="Data\Employee.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\Genre.cs">
+    <Compile Include="Data\Genre.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\Group.cs">
+    <Compile Include="Data\Group.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\Group_countries.cs">
+    <Compile Include="Data\Group_countries.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\MusicStoreModel.Context.cs">
+    <Compile Include="Data\MusicStoreModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MusicStoreModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\MusicStoreModel.cs">
+    <Compile Include="Data\MusicStoreModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\MusicStoreModel.Designer.cs">
+    <Compile Include="Data\MusicStoreModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MusicStoreModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="data\Purchase.cs">
+    <Compile Include="Data\Purchase.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\Song.cs">
+    <Compile Include="Data\Song.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\sp_helpdiagramdefinition_Result.cs">
+    <Compile Include="Data\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\sp_helpdiagrams_Result.cs">
+    <Compile Include="Data\sp_helpdiagrams_Result.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="data\sysdiagram.cs">
+    <Compile Include="Data\sysdiagram.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Views\SongDataTableView.xaml.cs">
+      <DependentUpon>SongDataTableView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -143,11 +143,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="data\MusicStoreModel.edmx">
+    <EntityDeploy Include="Data\MusicStoreModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>MusicStoreModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="data\MusicStoreModel.edmx.diagram">
+    <None Include="Data\MusicStoreModel.edmx.diagram">
       <DependentUpon>MusicStoreModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
@@ -160,12 +160,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="data\MusicStoreModel.Context.tt">
+    <Content Include="Data\MusicStoreModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MusicStoreModel.Context.cs</LastGenOutput>
       <DependentUpon>MusicStoreModel.edmx</DependentUpon>
     </Content>
-    <Content Include="data\MusicStoreModel.tt">
+    <Content Include="Data\MusicStoreModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MusicStoreModel.edmx</DependentUpon>
       <LastGenOutput>MusicStoreModel.cs</LastGenOutput>
@@ -173,6 +173,10 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
