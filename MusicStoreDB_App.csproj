@@ -64,7 +64,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\SongDataTableView.xaml">
+    <Page Include="Views\AddSongView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataTableView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -105,6 +109,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MusicStoreModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Data\Price_List.cs">
+      <DependentUpon>MusicStoreModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\Purchase.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
@@ -120,8 +127,14 @@
     <Compile Include="Data\sysdiagram.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Views\SongDataTableView.xaml.cs">
-      <DependentUpon>SongDataTableView.xaml</DependentUpon>
+    <Compile Include="Models\AlbumDataTableModel.cs" />
+    <Compile Include="Models\PurchaseDataTableModel.cs" />
+    <Compile Include="Models\SongDataTableModel.cs" />
+    <Compile Include="Views\AddSongView.xaml.cs">
+      <DependentUpon>AddSongView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataTableView.xaml.cs">
+      <DependentUpon>DataTableView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -175,8 +188,27 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="ViewModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -14,19 +14,14 @@ namespace MusicStoreDB_App.Data
     
     public partial class Purchase
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Purchase()
-        {
-            this.Albums = new HashSet<Album>();
-        }
-    
-        public int id_purchase { get; set; }
+        public int id_album { get; set; }
         public int id_employee { get; set; }
-        public int purchase_cost { get; set; }
-        public System.DateTime puchase_date { get; set; }
+        public Nullable<int> id_price { get; set; }
+        public Nullable<int> purchase_amount { get; set; }
+        public Nullable<System.DateTime> purchase_date { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Album> Albums { get; set; }
+        public virtual Album Album { get; set; }
         public virtual Employee Employee { get; set; }
+        public virtual Price_List Price_List { get; set; }
     }
 }

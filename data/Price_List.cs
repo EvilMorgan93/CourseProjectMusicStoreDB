@@ -12,22 +12,17 @@ namespace MusicStoreDB_App.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Album
+    public partial class Price_List
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Album()
+        public Price_List()
         {
             this.Purchases = new HashSet<Purchase>();
         }
     
-        public int id_album { get; set; }
-        public Nullable<int> id_album_songs { get; set; }
-        public int id_artist { get; set; }
-        public string album_name { get; set; }
-        public System.DateTime album_year { get; set; }
+        public int id_price { get; set; }
+        public int purchase_price { get; set; }
     
-        public virtual Album_Songs Album_Songs { get; set; }
-        public virtual Group Group { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Purchase> Purchases { get; set; }
     }
