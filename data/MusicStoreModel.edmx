@@ -10,8 +10,8 @@
             <PropertyRef Name="id_album_songs" />
           </Key>
           <Property Name="id_album_songs" Type="int" Nullable="false" />
-          <Property Name="id_song" Type="int" />
-          <Property Name="id_genre" Type="int" />
+          <Property Name="id_song" Type="int" Nullable="false" />
+          <Property Name="id_genre" Type="int" Nullable="false" />
           <Property Name="track_number" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Albums">
@@ -19,7 +19,7 @@
             <PropertyRef Name="id_album" />
           </Key>
           <Property Name="id_album" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="id_album_songs" Type="int" />
+          <Property Name="id_album_songs" Type="int" Nullable="false" />
           <Property Name="id_artist" Type="int" Nullable="false" />
           <Property Name="album_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="album_year" Type="date" Nullable="false" />
@@ -52,7 +52,7 @@
             <PropertyRef Name="id_artist" />
           </Key>
           <Property Name="id_artist" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="id_group_country" Type="int" />
+          <Property Name="id_group_country" Type="int" Nullable="false" />
           <Property Name="group_name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Price_List">
@@ -68,12 +68,15 @@
           <Key>
             <PropertyRef Name="id_album" />
             <PropertyRef Name="id_employee" />
+            
+            
+            
           </Key>
           <Property Name="id_album" Type="int" Nullable="false" />
           <Property Name="id_employee" Type="int" Nullable="false" />
-          <Property Name="id_price" Type="int" />
-          <Property Name="purchase_amount" Type="int" />
-          <Property Name="purchase_date" Type="datetime" />
+          <Property Name="id_price" Type="int" Nullable="false" />
+          <Property Name="purchase_amount" Type="int" Nullable="false" />
+          <Property Name="purchase_date" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Songs">
           <Key>
@@ -94,7 +97,7 @@
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK_Album_Songs_Genres">
-          <End Role="Genres" Type="Self.Genres" Multiplicity="0..1">
+          <End Role="Genres" Type="Self.Genres" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Album_Songs" Type="Self.Album_Songs" Multiplicity="*" />
@@ -108,7 +111,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Album_Songs_Songs">
-          <End Role="Songs" Type="Self.Songs" Multiplicity="0..1">
+          <End Role="Songs" Type="Self.Songs" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Album_Songs" Type="Self.Album_Songs" Multiplicity="*" />
@@ -122,7 +125,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Albums_Album_Songs">
-          <End Role="Album_Songs" Type="Self.Album_Songs" Multiplicity="0..1">
+          <End Role="Album_Songs" Type="Self.Album_Songs" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Albums" Type="Self.Albums" Multiplicity="*" />
@@ -150,7 +153,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Groups_Group_countries">
-          <End Role="Group_countries" Type="Self.Group_countries" Multiplicity="0..1">
+          <End Role="Group_countries" Type="Self.Group_countries" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Groups" Type="Self.Groups" Multiplicity="*" />
@@ -192,7 +195,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Purchases_Price_List">
-          <End Role="Price_List" Type="Self.Price_List" Multiplicity="0..1">
+          <End Role="Price_List" Type="Self.Price_List" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Purchases" Type="Self.Purchases" Multiplicity="*" />
@@ -392,8 +395,8 @@
             <PropertyRef Name="id_album_songs" />
           </Key>
           <Property Name="id_album_songs" Type="Int32" Nullable="false" />
-          <Property Name="id_song" Type="Int32" />
-          <Property Name="id_genre" Type="Int32" />
+          <Property Name="id_song" Type="Int32" Nullable="false" />
+          <Property Name="id_genre" Type="Int32" Nullable="false" />
           <Property Name="track_number" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Genre" Relationship="MusicStoreDBModel.FK_Album_Songs_Genres" FromRole="Album_Songs" ToRole="Genre" />
           <NavigationProperty Name="Song" Relationship="MusicStoreDBModel.FK_Album_Songs_Songs" FromRole="Album_Songs" ToRole="Song" />
@@ -404,7 +407,7 @@
             <PropertyRef Name="id_album" />
           </Key>
           <Property Name="id_album" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_album_songs" Type="Int32" />
+          <Property Name="id_album_songs" Type="Int32" Nullable="false" />
           <Property Name="id_artist" Type="Int32" Nullable="false" />
           <Property Name="album_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="album_year" Type="DateTime" Nullable="false" Precision="0" />
@@ -443,7 +446,7 @@
             <PropertyRef Name="id_artist" />
           </Key>
           <Property Name="id_artist" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_group_country" Type="Int32" />
+          <Property Name="id_group_country" Type="Int32" Nullable="false" />
           <Property Name="group_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Albums" Relationship="MusicStoreDBModel.FK_Albums_Groups" FromRole="Group" ToRole="Album" />
           <NavigationProperty Name="Group_countries" Relationship="MusicStoreDBModel.FK_Groups_Group_countries" FromRole="Group" ToRole="Group_countries" />
@@ -472,15 +475,15 @@
           </Key>
           <Property Name="id_album" Type="Int32" Nullable="false" />
           <Property Name="id_employee" Type="Int32" Nullable="false" />
-          <Property Name="id_price" Type="Int32" />
-          <Property Name="purchase_amount" Type="Int32" />
-          <Property Name="purchase_date" Type="DateTime" Precision="3" />
+          <Property Name="id_price" Type="Int32" Nullable="false" />
+          <Property Name="purchase_amount" Type="Int32" Nullable="false" />
+          <Property Name="purchase_date" Type="DateTime" Precision="3" Nullable="false" />
           <NavigationProperty Name="Album" Relationship="MusicStoreDBModel.FK_Purchases_Albums" FromRole="Purchase" ToRole="Album" />
           <NavigationProperty Name="Employee" Relationship="MusicStoreDBModel.FK_Purchases_Employees" FromRole="Purchase" ToRole="Employee" />
           <NavigationProperty Name="Price_List" Relationship="MusicStoreDBModel.FK_Purchases_Price_List" FromRole="Purchase" ToRole="Price_List" />
         </EntityType>
         <Association Name="FK_Album_Songs_Genres">
-          <End Type="MusicStoreDBModel.Genre" Role="Genre" Multiplicity="0..1">
+          <End Type="MusicStoreDBModel.Genre" Role="Genre" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="MusicStoreDBModel.Album_Songs" Role="Album_Songs" Multiplicity="*" />
@@ -494,7 +497,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Album_Songs_Songs">
-          <End Type="MusicStoreDBModel.Song" Role="Song" Multiplicity="0..1">
+          <End Type="MusicStoreDBModel.Song" Role="Song" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="MusicStoreDBModel.Album_Songs" Role="Album_Songs" Multiplicity="*" />
@@ -508,7 +511,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Albums_Album_Songs">
-          <End Type="MusicStoreDBModel.Album_Songs" Role="Album_Songs" Multiplicity="0..1">
+          <End Type="MusicStoreDBModel.Album_Songs" Role="Album_Songs" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="MusicStoreDBModel.Album" Role="Album" Multiplicity="*" />
@@ -564,7 +567,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Groups_Group_countries">
-          <End Type="MusicStoreDBModel.Group_countries" Role="Group_countries" Multiplicity="0..1">
+          <End Type="MusicStoreDBModel.Group_countries" Role="Group_countries" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="MusicStoreDBModel.Group" Role="Group" Multiplicity="*" />
@@ -578,7 +581,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Purchases_Price_List">
-          <End Type="MusicStoreDBModel.Price_List" Role="Price_List" Multiplicity="0..1">
+          <End Type="MusicStoreDBModel.Price_List" Role="Price_List" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="MusicStoreDBModel.Purchase" Role="Purchase" Multiplicity="*" />

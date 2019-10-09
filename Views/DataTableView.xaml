@@ -8,11 +8,10 @@
         Title="Music Store Database" Height="550" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <StackPanel>
         <ToolBar Height="30" VerticalAlignment="Top" Margin="0,0,188.6,0">
-            <ComboBox Name="comboBoxTableChoose" Width="100" Margin="5,0,5,0" DropDownClosed="ComboBoxTableChoose_DropDownClosed">
+            <ComboBox x:FieldModifier="public" Name="comboBoxTableChoose" SelectedIndex="0" Width="100" Margin="5,0,5,0" DropDownClosed="ComboBoxTableChoose_DropDownClosed">
                 <TextBlock Text="Песни"/>
                 <TextBlock Text="Альбомы"/>
-                <TextBlock Text="Жанры"/>
-                <TextBlock Text="Страны"/>
+                <TextBlock Text="Продажи"/>
             </ComboBox>
             <Button Content="Выход" Margin="5,2,0,1.6" Click="Exit_Click" Width="49" />
         </ToolBar>
@@ -28,9 +27,10 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Grid.Column="0" Content="Обновить" Click="Refresh_ClickAsync" Margin="8,5,8.4,5.4"/>
-            <Button Grid.Column="1" Grid.Row="0" Content="Добавить" Click="Add_Click" Margin="7.6,5,8,5.4"/>
-            <Button Grid.Column="2" Grid.Row="0" Content="Удалить" Click="Delete_ClickAsync" Margin="8,5,8.4,5.4"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="Обновить" Click="Refresh_ClickAsync" Margin="7,7,7,7"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="Добавить" Click="Add_Click" Margin="7,7,7,7"/>
+            <Button Grid.Column="2" Grid.Row="0" Content="Удалить" Click="Delete_ClickAsync" Margin="7,7,7,7"/>
+            <Button Grid.Column="0" Grid.Row="1" Content="Сохранить в PDF" Click="Safe_Songs_To_PDF_Click" Margin="7,7,7,7"/>
         </Grid>
     </StackPanel>
 </Window>

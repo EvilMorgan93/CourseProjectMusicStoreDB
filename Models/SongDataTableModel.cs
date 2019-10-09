@@ -1,6 +1,7 @@
 ﻿using MusicStoreDB_App.Data;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,10 @@ using System.Windows.Data;
 
 namespace MusicStoreDB_App.Models {
     class SongDataTableModel {       
-        public void CreateSongGridView() {
+        public void CreateSongGridView(ListView listView) {
+            listView.ItemsSource = null;
+            listView.Items.Clear();
             GridView gridView = new GridView();
-            DataTableView dataTableView = new DataTableView();
             GridViewColumn idColumn = new GridViewColumn {
                 DisplayMemberBinding = new Binding("id_song"),
                 Header = "ID",
@@ -30,11 +32,17 @@ namespace MusicStoreDB_App.Models {
                 Width = 80
             };
             gridView.Columns.Add(durationColumn);
-            dataTableView.listView.View = gridView;
+            listView.View = gridView;
+        }
+        public void DeleteSongData(ListView listView) {
             using (var db = new MusicStoreDBEntities()) {
-                dataTableView.listView.ItemsSource = db.Songs.ToList();
+                if (listView.SelectedIndex == -1) { return; } else {
+                    var song = new Song();
+                    song = listView.SelectedItem as Song;
+                    db.Entry(song).State = EntityState.Deleted;
+                    db.SaveChanges();
+                }
             }
         }
-
     }
 }

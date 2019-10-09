@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:MusicStoreDB_App"
              StartupUri="Views/DataTableView.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Dictionary1.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

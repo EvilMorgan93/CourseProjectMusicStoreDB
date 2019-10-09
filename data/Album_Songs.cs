@@ -21,8 +21,8 @@ namespace MusicStoreDB_App.Data
         }
     
         public int id_album_songs { get; set; }
-        public Nullable<int> id_song { get; set; }
-        public Nullable<int> id_genre { get; set; }
+        public int id_song { get; set; }
+        public int id_genre { get; set; }
         public int track_number { get; set; }
     
         public virtual Genre Genre { get; set; }

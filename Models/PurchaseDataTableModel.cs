@@ -9,9 +9,7 @@ using System.Windows.Data;
 
 namespace MusicStoreDB_App.Models {
     class PurchaseDataTableModel {
-        private void CreatePurchaseGridView() {
-            //Purchase purchase = new Purchase();
-            DataTableView DataTableView = new DataTableView();
+        private void CreatePurchaseGridView(ListView listView) {
             GridView gridView = new GridView();
             GridViewColumn albumName = new GridViewColumn {
                 DisplayMemberBinding = new Binding("album_name"),
@@ -31,7 +29,7 @@ namespace MusicStoreDB_App.Models {
                 Width = 80
             };
             gridView.Columns.Add(durationColumn);
-            DataTableView.listView.View = gridView;
+            listView.View = gridView;
         }
     }
 }

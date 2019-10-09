@@ -16,9 +16,9 @@ namespace MusicStoreDB_App.Data
     {
         public int id_album { get; set; }
         public int id_employee { get; set; }
-        public Nullable<int> id_price { get; set; }
-        public Nullable<int> purchase_amount { get; set; }
-        public Nullable<System.DateTime> purchase_date { get; set; }
+        public int id_price { get; set; }
+        public int purchase_amount { get; set; }
+        public System.DateTime purchase_date { get; set; }
     
         public virtual Album Album { get; set; }
         public virtual Employee Employee { get; set; }
