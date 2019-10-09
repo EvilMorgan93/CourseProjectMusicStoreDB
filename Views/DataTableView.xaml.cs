@@ -1,4 +1,5 @@
-﻿using MusicStoreDB_App.Data;
+﻿using iTextSharp.text.pdf;
+using MusicStoreDB_App.Data;
 using MusicStoreDB_App.Models;
 using MusicStoreDB_App.Views;
 using System;
@@ -8,6 +9,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,36 +19,45 @@ using System.Windows.Data;
 
 namespace MusicStoreDB_App {
     public partial class DataTableView : Window {
-        public DataTableView() {            
-            InitializeComponent();
-            comboBoxTableChoose.SelectedIndex = 0;
-            CreateSongGridView();
+        private readonly SongDataTableModel songData = new SongDataTableModel();
+        private readonly AlbumDataTableModel albumData = new AlbumDataTableModel();
+        private readonly PurchaseDataTableModel purchaseData = new PurchaseDataTableModel();
+        public DataTableView() {
+            InitializeComponent();        
+            songData.CreateSongGridView(listView);
         }
-        public async Task Refresh_Songs_List_View() {
+        public async Task RefreshListView() {
             using (var db = new MusicStoreDBEntities()) {
-                var songs = await db.Songs.ToListAsync();
-                var albums = await db.Albums.ToListAsync();
-                listView.ItemsSource = songs;
+                //SQL Query == "SELECT * FROM TABLE"  
+                switch (comboBoxTableChoose.Text) {
+                    case "Песни":
+                        listView.ItemsSource = await db.Songs.ToListAsync();
+                        break;
+                    case "Альбомы":
+                        listView.ItemsSource = await db.Albums.ToListAsync();
+                        break;
+                }
             }
         }
         //Нажатие кнопки "Обновить"
         private async void Refresh_ClickAsync(object sender, RoutedEventArgs e) {
-            await Refresh_Songs_List_View();
+            await RefreshListView();
         }
         private void Add_Click(object sender, RoutedEventArgs e) {
-            var modalAddSong = new AddDataView();
-            modalAddSong.ShowDialog();
+            var modalAdd = new AddDataView();
+            modalAdd.ShowDialog();
         }
         private async void Delete_ClickAsync(object sender, RoutedEventArgs e) {
-            using (var db = new MusicStoreDBEntities()) {
-                if (listView.SelectedIndex == -1) { return; }
-                else {
-                    Song song = new Song();
-                    song = listView.SelectedItem as Song;
-                    db.Entry(song).State = EntityState.Deleted;
-                    db.SaveChanges();
-                    await Refresh_Songs_List_View();
-                }
+            // SQL Query == "DELETE FROM TABLE WHERE predicat"
+            switch (comboBoxTableChoose.Text) {
+                case "Песни":
+                    songData.DeleteSongData(listView);
+                    await RefreshListView();
+                    break;
+                case "Альбомы":
+                    albumData.DeleteAlbumData(listView);
+                    await RefreshListView();
+                    break;
             }
         }
         private void Exit_Click(object sender, RoutedEventArgs e) {
@@ -55,72 +66,42 @@ namespace MusicStoreDB_App {
         private void ComboBoxTableChoose_DropDownClosed(object sender, EventArgs e) {
             switch (comboBoxTableChoose.Text) {
                 case "Песни":
-                    CreateSongGridView();
+                    songData.CreateSongGridView(listView);
                     break;
                 case "Альбомы":
-                    CreateAlbumGridView();
+                    albumData.CreateAlbumGridView(listView);
                     break;
             }
         }
-        public void CreateAlbumGridView() {
-            listView.ItemsSource = null;
-            listView.Items.Clear();
-            GridView gridView = new GridView();
-            GridViewColumn albumName = new GridViewColumn {
-                DisplayMemberBinding = new Binding("album_name"),
-                Header = "Название альбома",
-                Width = 120
-            };
-            gridView.Columns.Add(albumName);
-            GridViewColumn albumYear = new GridViewColumn {
-                DisplayMemberBinding = new Binding("album_year"),
-                Header = "Год выпуска",
-                Width = 100
-            };
-            gridView.Columns.Add(albumYear);
-            GridViewColumn albumId = new GridViewColumn {
-                DisplayMemberBinding = new Binding("id_album"),
-                Header = "ID Album",
-                Width = 80
-            };
-            gridView.Columns.Add(albumId);
-            GridViewColumn artistId = new GridViewColumn {
-                DisplayMemberBinding = new Binding("id_artist"),
-                Header = "ID Artist",
-                Width = 80
-            };
-            gridView.Columns.Add(artistId);
-            GridViewColumn albumSongId = new GridViewColumn {
-                DisplayMemberBinding = new Binding("id_album_songs"),
-                Header = "ID Album Song",
-                Width = 100
-            };
-            gridView.Columns.Add(albumSongId);
-            listView.View = gridView;
-        }
-        public void CreateSongGridView() {
-            listView.ItemsSource = null;
-            listView.Items.Clear();
-            GridView gridView = new GridView();
-            GridViewColumn idColumn = new GridViewColumn {
-                DisplayMemberBinding = new Binding("id_song"),
-                Header = "ID",
-                Width = 50
-            };
-            gridView.Columns.Add(idColumn);
-            GridViewColumn songTitle = new GridViewColumn {
-                DisplayMemberBinding = new Binding("song_title"),
-                Header = "Название песни",
-                Width = 150
-            };
-            gridView.Columns.Add(songTitle);
-            GridViewColumn durationColumn = new GridViewColumn {
-                DisplayMemberBinding = new Binding("song_duration"),
-                Header = "Длительность",
-                Width = 80
-            };
-            gridView.Columns.Add(durationColumn);
-            listView.View = gridView;
+        private void Safe_Songs_To_PDF_Click(object sender, RoutedEventArgs e) {
+            var document = new iTextSharp.text.Document();
+            var writer = PdfWriter.GetInstance(document, new FileStream("otchet.pdf", FileMode.Create));
+            document.Open();
+            using (var db = new MusicStoreDBEntities()) {
+                string[] nameColumns = new string[] {
+                    "ID",
+                    "Song Title",
+                    "Song Duration"
+                };
+                var table = new PdfPTable(nameColumns.Length);
+                var song = db.Songs.ToList();
+                for (int i = 0; i < nameColumns.Length; i++) {
+                    PdfPCell cell = new PdfPCell(new iTextSharp.text.Phrase(nameColumns[i])) {
+                        BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY,
+                        HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+                    };
+                    table.AddCell(cell);
+                }
+                for (int k = 0; k < db.Songs.Count(); k++) {
+                    table.AddCell(new iTextSharp.text.Phrase(song[k].id_song.ToString()));
+                    table.AddCell(new iTextSharp.text.Phrase(song[k].song_title));
+                    table.AddCell(new iTextSharp.text.Phrase(song[k].song_duration.ToString()));         
+                }
+                document.Add(table);
+            }
+            document.Close();
+            writer.Close();
+            MessageBox.Show("Отчёт сформирован!", "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
