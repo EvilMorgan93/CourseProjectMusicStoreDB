@@ -29,7 +29,7 @@ namespace MusicStoreDB_App.Models {
             GridViewColumn durationColumn = new GridViewColumn {
                 DisplayMemberBinding = new Binding("song_duration"),
                 Header = "Длительность",
-                Width = 80
+                Width = 90
             };
             gridView.Columns.Add(durationColumn);
             listView.View = gridView;

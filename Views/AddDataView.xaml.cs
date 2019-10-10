@@ -1,23 +1,9 @@
 ﻿using MusicStoreDB_App.Data;
-using MusicStoreDB_App.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MusicStoreDB_App.Views {
-    /// <summary>
-    /// Логика взаимодействия для AddSongView.xaml
-    /// </summary>
     public partial class AddDataView : Window {
         private readonly string[] songAttributes = new string[] {
                 "Название песни",
@@ -28,8 +14,10 @@ namespace MusicStoreDB_App.Views {
                 "Год выпуска",
                 "ID Артиста",
                 "ID Альбомной песни"
-            };
-        private readonly DataTableView window = (DataTableView)Application.Current.MainWindow;
+            };       
+        private static readonly DataTableView window = (DataTableView)Application.Current.MainWindow;
+        private readonly TextBox[] textBoxNames = new TextBox[SizeOfArray()];
+    
         public AddDataView() {
             InitializeComponent();
             switch (window.comboBoxTableChoose.Text) {
@@ -39,17 +27,17 @@ namespace MusicStoreDB_App.Views {
                 case "Альбомы":
                     CreateAddView(albumAttributes);
                     break;
-            }               
+            }
         }
         private void CreateAddView(string[] array) {
             TextBlock textBlock = new TextBlock() {
                 Text = window.comboBoxTableChoose.Text,
                 TextAlignment = TextAlignment.Center,
-                FontSize = 16
+                Margin = new Thickness(0,15,0,0),
+                FontSize = 18
             };
             stackPanel.Children.Add(textBlock);
             Grid grid = new Grid();
-
             ColumnDefinition column = new ColumnDefinition() {
                 Width = new GridLength(0.45, GridUnitType.Star)
             };
@@ -61,8 +49,8 @@ namespace MusicStoreDB_App.Views {
                 RowDefinition row = new RowDefinition();
                 grid.RowDefinitions.Add(row);
                 textBlock = new TextBlock() {
-                    Text = array[i],
-                    Width = 150,
+                    Text = array[i],                    
+                    Style = FindResource("textBlockStyle") as Style,
                     HorizontalAlignment = HorizontalAlignment.Left,
                     TextAlignment = TextAlignment.Center,
                     Margin = new Thickness(40, 20, 5, 5)
@@ -70,53 +58,78 @@ namespace MusicStoreDB_App.Views {
                 Grid.SetRow(textBlock, i);
                 grid.Children.Add(textBlock);
                 TextBox textBox = new TextBox() {
-                    Width = 300,
-                    FontSize = 17,
                     Margin = new Thickness(50, 20, 40, 5),
-                    HorizontalAlignment = HorizontalAlignment.Right
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    MaxLength = 30,
+                    Name = "textBox" + $"{i}"
                 };
                 Grid.SetColumn(textBox, 1);
                 Grid.SetRow(textBox, i);
+                textBoxNames[i] = textBox;
                 grid.Children.Add(textBox);
-            }         
+            }
             stackPanel.Children.Add(grid);
 
+            grid = new Grid() {
+                Margin = new Thickness(0, 30, 0, 0)
+            };
+            for (int i = 0; i < 2; i++) {
+                ColumnDefinition columnDefinition = new ColumnDefinition();
+                grid.ColumnDefinitions.Add(columnDefinition);
+            }
             Button acceptButton = new Button() {
                 Content = "Добавить",
-                Width = 100,
-                FontSize = 16,
+                Style = FindResource("AddStyle") as Style,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0,20,0,10)
             };
+            Grid.SetColumn(acceptButton, 0);
+            grid.Children.Add(acceptButton);
             Button cancelButton = new Button() {
                 Content = "Отмена",
-                Width = 100,
-                FontSize = 16,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 20, 0, 10)
-            };           
-            stackPanel.Children.Add(acceptButton);
-            stackPanel.Children.Add(cancelButton);
+                Style = FindResource("DeleteStyle") as Style,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            Grid.SetColumn(cancelButton, 1);            
+            grid.Children.Add(cancelButton);
+            stackPanel.Children.Add(grid);
             cancelButton.Click += Cancel_Click;
             acceptButton.Click += Accept_Click;
         }
         private void Accept_Click(object sender, RoutedEventArgs e) {
-            //using (var db = new MusicStoreDBEntities()) {
-            //    if (textBoxTitle.Text == "" || textBoxDuration.Text == "") {
-            //        MessageBox.Show("Введите данные", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    } else {
-            //        var song = new Song() {
-            //            song_title = textBoxTitle.Text,
-            //            song_duration = TimeSpan.Parse(textBoxDuration.Text)
-            //        };
-            //        db.Songs.Add(song);
-            //        db.SaveChanges();
-            //        Close();
-            //    }
-            //}
-        }
+            using (var db = new MusicStoreDBEntities()) {
+                switch (window.comboBoxTableChoose.Text) {
+                    case "Песни":
+                        var song = new Song() {
+                            song_title = textBoxNames[0].Text,
+                            song_duration = TimeSpan.Parse(textBoxNames[1].Text)
+                        };
+                        db.Songs.Add(song);
+                        db.SaveChanges(); Close();
+                        break;
+                    case "Альбомы":
+                        var album = new Album() {
+                            album_name = textBoxNames[0].Text,
+                            album_year = DateTime.Parse(textBoxNames[1].Text),
+                            id_artist = int.Parse(textBoxNames[2].Text),
+                            id_album_songs = int.Parse(textBoxNames[3].Text)
+                        };
+                        db.Albums.Add(album);
+                        db.SaveChanges(); Close();
+                        break;
+                }
+            }
+        }       
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             Close();
+        }
+        static public int SizeOfArray() {
+            int size = 0;
+            if (window.comboBoxTableChoose.Text == "Песни") {
+                size = 2;
+            } else if (window.comboBoxTableChoose.Text == "Альбомы") {
+                size = 4;
+            }
+            return size;
         }
     }
 }

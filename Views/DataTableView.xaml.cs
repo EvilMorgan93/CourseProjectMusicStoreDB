@@ -60,6 +60,9 @@ namespace MusicStoreDB_App {
                     break;
             }
         }
+        private void Edit_Click(object sender, RoutedEventArgs e) {
+
+        }
         private void Exit_Click(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
         }
@@ -75,7 +78,7 @@ namespace MusicStoreDB_App {
         }
         private void Safe_Songs_To_PDF_Click(object sender, RoutedEventArgs e) {
             var document = new iTextSharp.text.Document();
-            var writer = PdfWriter.GetInstance(document, new FileStream("otchet.pdf", FileMode.Create));
+            var writer = PdfWriter.GetInstance(document, new FileStream("Отчёт по песням.pdf", FileMode.Create));
             document.Open();
             using (var db = new MusicStoreDBEntities()) {
                 string[] nameColumns = new string[] {

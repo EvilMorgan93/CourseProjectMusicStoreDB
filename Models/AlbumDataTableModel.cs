@@ -17,7 +17,7 @@ namespace MusicStoreDB_App.Models {
             GridViewColumn albumId = new GridViewColumn {
                 DisplayMemberBinding = new Binding("id_album"),
                 Header = "ID_Album",
-                Width = 50
+                Width = 70
             };
             gridView.Columns.Add(albumId);
             GridViewColumn albumName = new GridViewColumn {

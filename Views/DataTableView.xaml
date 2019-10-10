@@ -5,32 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusicStoreDB_App"
         mc:Ignorable="d"
-        Title="Music Store Database" Height="550" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Music Store Database" Height="767.6" Width="1079.6" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="LightGray" Icon="../Resources/music.ico">
     <StackPanel>
-        <ToolBar Height="30" VerticalAlignment="Top" Margin="0,0,188.6,0">
+        <ToolBar Height="30" VerticalAlignment="Top" Margin="0,0,7.8,0" Background="White">
             <ComboBox x:FieldModifier="public" Name="comboBoxTableChoose" SelectedIndex="0" Width="100" Margin="5,0,5,0" DropDownClosed="ComboBoxTableChoose_DropDownClosed">
-                <TextBlock Text="Песни"/>
-                <TextBlock Text="Альбомы"/>
-                <TextBlock Text="Продажи"/>
+                <TextBlock Text="Песни" Style="{StaticResource menuTextBlockStyle}"/>
+                <TextBlock Text="Альбомы" Style="{StaticResource menuTextBlockStyle}"/>
+                <TextBlock Text="Продажи" Style="{StaticResource menuTextBlockStyle}"/> 
             </ComboBox>
-            <Button Content="Выход" Margin="5,2,0,1.6" Click="Exit_Click" Width="49" />
+            <Button Content="Выход" Margin="5,2,0,1.6" Click="Exit_Click" Width="49" Style="{StaticResource exitStyle}" />
         </ToolBar>
-        <ListView Name="listView" HorizontalAlignment="Left" Height="224" Margin="10,10,0,0" VerticalAlignment="Top" Width="723"/>
-        <Grid Height="150" Margin="15,10,572.6,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Button Grid.Row="0" Grid.Column="0" Content="Обновить" Click="Refresh_ClickAsync" Margin="7,7,7,7"/>
-            <Button Grid.Column="1" Grid.Row="0" Content="Добавить" Click="Add_Click" Margin="7,7,7,7"/>
-            <Button Grid.Column="2" Grid.Row="0" Content="Удалить" Click="Delete_ClickAsync" Margin="7,7,7,7"/>
-            <Button Grid.Column="0" Grid.Row="1" Content="Сохранить в PDF" Click="Safe_Songs_To_PDF_Click" Margin="7,7,7,7"/>
-        </Grid>
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="9" Margin="10,10,310.6,0"  Background="White">
+        <StackPanel Height="372">
+                <ListView x:Name="listView" Background="#FFA5A5A5" HorizontalAlignment="Left" Height="224" Margin="20,20,0,0" VerticalAlignment="Top" Width="717" BorderBrush="#FFA5A5A5">
+                    <ListView.ContextMenu>
+                        <ContextMenu StaysOpen="True" Background="WhiteSmoke">
+                            <ContextMenu.BitmapEffect>
+                                <BitmapEffectGroup/>
+                            </ContextMenu.BitmapEffect>
+                            <MenuItem Header="Изменить" x:Name="EditContextMenu" Click="Edit_Click"/>
+                            <MenuItem Header="Удалить" x:Name="RemoveContextMenu" Click="Delete_ClickAsync"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+                <Grid Height="188" Margin="50,15,106.8,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Style="{StaticResource UpdateStyle}" Content="Обновить" Click="Refresh_ClickAsync" Margin="10,10,9.8,133" Width="Auto"></Button>
+                    <Button Grid.Column="1" Style="{StaticResource AddStyle}" Content="Добавить" Click="Add_Click" Margin="10.2,10,9.6,133" Width="Auto"/>
+                    <Button Grid.Column="2" Style="{StaticResource DeleteStyle}" Content="Удалить" Click="Delete_ClickAsync" Margin="10.4,10,10.4,133" Width="Auto"/>
+                    <Button Grid.Column="3" Style="{StaticResource SafeStyle}" Content="Сохранить в PDF" Click="Safe_Songs_To_PDF_Click" Margin="9.6,10,10,133" Width="Auto"/>
+                </Grid>
+            </StackPanel>
+        </Border>
     </StackPanel>
 </Window>
