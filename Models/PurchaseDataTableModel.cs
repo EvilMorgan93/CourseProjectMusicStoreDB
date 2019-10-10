@@ -9,27 +9,25 @@ using System.Windows.Data;
 
 namespace MusicStoreDB_App.Models {
     class PurchaseDataTableModel {
-        private void CreatePurchaseGridView(ListView listView) {
-            GridView gridView = new GridView();
-            GridViewColumn albumName = new GridViewColumn {
-                DisplayMemberBinding = new Binding("album_name"),
+        private void CreatePurchaseDataGrid(DataGrid dataGrid) {
+            var albumName = new DataGridTextColumn {
+                Binding = new Binding("album_name"),
                 Header = "Название альбома",
                 Width = 80
             };
-            gridView.Columns.Add(albumName);
-            GridViewColumn albumYear = new GridViewColumn {
-                DisplayMemberBinding = new Binding("album_year"),
+            dataGrid.Columns.Add(albumName);
+            var albumYear = new DataGridTextColumn {
+                Binding = new Binding("album_year"),
                 Header = "Год выпуска",
                 Width = 100
             };
-            gridView.Columns.Add(albumYear);
-            GridViewColumn durationColumn = new GridViewColumn {
-                DisplayMemberBinding = new Binding("song_duration"),
+            dataGrid.Columns.Add(albumYear);
+            var durationColumn = new DataGridTextColumn {
+                Binding = new Binding("song_duration"),
                 Header = "Длительность",
                 Width = 80
             };
-            gridView.Columns.Add(durationColumn);
-            listView.View = gridView;
+            dataGrid.Columns.Add(durationColumn);
         }
     }
 }

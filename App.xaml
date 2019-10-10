@@ -8,6 +8,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Dictionaries/ButtonDictionary.xaml"/>
                 <ResourceDictionary Source="Dictionaries/TextBlockDictionary.xaml"/>
+                <ResourceDictionary Source="Dictionaries/TextBoxDictionary.xaml"/>
+                <ResourceDictionary Source="Dictionaries/DataGridDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

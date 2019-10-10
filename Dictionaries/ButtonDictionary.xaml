@@ -27,20 +27,6 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
-            <EventTrigger RoutedEvent="Click">
-                <EventTrigger.Actions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ThicknessAnimation
-                From="0"
-                To="200"
-                Duration="0:0:5"
-                Storyboard.TargetProperty
-                ="Margin"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger.Actions>
-            </EventTrigger>
         </Style.Triggers>
     </Style>
     <Style TargetType="Button" x:Key="AddStyle" BasedOn="{StaticResource {x:Type Button}}">
@@ -90,5 +76,6 @@
     <Style TargetType="Button" x:Key="exitStyle">
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="Cursor" Value="Hand"/>
     </Style>
 </ResourceDictionary>

@@ -5,20 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusicStoreDB_App"
         mc:Ignorable="d"
-        Title="Music Store Database" Height="767.6" Width="1079.6" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="LightGray" Icon="../Resources/music.ico">
+        Title="Music Store Database" Height="767.6" Width="1079.6" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="LightGray" Icon="../Resources/music.ico" WindowStyle="ThreeDBorderWindow">
     <StackPanel>
-        <ToolBar Height="30" VerticalAlignment="Top" Margin="0,0,7.8,0" Background="White">
-            <ComboBox x:FieldModifier="public" Name="comboBoxTableChoose" SelectedIndex="0" Width="100" Margin="5,0,5,0" DropDownClosed="ComboBoxTableChoose_DropDownClosed">
-                <TextBlock Text="Песни" Style="{StaticResource menuTextBlockStyle}"/>
-                <TextBlock Text="Альбомы" Style="{StaticResource menuTextBlockStyle}"/>
-                <TextBlock Text="Продажи" Style="{StaticResource menuTextBlockStyle}"/> 
-            </ComboBox>
-            <Button Content="Выход" Margin="5,2,0,1.6" Click="Exit_Click" Width="49" Style="{StaticResource exitStyle}" />
-        </ToolBar>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="9" Margin="10,10,310.6,0"  Background="White">
-        <StackPanel Height="372">
-                <ListView x:Name="listView" Background="#FFA5A5A5" HorizontalAlignment="Left" Height="224" Margin="20,20,0,0" VerticalAlignment="Top" Width="717" BorderBrush="#FFA5A5A5">
-                    <ListView.ContextMenu>
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="10,10,310.6,0"  Background="White">
+            <StackPanel Height="372">
+                <ToolBar Height="30" VerticalAlignment="Top" Margin="0.2,3,-16.4,0" Background="White" ToolBarTray.IsLocked="True" ClipToBounds="True">
+                    <ComboBox x:FieldModifier="public" Name="comboBoxTableChoose" SelectedIndex="0" Width="100" Margin="5,0,5,0" DropDownClosed="ComboBoxTableChoose_DropDownClosed">
+                        <TextBlock Text="Песни" Style="{StaticResource menuTextBlockStyle}"/>
+                        <TextBlock Text="Альбомы" Style="{StaticResource menuTextBlockStyle}"/>
+                        <TextBlock Text="Продажи" Style="{StaticResource menuTextBlockStyle}"/>
+                    </ComboBox>
+                    <Button Content="Выход" Margin="5,2,0,1.6" Click="Exit_Click" Width="49" Style="{StaticResource exitStyle}"/>
+                </ToolBar>
+                <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" HorizontalAlignment="Left" Height="224" Margin="20,20,0,0" VerticalAlignment="Top" Width="717" BorderBrush="#FFA5A5A5">
+                    <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
                             <ContextMenu.BitmapEffect>
                                 <BitmapEffectGroup/>
@@ -26,8 +26,8 @@
                             <MenuItem Header="Изменить" x:Name="EditContextMenu" Click="Edit_Click"/>
                             <MenuItem Header="Удалить" x:Name="RemoveContextMenu" Click="Delete_ClickAsync"/>
                         </ContextMenu>
-                    </ListView.ContextMenu>
-                </ListView>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
                 <Grid Height="188" Margin="50,15,106.8,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

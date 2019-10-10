@@ -24,17 +24,17 @@ namespace MusicStoreDB_App {
         private readonly PurchaseDataTableModel purchaseData = new PurchaseDataTableModel();
         public DataTableView() {
             InitializeComponent();        
-            songData.CreateSongGridView(listView);
+            songData.CreateSongDataGrid(dataGrid);
         }
         public async Task RefreshListView() {
             using (var db = new MusicStoreDBEntities()) {
                 //SQL Query == "SELECT * FROM TABLE"  
                 switch (comboBoxTableChoose.Text) {
                     case "Песни":
-                        listView.ItemsSource = await db.Songs.ToListAsync();
+                        dataGrid.ItemsSource = await db.Songs.ToListAsync();
                         break;
                     case "Альбомы":
-                        listView.ItemsSource = await db.Albums.ToListAsync();
+                        dataGrid.ItemsSource = await db.Albums.ToListAsync();
                         break;
                 }
             }
@@ -51,11 +51,11 @@ namespace MusicStoreDB_App {
             // SQL Query == "DELETE FROM TABLE WHERE predicat"
             switch (comboBoxTableChoose.Text) {
                 case "Песни":
-                    songData.DeleteSongData(listView);
+                    songData.DeleteSongData(dataGrid);
                     await RefreshListView();
                     break;
                 case "Альбомы":
-                    albumData.DeleteAlbumData(listView);
+                    albumData.DeleteAlbumData(dataGrid);
                     await RefreshListView();
                     break;
             }
@@ -69,10 +69,10 @@ namespace MusicStoreDB_App {
         private void ComboBoxTableChoose_DropDownClosed(object sender, EventArgs e) {
             switch (comboBoxTableChoose.Text) {
                 case "Песни":
-                    songData.CreateSongGridView(listView);
+                    songData.CreateSongDataGrid(dataGrid);
                     break;
                 case "Альбомы":
-                    albumData.CreateAlbumGridView(listView);
+                    albumData.CreateAlbumDataGrid(dataGrid);
                     break;
             }
         }

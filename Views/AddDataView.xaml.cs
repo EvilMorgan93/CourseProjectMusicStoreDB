@@ -39,7 +39,7 @@ namespace MusicStoreDB_App.Views {
             stackPanel.Children.Add(textBlock);
             Grid grid = new Grid();
             ColumnDefinition column = new ColumnDefinition() {
-                Width = new GridLength(0.45, GridUnitType.Star)
+                Width = new GridLength(1, GridUnitType.Star)
             };
             grid.ColumnDefinitions.Add(column);
             column = new ColumnDefinition();
@@ -51,16 +51,17 @@ namespace MusicStoreDB_App.Views {
                 textBlock = new TextBlock() {
                     Text = array[i],                    
                     Style = FindResource("textBlockStyle") as Style,
-                    HorizontalAlignment = HorizontalAlignment.Left,
+                    HorizontalAlignment = HorizontalAlignment.Center,
                     TextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(40, 20, 5, 5)
+                    Margin = new Thickness(10, 20, 5, 5)
                 };
                 Grid.SetRow(textBlock, i);
                 grid.Children.Add(textBlock);
                 TextBox textBox = new TextBox() {
-                    Margin = new Thickness(50, 20, 40, 5),
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    MaxLength = 30,
+                    Margin = new Thickness(10, 20, 40, 5),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Width = 300,
+                    Style = FindResource("textBoxStyle") as Style,
                     Name = "textBox" + $"{i}"
                 };
                 Grid.SetColumn(textBox, 1);

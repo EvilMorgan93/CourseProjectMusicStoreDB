@@ -10,35 +10,35 @@ using System.Windows.Data;
 
 namespace MusicStoreDB_App.Models {
     class SongDataTableModel {       
-        public void CreateSongGridView(ListView listView) {
-            listView.ItemsSource = null;
-            listView.Items.Clear();
-            GridView gridView = new GridView();
-            GridViewColumn idColumn = new GridViewColumn {
-                DisplayMemberBinding = new Binding("id_song"),
+        public void CreateSongDataGrid(DataGrid dataGrid) {
+            dataGrid.ItemsSource = null;
+            dataGrid.Columns.Clear();
+            dataGrid.Items.Clear();
+            var idColumn = new DataGridTextColumn {
+                Binding = new Binding("id_song"),
                 Header = "ID",
-                Width = 50
+                Width = 100
             };
-            gridView.Columns.Add(idColumn);
-            GridViewColumn songTitle = new GridViewColumn {
-                DisplayMemberBinding = new Binding("song_title"),
+            dataGrid.Columns.Add(idColumn);
+            var songTitle = new DataGridTextColumn {
+                Binding = new Binding("song_title"),
                 Header = "Название песни",
-                Width = 150
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star)
             };
-            gridView.Columns.Add(songTitle);
-            GridViewColumn durationColumn = new GridViewColumn {
-                DisplayMemberBinding = new Binding("song_duration"),
+            dataGrid.Columns.Add(songTitle);
+            var durationColumn = new DataGridTextColumn {
+                Binding = new Binding("song_duration"),
                 Header = "Длительность",
-                Width = 90
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star)
             };
-            gridView.Columns.Add(durationColumn);
-            listView.View = gridView;
+            dataGrid.Columns.Add(durationColumn);
+
         }
-        public void DeleteSongData(ListView listView) {
+        public void DeleteSongData(DataGrid dataGrid) {
             using (var db = new MusicStoreDBEntities()) {
-                if (listView.SelectedIndex == -1) { return; } else {
+                if (dataGrid.SelectedIndex == -1) { return; } else {
                     var song = new Song();
-                    song = listView.SelectedItem as Song;
+                    song = dataGrid.SelectedItem as Song;
                     db.Entry(song).State = EntityState.Deleted;
                     db.SaveChanges();
                 }

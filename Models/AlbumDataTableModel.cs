@@ -10,47 +10,46 @@ using System.Windows.Data;
 
 namespace MusicStoreDB_App.Models {
     class AlbumDataTableModel {    
-        public void CreateAlbumGridView(ListView listView) {
-            listView.ItemsSource = null;
-            listView.Items.Clear();
-            GridView gridView = new GridView();
-            GridViewColumn albumId = new GridViewColumn {
-                DisplayMemberBinding = new Binding("id_album"),
+        public void CreateAlbumDataGrid(DataGrid dataGrid) {
+            dataGrid.ItemsSource = null;
+            dataGrid.Items.Clear();
+            dataGrid.Columns.Clear();
+            var albumId = new DataGridTextColumn {
+                Binding = new Binding("id_album"),
                 Header = "ID_Album",
-                Width = 70
+                Width = 80
             };
-            gridView.Columns.Add(albumId);
-            GridViewColumn albumName = new GridViewColumn {
-                DisplayMemberBinding = new Binding("album_name"),
+            dataGrid.Columns.Add(albumId);
+            var albumName = new DataGridTextColumn {
+                Binding = new Binding("album_name"),
                 Header = "Название альбома",
-                Width = 130
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star)
             };
-            gridView.Columns.Add(albumName);
-            GridViewColumn albumYear = new GridViewColumn {
-                DisplayMemberBinding = new Binding("album_year"),
+            dataGrid.Columns.Add(albumName);
+            var albumYear = new DataGridTextColumn {
+                Binding = new Binding("album_year"),
                 Header = "Год выпуска",
-                Width = 100
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star)
             };
-            gridView.Columns.Add(albumYear);
-            GridViewColumn artistId = new GridViewColumn {
-                DisplayMemberBinding = new Binding("id_artist"),
+            dataGrid.Columns.Add(albumYear);
+            var artistId = new DataGridTextColumn {
+                Binding = new Binding("id_artist"),
                 Header = "ID_Artist",
-                Width = 60
+                Width = 80
             };
-            gridView.Columns.Add(artistId);
-            GridViewColumn albumSongId = new GridViewColumn {
-                DisplayMemberBinding = new Binding("id_album_songs"),
+            dataGrid.Columns.Add(artistId);
+            var albumSongId = new DataGridTextColumn {
+                Binding = new Binding("id_album_songs"),
                 Header = "ID_Album_Song",
                 Width = 110
             };
-            gridView.Columns.Add(albumSongId);
-            listView.View = gridView;
+            dataGrid.Columns.Add(albumSongId);
         }
-        public void DeleteAlbumData(ListView listView) {
+        public void DeleteAlbumData(DataGrid dataGrid) {
             using (var db = new MusicStoreDBEntities()) {
-                if (listView.SelectedIndex == -1) { return; } else {
+                if (dataGrid.SelectedIndex == -1) { return; } else {
                     var album = new Album();
-                    album = listView.SelectedItem as Album;
+                    album = dataGrid.SelectedItem as Album;
                     db.Entry(album).State = EntityState.Deleted;
                     db.SaveChanges();
                 }
