@@ -5,18 +5,18 @@ using System.Windows.Controls;
 
 namespace MusicStoreDB_App.Views {
     public partial class AddDataView : Window {
-        private readonly string[] songAttributes = new string[] {
+        private static readonly string[] songAttributes = new string[] {
                 "Название песни",
                 "Длительность песни"
             };
-        private readonly string[] albumAttributes = new string[] {
+        private static readonly string[] albumAttributes = new string[] {
                 "Название альбома",
                 "Год выпуска",
                 "ID Артиста",
                 "ID Альбомной песни"
             };       
         private static readonly DataTableView window = (DataTableView)Application.Current.MainWindow;
-        private readonly TextBox[] textBoxNames = new TextBox[SizeOfArray()];
+        private static readonly TextBox[] textBoxNames = new TextBox[SizeOfArray()];
     
         public AddDataView() {
             InitializeComponent();

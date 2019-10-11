@@ -17,7 +17,8 @@ namespace MusicStoreDB_App.Models {
             var idColumn = new DataGridTextColumn {
                 Binding = new Binding("id_song"),
                 Header = "ID",
-                Width = 100
+                Width = 100,
+                IsReadOnly = true
             };
             dataGrid.Columns.Add(idColumn);
             var songTitle = new DataGridTextColumn {

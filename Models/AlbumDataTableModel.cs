@@ -17,7 +17,8 @@ namespace MusicStoreDB_App.Models {
             var albumId = new DataGridTextColumn {
                 Binding = new Binding("id_album"),
                 Header = "ID_Album",
-                Width = 80
+                Width = 80,
+                IsReadOnly = true
             };
             dataGrid.Columns.Add(albumId);
             var albumName = new DataGridTextColumn {
@@ -35,13 +36,15 @@ namespace MusicStoreDB_App.Models {
             var artistId = new DataGridTextColumn {
                 Binding = new Binding("id_artist"),
                 Header = "ID_Artist",
-                Width = 80
+                Width = 80,
+                IsReadOnly = true
             };
             dataGrid.Columns.Add(artistId);
             var albumSongId = new DataGridTextColumn {
                 Binding = new Binding("id_album_songs"),
                 Header = "ID_Album_Song",
-                Width = 110
+                Width = 110,
+                IsReadOnly = true
             };
             dataGrid.Columns.Add(albumSongId);
         }
