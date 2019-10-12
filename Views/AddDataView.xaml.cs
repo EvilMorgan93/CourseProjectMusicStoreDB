@@ -1,10 +1,13 @@
-﻿using MusicStoreDB_App.Data;
+﻿using MusicStoreDB_App.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace MusicStoreDB_App.Views {
     public partial class AddDataView : Window {
+        private static readonly SongDataGridModel songData = new SongDataGridModel();
+        private static readonly AlbumDataGridModel albumData = new AlbumDataGridModel();
+        private static readonly PurchaseDataGridModel purchaseData = new PurchaseDataGridModel();
         private static readonly string[] songAttributes = new string[] {
                 "Название песни",
                 "Длительность песни"
@@ -15,7 +18,7 @@ namespace MusicStoreDB_App.Views {
                 "ID Артиста",
                 "ID Альбомной песни"
             };       
-        private static readonly DataTableView window = (DataTableView)Application.Current.MainWindow;
+        private static readonly DataGridView window = (DataGridView)Application.Current.MainWindow;
         private static readonly TextBox[] textBoxNames = new TextBox[SizeOfArray()];
     
         public AddDataView() {
@@ -96,30 +99,18 @@ namespace MusicStoreDB_App.Views {
             cancelButton.Click += Cancel_Click;
             acceptButton.Click += Accept_Click;
         }
-        private void Accept_Click(object sender, RoutedEventArgs e) {
-            using (var db = new MusicStoreDBEntities()) {
-                switch (window.comboBoxTableChoose.Text) {
-                    case "Песни":
-                        var song = new Song() {
-                            song_title = textBoxNames[0].Text,
-                            song_duration = TimeSpan.Parse(textBoxNames[1].Text)
-                        };
-                        db.Songs.Add(song);
-                        db.SaveChanges(); Close();
-                        break;
-                    case "Альбомы":
-                        var album = new Album() {
-                            album_name = textBoxNames[0].Text,
-                            album_year = DateTime.Parse(textBoxNames[1].Text),
-                            id_artist = int.Parse(textBoxNames[2].Text),
-                            id_album_songs = int.Parse(textBoxNames[3].Text)
-                        };
-                        db.Albums.Add(album);
-                        db.SaveChanges(); Close();
-                        break;
-                }
+        private async void Accept_Click(object sender, RoutedEventArgs e) {
+            switch (window.comboBoxTableChoose.Text) {
+                case "Песни":
+                    songData.AddSongData(window, textBoxNames);
+                    break;
+                case "Альбомы":
+                    albumData.AddAlbumData(window, textBoxNames);                    
+                    break;
             }
-        }       
+            Close();
+            await window.RefreshListViewAsync();
+        }
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             Close();
         }

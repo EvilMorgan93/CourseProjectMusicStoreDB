@@ -1,10 +1,11 @@
-﻿<Window x:Class="MusicStoreDB_App.DataTableView"
+﻿<Window x:Class="MusicStoreDB_App.DataGridView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusicStoreDB_App"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="Music Store Database" Height="590" Width="1238" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="LightGray" Icon="../Resources/music.ico" WindowStyle="ThreeDBorderWindow">
     <Grid x:Name="mainGrid">
         <Grid.ColumnDefinitions>
@@ -25,13 +26,12 @@
                     </ComboBox>
                     <Button Content="Выход" Margin="5,2,0,1.6" Click="Exit_Click" Width="49" Style="{StaticResource exitStyle}"/>
                 </ToolBar>
-                <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="224" Margin="10,20,10,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
+                <DataGrid x:Name="dataGrid" CellEditEnding="DataGrid_CellEditEnding" AutoGenerateColumns="False" ColumnWidth="*" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="224" Margin="10,20,10,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
                             <ContextMenu.BitmapEffect>
                                 <BitmapEffectGroup/>
                             </ContextMenu.BitmapEffect>
-                            <MenuItem Header="Изменить" x:Name="EditContextMenu" Click="Edit_Click"/>
                             <MenuItem Header="Удалить" x:Name="RemoveContextMenu" Click="Delete_ClickAsync"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
@@ -43,14 +43,14 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Style="{StaticResource UpdateStyle}" Content="Обновить" Click="Refresh_ClickAsync"  Width="130.9" Margin="5,6.1,0,6.1" HorizontalAlignment="Left"/>
-                    <Button Grid.Column="1" Style="{StaticResource AddStyle}" Content="Добавить" Click="Add_Click"  Width="130.9" Margin="5,6.1,0,6.1" HorizontalAlignment="Left"/>
+                    <Button Grid.Column="1" Style="{StaticResource EditStyle}" Content="Изменить" Click="Edit_Click" Width="130.9" Margin="5,6.1,0,6.1" HorizontalAlignment="Left"/>
+                    <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Добавить" Click="Add_Click"  Width="130.9" Margin="5,6.1,0,6.1" HorizontalAlignment="Left"/>
                     <Button Grid.Column="2" Style="{StaticResource DeleteStyle}" Content="Удалить" Click="Delete_ClickAsync" Width="130.901" Margin="5,6.1,0,6.1" HorizontalAlignment="Left"/>
                     <Button Grid.Column="3" Style="{StaticResource SafeStyle}" Content="Сохранить в PDF" Click="Export_Songs_To_PDF_ClickAsync"  Width="Auto" Margin="5,0"/>
                 </Grid>
             </StackPanel>
         </Border>
-        <Border Name="addBorder" Visibility="Hidden" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="10,10,6.175,0.07"  Background="White"  Grid.Column="1">
+        <Border Name="addBorder" Visibility="Hidden" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="10,10,6.175,0.07" Background="White" Grid.Column="1">
             <StackPanel x:Name="editStackPanel" Grid.Column="1">
                 
             </StackPanel>

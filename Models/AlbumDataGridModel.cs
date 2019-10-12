@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.Models {
-    class AlbumDataTableModel {    
+    class AlbumDataGridModel {    
         public void CreateAlbumDataGrid(DataGrid dataGrid) {
             dataGrid.ItemsSource = null;
             dataGrid.Items.Clear();
@@ -48,15 +48,17 @@ namespace MusicStoreDB_App.Models {
             };
             dataGrid.Columns.Add(albumSongId);
         }
-        public void DeleteAlbumData(DataGrid dataGrid) {
+        public void AddAlbumData(DataGridView window,TextBox[] textBoxNames) {
             using (var db = new MusicStoreDBEntities()) {
-                if (dataGrid.SelectedIndex == -1) { return; } else {
-                    var album = new Album();
-                    album = dataGrid.SelectedItem as Album;
-                    db.Entry(album).State = EntityState.Deleted;
-                    db.SaveChanges();
-                }
-            }
+                var album = new Album() {
+                    album_name = textBoxNames[0].Text,
+                    album_year = DateTime.Parse(textBoxNames[1].Text),
+                    id_artist = int.Parse(textBoxNames[2].Text),
+                    id_album_songs = int.Parse(textBoxNames[3].Text)
+                };
+                db.Albums.Add(album);
+                db.SaveChanges();
+            }            
         }
     }
 }

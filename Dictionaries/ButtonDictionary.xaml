@@ -51,7 +51,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="Button" x:Key="UpdateStyle" BasedOn="{StaticResource {x:Type Button}}">
+    <Style TargetType="Button" x:Key="EditStyle" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">

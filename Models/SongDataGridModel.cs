@@ -1,15 +1,12 @@
 ﻿using MusicStoreDB_App.Data;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.Models {
-    class SongDataTableModel {       
+    class SongDataGridModel {
         public void CreateSongDataGrid(DataGrid dataGrid) {
             dataGrid.ItemsSource = null;
             dataGrid.Columns.Clear();
@@ -33,16 +30,24 @@ namespace MusicStoreDB_App.Models {
                 Width = new DataGridLength(1, DataGridLengthUnitType.Star)
             };
             dataGrid.Columns.Add(durationColumn);
-
         }
-        public void DeleteSongData(DataGrid dataGrid) {
+        public void AddSongData(DataGridView window, TextBox[] textBoxNames) {
             using (var db = new MusicStoreDBEntities()) {
-                if (dataGrid.SelectedIndex == -1) { return; } else {
-                    var song = new Song();
-                    song = dataGrid.SelectedItem as Song;
-                    db.Entry(song).State = EntityState.Deleted;
-                    db.SaveChanges();
-                }
+                var song = new Song() {
+                    song_title = textBoxNames[0].Text,
+                    song_duration = TimeSpan.Parse(textBoxNames[1].Text)
+                };
+                db.Songs.Add(song);
+                db.SaveChanges();
+            }
+        }
+        public void EditSongData() {
+            using (var db = new MusicStoreDBEntities()) {
+                var song = new Song() {
+
+                };
+                db.Entry(song).State = EntityState.Modified;
+                db.SaveChanges();
             }
         }
     }

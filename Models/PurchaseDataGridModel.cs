@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.Models {
-    class PurchaseDataTableModel {
+    class PurchaseDataGridModel {
         private void CreatePurchaseDataGrid(DataGrid dataGrid) {
             var albumName = new DataGridTextColumn {
                 Binding = new Binding("album_name"),
