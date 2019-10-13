@@ -6,10 +6,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Dictionaries/ButtonDictionary.xaml"/>
-                <ResourceDictionary Source="Dictionaries/TextBlockDictionary.xaml"/>
-                <ResourceDictionary Source="Dictionaries/TextBoxDictionary.xaml"/>
-                <ResourceDictionary Source="Dictionaries/DataGridDictionary.xaml"/>
+                <ResourceDictionary Source="StyleDictionaries/ButtonDictionary.xaml"/>
+                <ResourceDictionary Source="StyleDictionaries/TextBlockDictionary.xaml"/>
+                <ResourceDictionary Source="StyleDictionaries/TextBoxDictionary.xaml"/>
+                <ResourceDictionary Source="StyleDictionaries/DataGridDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

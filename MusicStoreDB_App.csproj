@@ -68,23 +68,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Dictionaries\ButtonDictionary.xaml">
+    <Page Include="StyleDictionaries\ButtonDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dictionaries\DataGridDictionary.xaml">
+    <Page Include="StyleDictionaries\DataGridDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dictionaries\TextBlockDictionary.xaml">
+    <Page Include="StyleDictionaries\TextBlockDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dictionaries\TextBoxDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddDataView.xaml">
+    <Page Include="StyleDictionaries\TextBoxDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -96,6 +92,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\AddCommand.cs" />
+    <Compile Include="Commands\RefreshCommand.cs" />
+    <Compile Include="Commands\SaveCommand.cs" />
     <Compile Include="Data\Album.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
@@ -147,12 +146,9 @@
     <Compile Include="Data\sysdiagram.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AlbumDataGridModel.cs" />
-    <Compile Include="Models\PurchaseDataGridModel.cs" />
-    <Compile Include="Models\SongDataGridModel.cs" />
-    <Compile Include="Views\AddDataView.xaml.cs">
-      <DependentUpon>AddDataView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\AlbumViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\SongViewModel.cs" />
     <Compile Include="Views\DataGridView.xaml.cs">
       <DependentUpon>DataGridView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -208,9 +204,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
       <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
