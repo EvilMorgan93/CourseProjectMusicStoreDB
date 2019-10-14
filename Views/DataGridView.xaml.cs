@@ -14,23 +14,14 @@ using System.Windows.Media;
 
 namespace MusicStoreDB_App {
     public partial class DataGridView : Window {
-        public SongViewModel songViewModel { get { return DataContext as SongViewModel; } }
-        public AlbumViewModel albumViewModel { get { return DataContext as AlbumViewModel; } }
+        public SongViewModel SongViewModel { get { return DataContext as SongViewModel; } }
+        public AlbumViewModel AlbumViewModel { get { return DataContext as AlbumViewModel; } }
         public DataGridView() {
             InitializeComponent();
             DataContext = new SongViewModel();
-            CreateSongView();
+            CreateSongDataGridView();
         }
-        //Удаление строки из базы данных
-        private void Delete_Click(object sender, RoutedEventArgs e) {
-            using (var dbContext = new MusicStoreDBEntities()) {
-                var entity = dataGrid.SelectedItem;
-                dbContext.Entry(entity).State = EntityState.Deleted;
-                dbContext.SaveChanges();
-                songViewModel.RefreshData();
-            }
-        }
-        private void CreateSongView() {
+        private void CreateSongDataGridView() {
             dataGrid.ItemsSource = null;
             dataGrid.Items.Clear();
             dataGrid.Columns.Clear();
@@ -53,18 +44,18 @@ namespace MusicStoreDB_App {
                 Width = new DataGridLength(1, DataGridLengthUnitType.Star)
             };
             dataGrid.Columns.Add(durationColumn);
-            dataGrid.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = songViewModel.ListSongs });
-            songViewModel.RefreshData();
+            dataGrid.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = SongViewModel.ListSongs });
+            SongViewModel.RefreshData();
             CreateAddSongView();
         }
-        private void CreateAlbumView() {
+        private void CreateAlbumDataGridView() {
             dataGrid.ItemsSource = null;
             dataGrid.Items.Clear();
             dataGrid.Columns.Clear();
             var albumId = new DataGridTextColumn {
                 Binding = new Binding("id_album"),
-                Header = "ID_Album",
-                Width = 80,
+                Header = "ID",
+                Width = 50,
                 IsReadOnly = true
             };
             dataGrid.Columns.Add(albumId);
@@ -82,19 +73,19 @@ namespace MusicStoreDB_App {
             dataGrid.Columns.Add(albumYear);
             var artistId = new DataGridTextColumn {
                 Binding = new Binding("id_artist"),
-                Header = "ID_Artist",
-                Width = 80,
+                Header = "ID Исполнителя",
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star),
                 IsReadOnly = true
             };
             dataGrid.Columns.Add(artistId);
             var albumSongId = new DataGridTextColumn {
-                Binding = new Binding("id_album_songs"),
-                Header = "ID_Album_Song",
-                Width = 110,
+                Binding = new Binding("id_album_song"),
+                Header = "ID Альбомной песни",
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star),
                 IsReadOnly = true
             };
             dataGrid.Columns.Add(albumSongId);
-            dataGrid.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = albumViewModel.AlbumsSongs });
+            dataGrid.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = AlbumViewModel.AlbumsSongs });
             CreateAddAlbumView();
         }
         private void CreateAddSongView() {
@@ -113,7 +104,7 @@ namespace MusicStoreDB_App {
             var titleBlock = new TextBlock() {
                 Text = "Название песни",
                 Style = FindResource("textBlockStyle") as Style,
-                Margin = new Thickness(0, 5, 5, 5)
+                Margin = new Thickness(0, 25, 5, 5)
             };
             var durationBlock = new TextBlock() {
                 Text = "Длительность",
@@ -123,11 +114,11 @@ namespace MusicStoreDB_App {
             Grid.SetRow(titleBlock, 0);
             Grid.SetRow(durationBlock, 1);
             durationBox = new TextBox() {
-                Margin = new Thickness(5,5,5,5),
+                Margin = new Thickness(5, 5, 5, 5),
                 Style = FindResource("textBoxStyle") as Style
             };
             titleBox = new TextBox() {
-                Margin = new Thickness(5, 5, 5, 5),
+                Margin = new Thickness(5, 25, 5, 5),
                 Style = FindResource("textBoxStyle") as Style
             };
             var x = new Binding() {
@@ -165,7 +156,7 @@ namespace MusicStoreDB_App {
             var titleBlock = new TextBlock() {
                 Text = "Название альбома",
                 Style = FindResource("textBlockStyle") as Style,
-                Margin = new Thickness(0, 5, 5, 5)
+                Margin = new Thickness(0, 25, 5, 5)
             };
             var yearBlock = new TextBlock() {
                 Text = "Дата создания",
@@ -191,7 +182,7 @@ namespace MusicStoreDB_App {
             grid.Children.Add(idArtistBlock);
             grid.Children.Add(idAlbumSongBlock);
             var titleBox = new TextBox() {
-                Margin = new Thickness(5, 5, 5, 5),
+                Margin = new Thickness(5, 25, 5, 5),
                 Style = FindResource("textBoxStyle") as Style
             };
             var yearBox = new TextBox() {
@@ -222,7 +213,7 @@ namespace MusicStoreDB_App {
                 Mode = BindingMode.TwoWay,
             };
             var d = new Binding {
-                Path = new PropertyPath("SelectedItem.id_album_songs"),
+                Path = new PropertyPath("SelectedItem.id_album_song"),
                 TargetNullValue = "",
                 Mode = BindingMode.TwoWay,
             };
@@ -277,11 +268,11 @@ namespace MusicStoreDB_App {
             switch (comboBoxTableChoose.Text) {
                 case "Песни":
                     DataContext = new SongViewModel();
-                    CreateSongView();
+                    CreateSongDataGridView();
                     break;
                 case "Альбомы":
                     DataContext = new AlbumViewModel();
-                    CreateAlbumView();
+                    CreateAlbumDataGridView();
                     break;
             }
         }

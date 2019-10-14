@@ -26,6 +26,5 @@ namespace MusicStoreDB_App.Data
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Album_Songs> Album_Songs { get; set; }
-        public object TimeSpan { get; internal set; }
     }
 }

@@ -21,7 +21,7 @@ namespace MusicStoreDB_App.Data
         }
     
         public int id_album { get; set; }
-        public int id_album_songs { get; set; }
+        public int id_album_song { get; set; }
         public int id_artist { get; set; }
         public string album_name { get; set; }
         public System.DateTime album_year { get; set; }

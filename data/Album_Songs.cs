@@ -20,10 +20,9 @@ namespace MusicStoreDB_App.Data
             this.Albums = new HashSet<Album>();
         }
     
-        public int id_album_songs { get; set; }
+        public int id_album_song { get; set; }
         public int id_song { get; set; }
         public int id_genre { get; set; }
-        public int track_number { get; set; }
     
         public virtual Genre Genre { get; set; }
         public virtual Song Song { get; set; }

@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
@@ -29,6 +30,7 @@ namespace MusicStoreDB_App.ViewModels {
             SaveEvent = new SaveCommand(this);
             AddEvent = new AddCommand(this);
             RefreshEvent = new RefreshCommand(this);
+            DeleteEvent = new DeleteCommand(this);
         }
         public void RefreshData() {
             using (var dbContext = new MusicStoreDBEntities()) {
@@ -36,23 +38,39 @@ namespace MusicStoreDB_App.ViewModels {
             }
         }
         public void SaveChanges() {
-            using (var dbContext = new MusicStoreDBEntities()) {
-                if (ButtonAddContent == "Отмена") {
-                    AddSongData(dbContext);
-                    ButtonAddContent = "Добавить";
-                } else {
-                    EditData(dbContext);
+            try {
+                using (var dbContext = new MusicStoreDBEntities()) {
+                    if (ButtonAddContent == "Отмена") {
+                        AddSongData(dbContext);
+                        ButtonAddContent = "Добавить";
+                    } else {
+                        EditSongData(dbContext);
+                    }
                 }
+                RefreshData();
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
             }
-            RefreshData();
         }
         public void AddSongData(MusicStoreDBEntities dbContext) {
             dbContext.Songs.Add(SelectedItem);
             dbContext.SaveChanges();
         }
-        public void EditData(MusicStoreDBEntities dbContext) {
+        public void EditSongData(MusicStoreDBEntities dbContext) {
             dbContext.Entry(SelectedItem).State = EntityState.Modified;
             dbContext.SaveChanges();
+        }
+        public void DeleteSongData() {
+            try {
+                using (var dbContext = new MusicStoreDBEntities()) {
+                    var entity = ListSongs.View.CurrentItem as Song;
+                    dbContext.Songs.Remove(entity);
+                    dbContext.SaveChanges();
+                    RefreshData();
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

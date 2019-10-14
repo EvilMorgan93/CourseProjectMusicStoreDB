@@ -44,7 +44,7 @@ namespace MusicStoreDB_App.Commands {
                     albumViewModel.SelectedItem = album;
                     albumViewModel.ButtonAddContent = "Отмена";
                 } else {
-                    albumViewModel.SelectedItem = songViewModel.ListSongs.View.CurrentItem as Album;
+                    albumViewModel.SelectedItem = albumViewModel.AlbumsSongs.View.CurrentItem as Album;
                 }
             }
         }

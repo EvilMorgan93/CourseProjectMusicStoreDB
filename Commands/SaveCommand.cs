@@ -11,8 +11,8 @@ namespace MusicStoreDB_App.Commands {
     public class SaveCommand : ICommand {
         private SongViewModel songViewModel;
         private AlbumViewModel albumViewModel;
-
-        public SaveCommand(SongViewModel songViewModel) {           
+  
+      public SaveCommand(SongViewModel songViewModel) {           
             this.songViewModel = songViewModel;
         }
         public SaveCommand(AlbumViewModel albumViewModel) {

@@ -31,26 +31,34 @@
                             <ContextMenu.BitmapEffect>
                                 <BitmapEffectGroup/>
                             </ContextMenu.BitmapEffect>
-                            <MenuItem Header="Удалить" x:Name="RemoveContextMenu" Click="Delete_Click"/>
+                            <MenuItem Header="Удалить" x:Name="RemoveContextMenu" Command="{Binding DeleteEvent}"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                 </DataGrid>
-                <Grid Height="57.2" Margin="10,15,10,0">
+                <Grid Height="58" Margin="10,15,391.2,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="1" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="5,5,5,5" Height="Auto"/>
-                    <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="5,5,5,5"/>
-                    <Button Grid.Column="2" Style="{StaticResource DeleteStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="5,5,5,5"/>
-                    <Button Grid.Column="3" Style="{StaticResource SafeStyle}" Content="Сохранить в PDF" Click="Export_Songs_To_PDF_ClickAsync"  Width="Auto" Margin="5,5,5,5"/>
+                    <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
+                    <Button Grid.Column="1" Style="{StaticResource SaveStyle}" Content="Сохранить в PDF" Click="Export_Songs_To_PDF_ClickAsync" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
                 </Grid>
             </StackPanel>
         </Border>
         <Border Name="addBorder" Visibility="Visible" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8.2,10,6,170.8" Background="White" Grid.Column="0" Grid.RowSpan="2">
-            <StackPanel x:Name="addStackPanel" Grid.Column="1"/>
+            <StackPanel x:Name="addStackPanel" Grid.Column="1">
+            </StackPanel>
         </Border>
+        <Grid Margin="40,309,39.8,17.6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="1" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,7.8,24.8,7.8" Height="Auto"/>
+            <Button Grid.Column="1" Style="{StaticResource DeleteStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,8,25.2,7.6" Height="Auto"/>
+        </Grid>
     </Grid>
 </Window>

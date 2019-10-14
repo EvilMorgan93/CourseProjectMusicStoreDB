@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
@@ -30,6 +31,7 @@ namespace MusicStoreDB_App.ViewModels {
             SaveEvent = new SaveCommand(this);
             AddEvent = new AddCommand(this);
             RefreshEvent = new RefreshCommand(this);
+            DeleteEvent = new DeleteCommand(this);
         }
         public void RefreshData() {
             using (var dbContext = new MusicStoreDBEntities()) {
@@ -37,23 +39,39 @@ namespace MusicStoreDB_App.ViewModels {
             }
         }
         public void SaveChanges() {
-            using (var dbContext = new MusicStoreDBEntities()) {
-                if (ButtonAddContent == "Отмена") {
-                    AddSongData(dbContext);
-                    ButtonAddContent = "Добавить";
-                } else {
-                    EditData(dbContext);
+            try {
+                using (var dbContext = new MusicStoreDBEntities()) {
+                    if (ButtonAddContent == "Отмена") {
+                        AddAlbumData(dbContext);
+                        ButtonAddContent = "Добавить";
+                    } else {
+                        EditAlbumData(dbContext);
+                    }
                 }
-            }
-            RefreshData();
+                RefreshData();
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }            
         }
-        public void AddSongData(MusicStoreDBEntities dbContext) {
+        public void AddAlbumData(MusicStoreDBEntities dbContext) {
             dbContext.Albums.Add(SelectedItem);
             dbContext.SaveChanges();
         }
-        public void EditData(MusicStoreDBEntities dbContext) {
+        public void EditAlbumData(MusicStoreDBEntities dbContext) {
             dbContext.Entry(SelectedItem).State = EntityState.Modified;
             dbContext.SaveChanges();
+        }
+        public void DeleteAlbumData() {
+            try {
+                using (var dbContext = new MusicStoreDBEntities()) {
+                    var entity = AlbumsSongs.View.CurrentItem as Album;
+                    dbContext.Entry(entity).State = EntityState.Deleted;
+                    dbContext.SaveChanges();
+                    RefreshData();
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
