@@ -1,4 +1,5 @@
-﻿using iTextSharp.text.pdf;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
 using MusicStoreDB_App.Data;
 using MusicStoreDB_App.ViewModels;
 using System;
@@ -25,13 +26,6 @@ namespace MusicStoreDB_App {
             dataGrid.ItemsSource = null;
             dataGrid.Items.Clear();
             dataGrid.Columns.Clear();
-            var idColumn = new DataGridTextColumn {
-                Binding = new Binding("id_song"),
-                Header = "ID",
-                Width = 100,
-                IsReadOnly = true
-            };
-            dataGrid.Columns.Add(idColumn);
             var songTitle = new DataGridTextColumn {
                 Binding = new Binding("song_title"),
                 Header = "Название песни",
@@ -52,13 +46,6 @@ namespace MusicStoreDB_App {
             dataGrid.ItemsSource = null;
             dataGrid.Items.Clear();
             dataGrid.Columns.Clear();
-            var albumId = new DataGridTextColumn {
-                Binding = new Binding("id_album"),
-                Header = "ID",
-                Width = 50,
-                IsReadOnly = true
-            };
-            dataGrid.Columns.Add(albumId);
             var albumName = new DataGridTextColumn {
                 Binding = new Binding("album_name"),
                 Header = "Название альбома",
@@ -78,14 +65,7 @@ namespace MusicStoreDB_App {
                 IsReadOnly = true
             };
             dataGrid.Columns.Add(artistId);
-            var albumSongId = new DataGridTextColumn {
-                Binding = new Binding("id_album_song"),
-                Header = "ID Альбомной песни",
-                Width = new DataGridLength(1, DataGridLengthUnitType.Star),
-                IsReadOnly = true
-            };
-            dataGrid.Columns.Add(albumSongId);
-            dataGrid.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = AlbumViewModel.AlbumsSongs });
+            dataGrid.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = AlbumViewModel.Albums });
             CreateAddAlbumView();
         }
         private void CreateAddSongView() {
@@ -149,7 +129,7 @@ namespace MusicStoreDB_App {
                 ColumnDefinition columnDefinition = new ColumnDefinition();
                 grid.ColumnDefinitions.Add(columnDefinition);
             }
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < 3; j++) {
                 RowDefinition rowDefinition = new RowDefinition();
                 grid.RowDefinitions.Add(rowDefinition);
             }
@@ -164,23 +144,16 @@ namespace MusicStoreDB_App {
                 Margin = new Thickness(0, 5, 5, 5)
             };
             var idArtistBlock = new TextBlock() {
-                Text = "ID Артиста",
-                Style = FindResource("textBlockStyle") as Style,
-                Margin = new Thickness(0, 5, 5, 5)
-            };
-            var idAlbumSongBlock = new TextBlock() {
-                Text = "ID Альбомной песни",
+                Text = "Название исполнителя",
                 Style = FindResource("textBlockStyle") as Style,
                 Margin = new Thickness(0, 5, 5, 5)
             };
             Grid.SetRow(titleBlock, 0);
             Grid.SetRow(yearBlock, 1);
             Grid.SetRow(idArtistBlock, 2);
-            Grid.SetRow(idAlbumSongBlock, 3);
             grid.Children.Add(titleBlock);
             grid.Children.Add(yearBlock);
             grid.Children.Add(idArtistBlock);
-            grid.Children.Add(idAlbumSongBlock);
             var titleBox = new TextBox() {
                 Margin = new Thickness(5, 25, 5, 5),
                 Style = FindResource("textBoxStyle") as Style
@@ -190,10 +163,6 @@ namespace MusicStoreDB_App {
                 Style = FindResource("textBoxStyle") as Style
             };
             var idArtistBox = new TextBox() {
-                Margin = new Thickness(5, 5, 5, 5),
-                Style = FindResource("textBoxStyle") as Style
-            };
-            var idAlbumSongBox = new TextBox() {
                 Margin = new Thickness(5, 5, 5, 5),
                 Style = FindResource("textBoxStyle") as Style
             };
@@ -209,60 +178,91 @@ namespace MusicStoreDB_App {
             };
             var c = new Binding {
                 Path = new PropertyPath("SelectedItem.id_artist"),
-                TargetNullValue = "",
-                Mode = BindingMode.TwoWay,
-            };
-            var d = new Binding {
-                Path = new PropertyPath("SelectedItem.id_album_song"),
-                TargetNullValue = "",
-                Mode = BindingMode.TwoWay,
+                TargetNullValue = ""           
             };
             titleBox.SetBinding(TextBox.TextProperty, a);
             yearBox.SetBinding(TextBox.TextProperty, b);
             idArtistBox.SetBinding(TextBox.TextProperty, c);
-            idAlbumSongBox.SetBinding(TextBox.TextProperty, d);
             Grid.SetColumn(titleBox, 1);
             Grid.SetColumn(yearBox, 1);
             Grid.SetRow(yearBox, 1);
             Grid.SetColumn(idArtistBox, 1);
             Grid.SetRow(idArtistBox, 2);
-            Grid.SetColumn(idAlbumSongBox, 1);
-            Grid.SetRow(idAlbumSongBox, 3);
             grid.Children.Add(titleBox);
             grid.Children.Add(yearBox);
             grid.Children.Add(idArtistBox);
-            grid.Children.Add(idAlbumSongBox);
             addStackPanel.Children.Add(grid);
         }
-        private async void Export_Songs_To_PDF_ClickAsync(object sender, RoutedEventArgs e) {
-            var document = new iTextSharp.text.Document();
-            var writer = PdfWriter.GetInstance(document, new FileStream("Отчёт по песням.pdf", FileMode.Create));
-            document.Open();
-            using (var db = new MusicStoreDBEntities()) {
-                string[] nameColumns = new string[] {
-                    "ID",
-                    "Song Title",
-                    "Song Duration"
-                };
-                var table = new PdfPTable(nameColumns.Length);
-                var song = await db.Songs.ToListAsync();
-                for (int i = 0; i < nameColumns.Length; i++) {
-                    PdfPCell cell = new PdfPCell(new iTextSharp.text.Phrase(nameColumns[i])) {
-                        BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY,
-                        HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER
+        private void Export_Pucrhases_To_PDF_Click(object sender, RoutedEventArgs e) {
+            try {
+                var document = new Document();
+                var writer = PdfWriter.GetInstance(document, new FileStream("Отчёт по продажам.pdf", FileMode.Create));
+                document.Open();
+                using (var dbContext = new MusicStoreDBEntities()) {
+                    string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
+                    var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                    var font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
+                    string[] nameColumns = new string[] {
+                        "Имя продавца",
+                        "Название альбома",
+                        "Название группы",
+                        "Дата покупки",
+                        "Цена"
+                    };
+                    var table = new PdfPTable(nameColumns.Length);
+                    PdfPCell cell = new PdfPCell(new Phrase("Отчёт по продажам", font)) {
+                        Colspan = nameColumns.Length,
+                        HorizontalAlignment = 1,
+                        Border = 0,
+                        PaddingBottom = 10
                     };
                     table.AddCell(cell);
+                    var query = (from a in dbContext.Albums
+                                 join g in dbContext.Groups on a.id_artist equals g.id_artist
+                                 join p in dbContext.Purchases on a.id_album equals p.id_album
+                                 join pr in dbContext.Price_List on p.id_price equals pr.id_price
+                                 join emp in dbContext.Employees on p.id_employee equals emp.id_employee into ps
+                                  from emp in ps.DefaultIfEmpty()
+                                 select new {
+                                     emp.employee_name,
+                                     a.album_name,
+                                     g.group_name,
+                                     p.purchase_date,
+                                     pr.purchase_price
+                                 }).ToList();
+                    for (int i = 0; i < nameColumns.Length; i++) {
+                        cell = new PdfPCell(new Phrase(nameColumns[i], font)) {
+                            BackgroundColor = BaseColor.LIGHT_GRAY,
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            Padding = 3,
+                        };                       
+                        table.AddCell(cell);
+                    }
+                    for (int k = 0; k < query.Count; k++) {
+                        table.AddCell(new PdfPCell(new Phrase(query[k].employee_name, font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                        table.AddCell(new PdfPCell(new Phrase(query[k].album_name, font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                        table.AddCell(new PdfPCell(new Phrase(query[k].group_name, font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });                       
+                        table.AddCell(new PdfPCell(new Phrase(query[k].purchase_date.ToString("G"), font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                        table.AddCell(new PdfPCell(new Phrase(query[k].purchase_price.ToString(), font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                    }
+                    document.Add(table);
                 }
-                for (int k = 0; k < db.Songs.Count(); k++) {
-                    table.AddCell(new iTextSharp.text.Phrase(song[k].id_song.ToString()));
-                    table.AddCell(new iTextSharp.text.Phrase(song[k].song_title));
-                    table.AddCell(new iTextSharp.text.Phrase(song[k].song_duration.ToString()));
-                }
-                document.Add(table);
+                document.Close();
+                writer.Close();
+                MessageBox.Show("Отчёт сформирован!", "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Information);
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message,"Информация об отчёте",MessageBoxButton.OK,MessageBoxImage.Error);
             }
-            document.Close();
-            writer.Close();
-            MessageBox.Show("Отчёт сформирован!", "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void ComboBoxTableChoose_DropDownClosed(object sender, EventArgs e) {
             switch (comboBoxTableChoose.Text) {
