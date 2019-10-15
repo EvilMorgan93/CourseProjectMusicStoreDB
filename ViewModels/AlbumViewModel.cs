@@ -11,8 +11,9 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
-    public class AlbumViewModel : BaseViewModel, INotifyPropertyChanged {
-        public CollectionViewSource AlbumsSongs { get; private set; }
+    public class AlbumViewModel : BaseViewModel{
+        public CollectionViewSource Albums { get; private set; }
+        public CollectionViewSource Groups { get; private set; }
 
         private Album selectedItem;
         public Album SelectedItem {
@@ -24,18 +25,21 @@ namespace MusicStoreDB_App.ViewModels {
             }
         }
         public AlbumViewModel() {
-            AlbumsSongs = new CollectionViewSource();
+
+            Albums = new CollectionViewSource();
+            Groups = new CollectionViewSource();
+
             RefreshData();
-            SelectedItem = AlbumsSongs.View.CurrentItem as Album;
+            SelectedItem = Albums.View.CurrentItem as Album;
             ButtonAddContent = "Добавить";
             SaveEvent = new SaveCommand(this);
             AddEvent = new AddCommand(this);
             RefreshEvent = new RefreshCommand(this);
-            DeleteEvent = new DeleteCommand(this);
+            DeleteEvent = new DeleteCommand(this);           
         }
         public void RefreshData() {
             using (var dbContext = new MusicStoreDBEntities()) {
-                AlbumsSongs.Source = dbContext.Albums.ToList();
+                Albums.Source = dbContext.Albums.ToList();
             }
         }
         public void SaveChanges() {
@@ -54,7 +58,7 @@ namespace MusicStoreDB_App.ViewModels {
             }            
         }
         public void AddAlbumData(MusicStoreDBEntities dbContext) {
-            dbContext.Albums.Add(SelectedItem);
+            dbContext.Albums.Add(SelectedItem as Album);
             dbContext.SaveChanges();
         }
         public void EditAlbumData(MusicStoreDBEntities dbContext) {
@@ -64,7 +68,7 @@ namespace MusicStoreDB_App.ViewModels {
         public void DeleteAlbumData() {
             try {
                 using (var dbContext = new MusicStoreDBEntities()) {
-                    var entity = AlbumsSongs.View.CurrentItem as Album;
+                    var entity = Albums.View.CurrentItem as Album;
                     dbContext.Entry(entity).State = EntityState.Deleted;
                     dbContext.SaveChanges();
                     RefreshData();

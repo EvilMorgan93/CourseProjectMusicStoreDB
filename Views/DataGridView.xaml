@@ -35,13 +35,13 @@
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                 </DataGrid>
-                <Grid Height="58" Margin="10,15,391.2,0">
+                <Grid Height="58" Margin="10,15,364.2,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
-                    <Button Grid.Column="1" Style="{StaticResource SaveStyle}" Content="Сохранить в PDF" Click="Export_Songs_To_PDF_ClickAsync" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
+                    <Button Grid.Column="1" Style="{StaticResource SaveStyle}" Content="Отчёт по продажам" Click="Export_Pucrhases_To_PDF_Click" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
                 </Grid>
             </StackPanel>
         </Border>
@@ -49,7 +49,7 @@
             <StackPanel x:Name="addStackPanel" Grid.Column="1">
             </StackPanel>
         </Border>
-        <Grid Margin="40,309,39.8,17.6">
+        <Grid Margin="30,309,29.8,17.6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

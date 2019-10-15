@@ -14,19 +14,13 @@ namespace MusicStoreDB_App.Data
     
     public partial class Album_Songs
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Album_Songs()
-        {
-            this.Albums = new HashSet<Album>();
-        }
-    
-        public int id_album_song { get; set; }
+        public int id_album { get; set; }
         public int id_song { get; set; }
         public int id_genre { get; set; }
+        public int track_number { get; set; }
     
+        public virtual Album Album { get; set; }
         public virtual Genre Genre { get; set; }
         public virtual Song Song { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Album> Albums { get; set; }
     }
 }

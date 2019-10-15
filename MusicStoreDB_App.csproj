@@ -102,6 +102,9 @@
     <Compile Include="Data\Album_Songs.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\Country.cs">
+      <DependentUpon>MusicStoreModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\Employee.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
@@ -109,9 +112,6 @@
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Group.cs">
-      <DependentUpon>MusicStoreModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Group_countries.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\MusicStoreModel.Context.cs">
@@ -149,6 +149,7 @@
     </Compile>
     <Compile Include="ViewModels\AlbumViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\PurchaseViewModel.cs" />
     <Compile Include="ViewModels\SongViewModel.cs" />
     <Compile Include="Views\DataGridView.xaml.cs">
       <DependentUpon>DataGridView.xaml</DependentUpon>

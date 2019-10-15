@@ -12,16 +12,16 @@ namespace MusicStoreDB_App.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Group_countries
+    public partial class Country
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Group_countries()
+        public Country()
         {
             this.Groups = new HashSet<Group>();
         }
     
-        public int id_group_country { get; set; }
-        public string group_country { get; set; }
+        public int id_country { get; set; }
+        public string country_name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Group> Groups { get; set; }

@@ -21,11 +21,11 @@ namespace MusicStoreDB_App.Data
         }
     
         public int id_artist { get; set; }
-        public int id_group_country { get; set; }
+        public int id_country { get; set; }
         public string group_name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Album> Albums { get; set; }
-        public virtual Group_countries Group_countries { get; set; }
+        public virtual Country Country { get; set; }
     }
 }

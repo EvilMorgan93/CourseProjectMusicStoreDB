@@ -64,7 +64,7 @@ namespace MusicStoreDB_App.ViewModels {
             try {
                 using (var dbContext = new MusicStoreDBEntities()) {
                     var entity = ListSongs.View.CurrentItem as Song;
-                    dbContext.Songs.Remove(entity);
+                    dbContext.Entry(entity).State = EntityState.Deleted;
                     dbContext.SaveChanges();
                     RefreshData();
                 }
