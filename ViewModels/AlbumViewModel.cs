@@ -11,19 +11,24 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
-    public class AlbumViewModel : BaseViewModel{
+    public class AlbumViewModel : BaseViewModel, IPageViewModel{
         public CollectionViewSource Albums { get; private set; }
         public CollectionViewSource Groups { get; private set; }
 
         private Album selectedItem;
         public Album SelectedItem {
-            get { return selectedItem; }
+            get => selectedItem; 
             set {
                 selectedItem = value;
                 OnPropertyChanged("SelectedItem");
                 ButtonAddContent = "Добавить";
             }
         }
+
+        public string Name {
+            get => "Альбомы";
+        }
+
         public AlbumViewModel() {
 
             Albums = new CollectionViewSource();

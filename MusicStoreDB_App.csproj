@@ -84,7 +84,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DataGridView.xaml">
+    <Page Include="UserControls\AlbumPresentation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SongPresentation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -94,7 +102,9 @@
     </Compile>
     <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\DeleteCommand.cs" />
+    <Compile Include="Commands\ExportPurchasesCommand.cs" />
     <Compile Include="Commands\RefreshCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\SaveCommand.cs" />
     <Compile Include="Data\Album.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
@@ -147,12 +157,21 @@
     <Compile Include="Data\sysdiagram.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="IPageViewModel.cs" />
+    <Compile Include="UserControls\AlbumPresentation.xaml.cs">
+      <DependentUpon>AlbumPresentation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SongPresentation.xaml.cs">
+      <DependentUpon>SongPresentation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\AlbumViewModel.cs" />
+    <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\PurchaseViewModel.cs" />
     <Compile Include="ViewModels\SongViewModel.cs" />
-    <Compile Include="Views\DataGridView.xaml.cs">
-      <DependentUpon>DataGridView.xaml</DependentUpon>
+    <Compile Include="Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

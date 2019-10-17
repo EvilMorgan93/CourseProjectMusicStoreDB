@@ -11,7 +11,7 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
-    public class SongViewModel : BaseViewModel {
+    public class SongViewModel : BaseViewModel, IPageViewModel {
         public CollectionViewSource ListSongs { get; private set; }       
         private Song selectedItem;
         public Song SelectedItem {
@@ -22,6 +22,11 @@ namespace MusicStoreDB_App.ViewModels {
                 ButtonAddContent = "Добавить";
             }
         }
+
+        public string Name {
+            get => "Песни";
+        }
+
         public SongViewModel() {
             ListSongs = new CollectionViewSource();
             RefreshData();
