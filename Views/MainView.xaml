@@ -7,13 +7,20 @@
         xmlns:vm="clr-namespace:MusicStoreDB_App.ViewModels"
         xmlns:view="clr-namespace:MusicStoreDB_App.UserControls"
         mc:Ignorable="d"
-        Title="Music Store Database" Height="790" Width="1238" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="LightGray" Icon="../Resources/music.ico" WindowStyle="ThreeDBorderWindow">
+        Title="Music Store Database" Height="790
+" Width="1238" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="LightGray" Icon="../Resources/music.ico">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:SongViewModel}">
             <view:SongPresentation/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AlbumSongsViewModel}">
+            <view:AlbumSongsPresentation/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:AlbumViewModel}">
             <view:AlbumPresentation/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PurchaseViewModel}">
+            <view:PurchasesPresentation/>
         </DataTemplate>
     </Window.Resources>
     <StackPanel>
@@ -29,11 +36,11 @@
                                 Command="{Binding DataContext.ChangePageCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding }"
                                 Margin="4,5"
-                                Width="100"/>
+                                Style="{StaticResource textMenuStyle}"/>
                     </DataTemplate>
                 </ToolBar.ItemTemplate>
             </ToolBar>
-            <Button Grid.Column="1" Width="100" Content="Выход" Click="Exit_Click" />
+            <Button Grid.Column="1" Style="{StaticResource textMenuStyle}" Content="Выход" Click="Exit_Click" Margin="141.2,6,15,5" Height="Auto" Width="Auto" />
         </Grid>
         <ContentControl Content="{Binding CurrentPageViewModel}" />
     </StackPanel>

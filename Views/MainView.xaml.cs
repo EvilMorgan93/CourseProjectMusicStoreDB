@@ -1,9 +1,4 @@
-﻿using MusicStoreDB_App.ViewModels;
-using System;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
+﻿using System.Windows;
 
 namespace MusicStoreDB_App {
     public partial class MainView : Window {

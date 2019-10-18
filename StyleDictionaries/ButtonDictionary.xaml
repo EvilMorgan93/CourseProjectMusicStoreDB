@@ -73,9 +73,11 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="Button" x:Key="exitStyle">
+    <Style TargetType="Button" x:Key="textMenuStyle">
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontFamily" Value="Georgia"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Width" Value="160"/>
     </Style>
 </ResourceDictionary>

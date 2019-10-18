@@ -17,12 +17,10 @@
         </Grid.RowDefinitions>
         <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="10.2,10,8,9.8" Background="White" Grid.RowSpan="2" Grid.Column ="1">
             <StackPanel Margin="0.2,9.2,0,9">
+                <TextBlock Text="Альбомы" Style="{StaticResource textBlockStyle}"/>
                 <DataGrid AutoGenerateColumns="False" ColumnWidth="*" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding Albums.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
-                            <ContextMenu.BitmapEffect>
-                                <BitmapEffectGroup/>
-                            </ContextMenu.BitmapEffect>
                             <MenuItem Header="Удалить" Command="{Binding DeleteEvent}"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
@@ -33,14 +31,6 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" ItemsSource="{Binding Groups.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
-                    <DataGrid.ContextMenu>
-                        <ContextMenu StaysOpen="True" Background="WhiteSmoke">
-                            <ContextMenu.BitmapEffect>
-                                <BitmapEffectGroup/>
-                            </ContextMenu.BitmapEffect>
-                            <MenuItem Header="Удалить" Command="{Binding DeleteEvent}"/>
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID Исполнителя" Width="*" Binding="{Binding id_artist}"/>
                         <DataGridTextColumn Header="Название исполнителя" Width="*" Binding="{Binding group_name}"/>
@@ -53,7 +43,6 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
-                    <Button Grid.Column="1" Style="{StaticResource SaveStyle}" Content="Отчёт по продажам" Command="{Binding ExportEvent}" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
                 </Grid>
             </StackPanel>
         </Border>

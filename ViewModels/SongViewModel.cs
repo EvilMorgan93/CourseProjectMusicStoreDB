@@ -1,12 +1,8 @@
 ﻿using MusicStoreDB_App.Commands;
 using MusicStoreDB_App.Data;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
@@ -24,7 +20,7 @@ namespace MusicStoreDB_App.ViewModels {
         }
 
         public string Name {
-            get => "Песни";
+            get => "Композиции";
         }
 
         public SongViewModel() {
@@ -68,7 +64,7 @@ namespace MusicStoreDB_App.ViewModels {
         public void DeleteSongData() {
             try {
                 using (var dbContext = new MusicStoreDBEntities()) {
-                    var entity = ListSongs.View.CurrentItem as Song;
+                    var entity = SelectedItem as Song;
                     dbContext.Entry(entity).State = EntityState.Deleted;
                     dbContext.SaveChanges();
                     RefreshData();

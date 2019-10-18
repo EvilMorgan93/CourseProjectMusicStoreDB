@@ -1,10 +1,7 @@
 ﻿using MusicStoreDB_App.Commands;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MusicStoreDB_App.ViewModels {
@@ -16,7 +13,9 @@ namespace MusicStoreDB_App.ViewModels {
         public ApplicationViewModel() {
             // Add available pages
             PageViewModels.Add(new SongViewModel());
+            PageViewModels.Add(new AlbumSongsViewModel());
             PageViewModels.Add(new AlbumViewModel());
+            PageViewModels.Add(new PurchaseViewModel());           
 
             // Set starting page
             CurrentPageViewModel = PageViewModels[0];

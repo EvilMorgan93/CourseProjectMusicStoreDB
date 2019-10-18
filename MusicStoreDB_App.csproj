@@ -88,6 +88,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\AlbumSongsPresentation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PurchasesPresentation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\SongPresentation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -157,9 +165,16 @@
     <Compile Include="Data\sysdiagram.cs">
       <DependentUpon>MusicStoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="IPageViewModel.cs" />
+    <Compile Include="UserControls\AlbumSongsPresentation.xaml.cs">
+      <DependentUpon>AlbumSongsPresentation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\AlbumSongsViewModel.cs" />
+    <Compile Include="ViewModels\IPageViewModel.cs" />
     <Compile Include="UserControls\AlbumPresentation.xaml.cs">
       <DependentUpon>AlbumPresentation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PurchasesPresentation.xaml.cs">
+      <DependentUpon>PurchasesPresentation.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\SongPresentation.xaml.cs">
       <DependentUpon>SongPresentation.xaml</DependentUpon>
@@ -167,7 +182,6 @@
     <Compile Include="ViewModels\AlbumViewModel.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\GroupViewModel.cs" />
     <Compile Include="ViewModels\PurchaseViewModel.cs" />
     <Compile Include="ViewModels\SongViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">

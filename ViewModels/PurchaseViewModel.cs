@@ -3,19 +3,43 @@ using iTextSharp.text.pdf;
 using MusicStoreDB_App.Commands;
 using MusicStoreDB_App.Data;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
-    public class PurchaseViewModel : BaseViewModel {
-        public CollectionViewSource Purchase { get; private set; }      
+    public class PurchaseViewModel : BaseViewModel, IPageViewModel {
+        public CollectionViewSource Purchase { get; private set; }
+        public CollectionViewSource Album { get; private set; }
+        public CollectionViewSource Employee { get; private set; }
+        public CollectionViewSource Price { get; private set; }
+        public string Name {
+            get => "Продажи";
+        }
+        private Purchase selectedItem;
+        public Purchase SelectedItem {
+            get => selectedItem;
+            set {
+                selectedItem = value;
+                OnPropertyChanged("SelectedItem");
+                ButtonAddContent = "Добавить";
+            }
+        }
+
         public PurchaseViewModel() {
             Purchase = new CollectionViewSource();
+            Album = new CollectionViewSource();
+            Employee = new CollectionViewSource();
+            Price = new CollectionViewSource();
+            RefreshData();
+            SelectedItem = Purchase.View.CurrentItem as Purchase;
+            ButtonAddContent = "Добавить";
+            SaveEvent = new SaveCommand(this);
+            AddEvent = new AddCommand(this);
+            RefreshEvent = new RefreshCommand(this);
+            DeleteEvent = new DeleteCommand(this);
             ExportEvent = new ExportPurchasesCommand(this);
         }
         public void ExportPucrhasesToPDF() {
@@ -87,6 +111,64 @@ namespace MusicStoreDB_App.ViewModels {
                 MessageBox.Show("Отчёт сформирован!", "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Information);
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        public void RefreshData() {
+            using (var dbContext = new MusicStoreDBEntities()) {
+                Purchase.Source = dbContext.Purchases.ToList();
+                var employeeQuery = (from emp in dbContext.Employees
+                             select new {
+                                 emp.id_employee,
+                                 emp.employee_name
+                             }).ToList();
+                Employee.Source = employeeQuery;
+                var albumQuery = (from a in dbContext.Albums
+                                     select new {
+                                         a.id_album,
+                                         a.album_name
+                                     }).ToList();
+                Album.Source = albumQuery;
+                var priceQuery = (from p in dbContext.Price_List
+                                     select new {
+                                         p.id_price,
+                                         p.purchase_price
+                                     }).ToList();
+                Price.Source = priceQuery;
+            }
+        }
+        public void SaveChanges() {
+            try {
+                using (var dbContext = new MusicStoreDBEntities()) {
+                    if (ButtonAddContent == "Отмена") {
+                        AddPurchaseData(dbContext);
+                        ButtonAddContent = "Добавить";
+                    } else {
+                        EditPurchaseData(dbContext);
+                    }
+                }
+                RefreshData();
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        public void AddPurchaseData(MusicStoreDBEntities dbContext) {
+            dbContext.Purchases.Add(SelectedItem);
+            dbContext.SaveChanges();
+        }
+        public void EditPurchaseData(MusicStoreDBEntities dbContext) {
+            dbContext.Entry(SelectedItem).State = EntityState.Modified;
+            dbContext.SaveChanges();
+        }
+        public void DeletePurchaseData() {
+            try {
+                using (var dbContext = new MusicStoreDBEntities()) {
+                    var entity = SelectedItem;
+                    dbContext.Entry(entity).State = EntityState.Deleted;
+                    dbContext.SaveChanges();
+                    RefreshData();
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
             }
         }
     }

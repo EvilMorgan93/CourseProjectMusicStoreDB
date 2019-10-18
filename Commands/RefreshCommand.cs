@@ -10,12 +10,16 @@ namespace MusicStoreDB_App.Commands {
     public class RefreshCommand : ICommand {
         private SongViewModel songViewModel;
         private AlbumViewModel albumViewModel;
+        private PurchaseViewModel purchaseViewModel;
 
         public RefreshCommand(SongViewModel songViewModel) {
             this.songViewModel = songViewModel;
         }
         public RefreshCommand(AlbumViewModel albumViewModel) {
             this.albumViewModel = albumViewModel;
+        }
+        public RefreshCommand(PurchaseViewModel purchaseViewModel) {
+            this.purchaseViewModel = purchaseViewModel;
         }
 
         public event EventHandler CanExecuteChanged {
@@ -30,7 +34,13 @@ namespace MusicStoreDB_App.Commands {
         public void Execute(object parameter) {
             if (songViewModel != null) {
                 songViewModel.RefreshData();
-            } else { albumViewModel.RefreshData(); }           
+            } 
+            if (albumViewModel != null) { 
+                albumViewModel.RefreshData(); 
+            } 
+            if (purchaseViewModel != null) {
+                purchaseViewModel.RefreshData();
+            }
         }
     }
 }

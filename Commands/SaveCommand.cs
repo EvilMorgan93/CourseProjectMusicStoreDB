@@ -11,12 +11,16 @@ namespace MusicStoreDB_App.Commands {
     public class SaveCommand : ICommand {
         private SongViewModel songViewModel;
         private AlbumViewModel albumViewModel;
-  
-      public SaveCommand(SongViewModel songViewModel) {           
+        private PurchaseViewModel purchaseViewModel;
+
+        public SaveCommand(SongViewModel songViewModel) {           
             this.songViewModel = songViewModel;
         }
         public SaveCommand(AlbumViewModel albumViewModel) {
             this.albumViewModel = albumViewModel;
+        }
+        public SaveCommand(PurchaseViewModel purchaseViewModel) {
+            this.purchaseViewModel = purchaseViewModel;
         }
 
         public event EventHandler CanExecuteChanged {
@@ -31,7 +35,13 @@ namespace MusicStoreDB_App.Commands {
         public void Execute(object parameter) {
             if (songViewModel != null) {
                 songViewModel.SaveChanges();
-            } else { albumViewModel.SaveChanges(); }           
+            }  
+            if (albumViewModel != null) { 
+                albumViewModel.SaveChanges(); 
+            }           
+            if (purchaseViewModel != null) {
+                purchaseViewModel.SaveChanges();
+            }
         }
     }
 }

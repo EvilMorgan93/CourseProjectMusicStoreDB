@@ -10,12 +10,16 @@ namespace MusicStoreDB_App.Commands {
     public class DeleteCommand : ICommand {
         private SongViewModel songViewModel;
         private AlbumViewModel albumViewModel;
+        private PurchaseViewModel purchaseViewModel;
 
         public DeleteCommand(SongViewModel songViewModel) {
             this.songViewModel = songViewModel;
         }
         public DeleteCommand(AlbumViewModel albumViewModel) {
             this.albumViewModel = albumViewModel;
+        }
+        public DeleteCommand(PurchaseViewModel purchaseViewModel) {
+            this.purchaseViewModel = purchaseViewModel;
         }
 
         public event EventHandler CanExecuteChanged {
@@ -30,7 +34,13 @@ namespace MusicStoreDB_App.Commands {
         public void Execute(object parameter) {
             if (songViewModel != null) {
                 songViewModel.DeleteSongData();
-            } else { albumViewModel.DeleteAlbumData(); }
+            }
+            if (albumViewModel != null) { 
+                albumViewModel.DeleteAlbumData(); 
+            }
+            if (purchaseViewModel != null) {
+                purchaseViewModel.DeletePurchaseData();
+            }
         }
     }
 }
