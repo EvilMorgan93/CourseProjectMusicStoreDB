@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:MusicStoreDB_App.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="790" d:DesignWidth="1238">
-    <Grid x:Name="mainGrid">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="63*"/>
             <ColumnDefinition Width="113*"/>
@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="10.2,10,8,9.8" Background="White" Grid.RowSpan="2" Grid.Column ="1">
             <StackPanel Margin="0.2,9.2,0,9">
-                <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" SelectedItem="{Binding SelectedItem}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
+                <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding ListSongs.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
                             <ContextMenu.BitmapEffect>
@@ -26,6 +26,10 @@
                             <MenuItem Header="Удалить" x:Name="RemoveContextMenu" Command="{Binding DeleteEvent}"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Название песни" Width="*" Binding="{Binding song_title}"/>
+                        <DataGridTextColumn Header="Длительность" Width="*" Binding="{Binding song_duration}"/>
+                    </DataGrid.Columns>
                 </DataGrid>
                 <Grid Height="58" Margin="10,15,364.2,0">
                     <Grid.ColumnDefinitions>
@@ -37,21 +41,29 @@
                 </Grid>
             </StackPanel>
         </Border>
-        <Border Name="addBorder" Visibility="Visible" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,5.8,9.8" Background="White" Grid.Column="0" Grid.RowSpan="2">
+        <Border Visibility="Visible" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,5.8,10" Background="White" Grid.Column="0" Grid.RowSpan="2">
             <StackPanel x:Name="addStackPanel" Grid.Column="1">
-                
+                <Grid Height="525">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Text="Название песни" Style="{StaticResource textBlockStyle}"/>
+                    <TextBox Grid.Column="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.song_title, Mode=TwoWay}"/>
+                    <TextBlock Grid.Row="1" Text="Длительность песни" Style="{StaticResource textBlockStyle}"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.song_duration, Mode=TwoWay}"/>
+                    <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>
+                    <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource DeleteStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
+                </Grid>
             </StackPanel>
         </Border>
-        <Grid Margin="30,317,25.8,146.8">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Grid.Row="1" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,7.8,24.8,7.8" Height="Auto"/>
-            <Button Grid.Column="1" Style="{StaticResource DeleteStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,8,25.2,7.6" Height="Auto"/>
-        </Grid>
     </Grid>
 </UserControl>
