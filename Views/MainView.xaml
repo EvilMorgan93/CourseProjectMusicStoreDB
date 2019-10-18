@@ -17,17 +17,24 @@
         </DataTemplate>
     </Window.Resources>
     <StackPanel>
-        <ToolBar VerticalAlignment="Top" Height="36" ItemsSource="{Binding PageViewModels}" Margin="0,0,-32,0">
-            <ToolBar.ItemTemplate>
-                <DataTemplate>
-                    <Button Content="{Binding Name}"
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="985*"/>
+                <ColumnDefinition Width="247*"/>
+            </Grid.ColumnDefinitions>
+            <ToolBar  ToolBarTray.IsLocked="True" VerticalAlignment="Top" Height="36" ItemsSource="{Binding PageViewModels}" Margin="0,0,-30,0" Grid.ColumnSpan="2">
+                <ToolBar.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding Name}"
                                 Command="{Binding DataContext.ChangePageCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding }"
                                 Margin="4,5"
                                 Width="100"/>
-                </DataTemplate>
-            </ToolBar.ItemTemplate>
-        </ToolBar>
+                    </DataTemplate>
+                </ToolBar.ItemTemplate>
+            </ToolBar>
+            <Button Grid.Column="1" Width="100" Content="Выход" Click="Exit_Click" />
+        </Grid>
         <ContentControl Content="{Binding CurrentPageViewModel}" />
     </StackPanel>
 </Window>

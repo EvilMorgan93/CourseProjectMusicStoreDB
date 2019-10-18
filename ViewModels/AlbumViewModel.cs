@@ -30,10 +30,8 @@ namespace MusicStoreDB_App.ViewModels {
         }
 
         public AlbumViewModel() {
-
             Albums = new CollectionViewSource();
             Groups = new CollectionViewSource();
-
             RefreshData();
             SelectedItem = Albums.View.CurrentItem as Album;
             ButtonAddContent = "Добавить";
@@ -45,6 +43,14 @@ namespace MusicStoreDB_App.ViewModels {
         public void RefreshData() {
             using (var dbContext = new MusicStoreDBEntities()) {
                 Albums.Source = dbContext.Albums.ToList();
+                var query = (from g in dbContext.Groups
+                             join c in dbContext.Countries on g.id_country equals c.id_country
+                             select new {
+                                 g.id_artist,
+                                 g.group_name,
+                                 c.country_name
+                             }).ToList();
+                Groups.Source = query;
             }
         }
         public void SaveChanges() {
