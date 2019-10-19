@@ -5,15 +5,11 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Хранилище MusicStoreDBModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "MusicStoreDB.dbo.Album_Songs" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="Album_Songs">
           <Key>
-            <PropertyRef Name="id_album" />
-            <PropertyRef Name="id_song" />
-            <PropertyRef Name="id_genre" />
-            <PropertyRef Name="track_number" />
+            <PropertyRef Name="id_album_song" />
           </Key>
+          <Property Name="id_album_song" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_album" Type="int" Nullable="false" />
           <Property Name="id_song" Type="int" Nullable="false" />
           <Property Name="id_genre" Type="int" Nullable="false" />
@@ -239,6 +235,7 @@
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="Хранилище MusicStoreDBModelContainer">
+          <EntitySet Name="Album_Songs" EntityType="Self.Album_Songs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Albums" EntityType="Self.Albums" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Countries" EntityType="Self.Countries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
@@ -248,14 +245,6 @@
           <EntitySet Name="Purchases" EntityType="Self.Purchases" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Songs" EntityType="Self.Songs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Album_Songs" EntityType="Self.Album_Songs" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Album_Songs].[id_album] AS [id_album], 
-    [Album_Songs].[id_song] AS [id_song], 
-    [Album_Songs].[id_genre] AS [id_genre], 
-    [Album_Songs].[track_number] AS [track_number]
-    FROM [dbo].[Album_Songs] AS [Album_Songs]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_Album_Songs_Albums" Association="Self.FK_Album_Songs_Albums">
             <End Role="Albums" EntitySet="Albums" />
             <End Role="Album_Songs" EntitySet="Album_Songs" />
@@ -324,6 +313,7 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="Album_Songs" EntityType="MusicStoreDBModel.Album_Songs" />
           <EntitySet Name="Albums" EntityType="MusicStoreDBModel.Album" />
           <EntitySet Name="Countries" EntityType="MusicStoreDBModel.Country" />
           <EntitySet Name="Employees" EntityType="MusicStoreDBModel.Employee" />
@@ -333,9 +323,16 @@
           <EntitySet Name="Purchases" EntityType="MusicStoreDBModel.Purchase" />
           <EntitySet Name="Songs" EntityType="MusicStoreDBModel.Song" />
           <EntitySet Name="sysdiagrams" EntityType="MusicStoreDBModel.sysdiagram" />
-          <EntitySet Name="Album_Songs" EntityType="MusicStoreDBModel.Album_Songs" />
           <AssociationSet Name="FK_Album_Songs_Albums" Association="MusicStoreDBModel.FK_Album_Songs_Albums">
             <End Role="Album" EntitySet="Albums" />
+            <End Role="Album_Songs" EntitySet="Album_Songs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Album_Songs_Genres" Association="MusicStoreDBModel.FK_Album_Songs_Genres">
+            <End Role="Genre" EntitySet="Genres" />
+            <End Role="Album_Songs" EntitySet="Album_Songs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Album_Songs_Songs" Association="MusicStoreDBModel.FK_Album_Songs_Songs">
+            <End Role="Song" EntitySet="Songs" />
             <End Role="Album_Songs" EntitySet="Album_Songs" />
           </AssociationSet>
           <AssociationSet Name="FK_Albums_Groups" Association="MusicStoreDBModel.FK_Albums_Groups">
@@ -354,17 +351,9 @@
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Purchase" EntitySet="Purchases" />
           </AssociationSet>
-          <AssociationSet Name="FK_Album_Songs_Genres" Association="MusicStoreDBModel.FK_Album_Songs_Genres">
-            <End Role="Genre" EntitySet="Genres" />
-            <End Role="Album_Songs" EntitySet="Album_Songs" />
-          </AssociationSet>
           <AssociationSet Name="FK_Purchases_Price_List" Association="MusicStoreDBModel.FK_Purchases_Price_List">
             <End Role="Price_List" EntitySet="Price_List" />
             <End Role="Purchase" EntitySet="Purchases" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Album_Songs_Songs" Association="MusicStoreDBModel.FK_Album_Songs_Songs">
-            <End Role="Song" EntitySet="Songs" />
-            <End Role="Album_Songs" EntitySet="Album_Songs" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
@@ -378,6 +367,19 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="Album_Songs">
+          <Key>
+            <PropertyRef Name="id_album_song" />
+          </Key>
+          <Property Name="id_album_song" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_album" Type="Int32" Nullable="false" />
+          <Property Name="id_song" Type="Int32" Nullable="false" />
+          <Property Name="id_genre" Type="Int32" Nullable="false" />
+          <Property Name="track_number" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Album" Relationship="MusicStoreDBModel.FK_Album_Songs_Albums" FromRole="Album_Songs" ToRole="Album" />
+          <NavigationProperty Name="Genre" Relationship="MusicStoreDBModel.FK_Album_Songs_Genres" FromRole="Album_Songs" ToRole="Genre" />
+          <NavigationProperty Name="Song" Relationship="MusicStoreDBModel.FK_Album_Songs_Songs" FromRole="Album_Songs" ToRole="Song" />
+        </EntityType>
         <EntityType Name="Album">
           <Key>
             <PropertyRef Name="id_album" />
@@ -467,21 +469,6 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="Album_Songs">
-          <Key>
-            <PropertyRef Name="id_album" />
-            <PropertyRef Name="id_song" />
-            <PropertyRef Name="id_genre" />
-            <PropertyRef Name="track_number" />
-          </Key>
-          <Property Name="id_album" Type="Int32" Nullable="false" />
-          <Property Name="id_song" Type="Int32" Nullable="false" />
-          <Property Name="id_genre" Type="Int32" Nullable="false" />
-          <Property Name="track_number" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Album" Relationship="MusicStoreDBModel.FK_Album_Songs_Albums" FromRole="Album_Songs" ToRole="Album" />
-          <NavigationProperty Name="Genre" Relationship="MusicStoreDBModel.FK_Album_Songs_Genres" FromRole="Album_Songs" ToRole="Genre" />
-          <NavigationProperty Name="Song" Relationship="MusicStoreDBModel.FK_Album_Songs_Songs" FromRole="Album_Songs" ToRole="Song" />
-        </EntityType>
         <Association Name="FK_Album_Songs_Albums">
           <End Type="MusicStoreDBModel.Album" Role="Album" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -493,6 +480,34 @@
             </Principal>
             <Dependent Role="Album_Songs">
               <PropertyRef Name="id_album" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Album_Songs_Genres">
+          <End Type="MusicStoreDBModel.Genre" Role="Genre" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="MusicStoreDBModel.Album_Songs" Role="Album_Songs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="id_genre" />
+            </Principal>
+            <Dependent Role="Album_Songs">
+              <PropertyRef Name="id_genre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Album_Songs_Songs">
+          <End Type="MusicStoreDBModel.Song" Role="Song" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="MusicStoreDBModel.Album_Songs" Role="Album_Songs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Song">
+              <PropertyRef Name="id_song" />
+            </Principal>
+            <Dependent Role="Album_Songs">
+              <PropertyRef Name="id_song" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -552,20 +567,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Album_Songs_Genres">
-          <End Type="MusicStoreDBModel.Genre" Role="Genre" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="MusicStoreDBModel.Album_Songs" Role="Album_Songs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Genre">
-              <PropertyRef Name="id_genre" />
-            </Principal>
-            <Dependent Role="Album_Songs">
-              <PropertyRef Name="id_genre" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Purchases_Price_List">
           <End Type="MusicStoreDBModel.Price_List" Role="Price_List" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -577,20 +578,6 @@
             </Principal>
             <Dependent Role="Purchase">
               <PropertyRef Name="id_price" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Album_Songs_Songs">
-          <End Type="MusicStoreDBModel.Song" Role="Song" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="MusicStoreDBModel.Album_Songs" Role="Album_Songs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Song">
-              <PropertyRef Name="id_song" />
-            </Principal>
-            <Dependent Role="Album_Songs">
-              <PropertyRef Name="id_song" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -624,6 +611,17 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Хранилище MusicStoreDBModel.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Хранилище MusicStoreDBModel.sp_upgraddiagrams" />
+          <EntitySetMapping Name="Album_Songs">
+            <EntityTypeMapping TypeName="MusicStoreDBModel.Album_Songs">
+              <MappingFragment StoreEntitySet="Album_Songs">
+                <ScalarProperty Name="track_number" ColumnName="track_number" />
+                <ScalarProperty Name="id_genre" ColumnName="id_genre" />
+                <ScalarProperty Name="id_song" ColumnName="id_song" />
+                <ScalarProperty Name="id_album" ColumnName="id_album" />
+                <ScalarProperty Name="id_album_song" ColumnName="id_album_song" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Albums">
             <EntityTypeMapping TypeName="MusicStoreDBModel.Album">
               <MappingFragment StoreEntitySet="Albums">
@@ -706,16 +704,6 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Album_Songs">
-            <EntityTypeMapping TypeName="MusicStoreDBModel.Album_Songs">
-              <MappingFragment StoreEntitySet="Album_Songs">
-                <ScalarProperty Name="track_number" ColumnName="track_number" />
-                <ScalarProperty Name="id_genre" ColumnName="id_genre" />
-                <ScalarProperty Name="id_song" ColumnName="id_song" />
-                <ScalarProperty Name="id_album" ColumnName="id_album" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

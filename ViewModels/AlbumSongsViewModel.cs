@@ -1,6 +1,10 @@
-﻿using MusicStoreDB_App.Data;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using MusicStoreDB_App.Commands;
+using MusicStoreDB_App.Data;
 using System;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
@@ -32,10 +36,11 @@ namespace MusicStoreDB_App.ViewModels {
             RefreshData();
             SelectedItem = AlbumSongs.View.CurrentItem as Album_Songs;
             ButtonAddContent = "Добавить";
-            //SaveEvent = new SaveCommand(this);
-            //AddEvent = new AddCommand(this);
-            //RefreshEvent = new RefreshCommand(this);
-            //DeleteEvent = new DeleteCommand(this);
+            SaveEvent = new SaveCommand(this);
+            AddEvent = new AddCommand(this);
+            RefreshEvent = new RefreshCommand(this);
+            DeleteEvent = new DeleteCommand(this);
+            ExportEvent = new ExportCommand(this);
         }
 
         public void RefreshData() {
@@ -59,6 +64,70 @@ namespace MusicStoreDB_App.ViewModels {
                                       g.genre1
                                   }).ToList();
                 Genre.Source = genreQuery;
+            }
+        }
+        public void ExportAlbumSongsToPDF() {
+            try {
+                var document = new Document();
+                var writer = PdfWriter.GetInstance(document, new FileStream("Отчёт по песням.pdf", FileMode.Create));
+                document.Open();
+                using (var dbContext = new MusicStoreDBEntities()) {
+                    string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
+                    var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                    var font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
+                    string[] nameColumns = new string[] {
+                        "Название альбома",
+                        "Название композиции",
+                        "Жанр",
+                        "Номер трека"
+                    };
+                    var table = new PdfPTable(nameColumns.Length);
+                    PdfPCell cell = new PdfPCell(new Phrase("Отчёт по песням", font)) {
+                        Colspan = nameColumns.Length,
+                        HorizontalAlignment = 1,
+                        Border = 0,
+                        PaddingBottom = 10
+                    };
+                    table.AddCell(cell);
+                    var query = (from albs in dbContext.Album_Songs
+                                 join a in dbContext.Albums on albs.id_album equals a.id_album
+                                 join s in dbContext.Songs on albs.id_song equals s.id_song 
+                                 join g in dbContext.Genres on albs.id_genre equals g.id_genre orderby a.album_name, albs.track_number
+                                 select new {
+                                     a.album_name,
+                                     s.song_title,
+                                     g.genre1,
+                                     albs.track_number
+                                 }).ToList();
+                    for (int i = 0; i < nameColumns.Length; i++) {
+                        cell = new PdfPCell(new Phrase(nameColumns[i], font)) {
+                            BackgroundColor = BaseColor.LIGHT_GRAY,
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            Padding = 3,
+                        };
+                        table.AddCell(cell);
+                    }
+                    for (int k = 0; k < query.Count; k++) {
+                        table.AddCell(new PdfPCell(new Phrase(query[k].album_name, font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                        table.AddCell(new PdfPCell(new Phrase(query[k].song_title, font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                        table.AddCell(new PdfPCell(new Phrase(query[k].genre1, font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                        table.AddCell(new PdfPCell(new Phrase(query[k].track_number.ToString(), font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                    }
+                    document.Add(table);
+                }
+                document.Close();
+                writer.Close();
+                MessageBox.Show("Отчёт сформирован!", "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Information);
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message, "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         public void SaveChanges() {

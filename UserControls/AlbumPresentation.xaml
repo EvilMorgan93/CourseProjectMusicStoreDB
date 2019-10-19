@@ -26,7 +26,7 @@
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Название альбома" Width="*" Binding="{Binding album_name}"/>
-                        <DataGridTextColumn Header="Дата выхода" Width="*" Binding="{Binding album_year}"/>
+                        <DataGridTextColumn Header="Дата выхода" Width="*" Binding="{Binding album_year, StringFormat=\{0:dd/MM/yyyy\}}"/>
                         <DataGridTextColumn Header="ID Исполнителя" Width="*" Binding="{Binding id_artist}"/>
                     </DataGrid.Columns>
                 </DataGrid>
@@ -63,8 +63,8 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Text="Название альбома" Style="{StaticResource textBlockStyle}"/>
                     <TextBox Grid.Column="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.album_name, Mode=TwoWay}"/>
-                    <TextBlock Grid.Row="1" Text="Дата выхода" Style="{StaticResource textBlockStyle}"/> 
-                    <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.album_year, Mode=TwoWay}"/>
+                    <TextBlock Grid.Row="1" Text="Дата выхода" Style="{StaticResource textBlockStyle}"/>
+                    <DatePicker Grid.Column="1" Style="{StaticResource datePickerStyle}" Grid.Row="1" SelectedDate="{Binding SelectedItem.album_year, Mode=TwoWay, StringFormat=\{0:dd.MM.yyyy\}}"/>
                     <TextBlock Grid.Row="2" Text="ID Исполнителя" Style="{StaticResource textBlockStyle}"/>
                     <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.id_artist,Mode=TwoWay}"/>
                     <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>

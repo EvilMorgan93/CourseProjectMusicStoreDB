@@ -13,7 +13,7 @@ namespace MusicStoreDB_App.ViewModels {
     public abstract class BaseViewModel : INotifyPropertyChanged {
         public SaveCommand SaveEvent { get; set; }
         public AddCommand AddEvent { get; set; }
-        public ExportPurchasesCommand ExportEvent { get; set; }
+        public ExportCommand ExportEvent { get; set; }
         public RefreshCommand RefreshEvent { get; set; }
         public DeleteCommand DeleteEvent { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -22,9 +22,7 @@ namespace MusicStoreDB_App.ViewModels {
         }
         private string buttonAddContent;
         public string ButtonAddContent {
-            get {
-                return buttonAddContent;
-            }
+            get => buttonAddContent;
             set {
                 buttonAddContent = value;
                 OnPropertyChanged("ButtonAddContent");

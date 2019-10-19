@@ -7,11 +7,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MusicStoreDB_App.Commands {
-    public class ExportPurchasesCommand : ICommand {
+    public class ExportCommand : ICommand {
         private PurchaseViewModel purchaseViewModel;
+        private AlbumSongsViewModel albumSongsViewModel;
 
-        public ExportPurchasesCommand(PurchaseViewModel purchaseViewModel) {
+        public ExportCommand(PurchaseViewModel purchaseViewModel) {
             this.purchaseViewModel = purchaseViewModel;
+        }
+        public ExportCommand(AlbumSongsViewModel albumSongsViewModel) {
+            this.albumSongsViewModel = albumSongsViewModel;
         }
 
         public event EventHandler CanExecuteChanged {
@@ -24,7 +28,12 @@ namespace MusicStoreDB_App.Commands {
         }
 
         public void Execute(object parameter) {
-            purchaseViewModel.ExportPucrhasesToPDF();
+            if (purchaseViewModel != null) {
+                purchaseViewModel.ExportPucrhasesToPDF();
+            }
+            if (albumSongsViewModel != null) {
+                albumSongsViewModel.ExportAlbumSongsToPDF();
+            }
         }
 
     }

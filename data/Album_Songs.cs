@@ -14,6 +14,7 @@ namespace MusicStoreDB_App.Data
     
     public partial class Album_Songs
     {
+        public int id_album_song { get; set; }
         public int id_album { get; set; }
         public int id_song { get; set; }
         public int id_genre { get; set; }

@@ -27,6 +27,7 @@ namespace MusicStoreDB_App.Data
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Album_Songs> Album_Songs { get; set; }
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
@@ -36,7 +37,6 @@ namespace MusicStoreDB_App.Data
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<Song> Songs { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<Album_Songs> Album_Songs { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

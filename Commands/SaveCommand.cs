@@ -1,10 +1,5 @@
-﻿using MusicStoreDB_App.Data;
-using MusicStoreDB_App.ViewModels;
+﻿using MusicStoreDB_App.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MusicStoreDB_App.Commands {
@@ -12,6 +7,11 @@ namespace MusicStoreDB_App.Commands {
         private SongViewModel songViewModel;
         private AlbumViewModel albumViewModel;
         private PurchaseViewModel purchaseViewModel;
+        private AlbumSongsViewModel albumSongsViewModel;
+
+        public SaveCommand(AlbumSongsViewModel albumSongsViewModel) {
+            this.albumSongsViewModel = albumSongsViewModel;
+        }
 
         public SaveCommand(SongViewModel songViewModel) {           
             this.songViewModel = songViewModel;
@@ -41,6 +41,9 @@ namespace MusicStoreDB_App.Commands {
             }           
             if (purchaseViewModel != null) {
                 purchaseViewModel.SaveChanges();
+            }
+            if (albumSongsViewModel != null) {
+                albumSongsViewModel.SaveChanges();
             }
         }
     }

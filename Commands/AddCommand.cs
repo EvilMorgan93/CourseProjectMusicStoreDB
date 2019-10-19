@@ -1,11 +1,6 @@
 ﻿using MusicStoreDB_App.Data;
 using MusicStoreDB_App.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MusicStoreDB_App.Commands {
@@ -13,6 +8,11 @@ namespace MusicStoreDB_App.Commands {
         private SongViewModel songViewModel;
         private AlbumViewModel albumViewModel;
         private PurchaseViewModel purchaseViewModel;
+        private AlbumSongsViewModel albumSongsViewModel;
+
+        public AddCommand(AlbumSongsViewModel albumSongsViewModel) {
+            this.albumSongsViewModel = albumSongsViewModel;
+        }
 
         public AddCommand(SongViewModel songViewModel) {
             this.songViewModel = songViewModel;
@@ -46,6 +46,7 @@ namespace MusicStoreDB_App.Commands {
             if (albumViewModel != null) {
                 if (albumViewModel.ButtonAddContent == "Добавить") {
                     var album = new Album();
+                    album.album_year.ToString("d");
                     albumViewModel.SelectedItem = album;
                     albumViewModel.ButtonAddContent = "Отмена";
                 } else {
@@ -61,6 +62,15 @@ namespace MusicStoreDB_App.Commands {
                     purchaseViewModel.ButtonAddContent = "Отмена";
                 } else {
                     purchaseViewModel.SelectedItem = purchaseViewModel.Purchase.View.CurrentItem as Purchase;
+                }
+            }
+            if (albumSongsViewModel != null) {
+                if (albumSongsViewModel.ButtonAddContent == "Добавить") {
+                    var albumSong = new Album_Songs();
+                    albumSongsViewModel.SelectedItem = albumSong;
+                    albumSongsViewModel.ButtonAddContent = "Отмена";
+                } else {
+                    albumSongsViewModel.SelectedItem = albumSongsViewModel.AlbumSongs.View.CurrentItem as Album_Songs;
                 }
             }
         }
