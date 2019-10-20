@@ -27,7 +27,6 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID Альбома" Width="*" Binding="{Binding id_album}"/>
                         <DataGridTextColumn Header="ID Композиции" Width="*" Binding="{Binding id_song}"/>
-                        <DataGridTextColumn Header="ID Жанра" Width="*" Binding="{Binding id_genre}"/>
                         <DataGridTextColumn Header="Номер трека" Width="*" Binding="{Binding track_number}"/>
                     </DataGrid.Columns>
                 </DataGrid>
@@ -43,13 +42,7 @@
                             <DataGridTextColumn Header="Название альбома" Width="*" Binding="{Binding album_name}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <DataGrid IsReadOnly="True" Grid.Column="1" AutoGenerateColumns="False" ColumnWidth="*" ItemsSource="{Binding Genre.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID Жанра" Width="*" Binding="{Binding id_genre}"/>
-                            <DataGridTextColumn Header="Жанр" Width="*" Binding="{Binding genre1}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <DataGrid IsReadOnly="True" Grid.Column="2" AutoGenerateColumns="False" ColumnWidth="*" ItemsSource="{Binding Song.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
+                    <DataGrid IsReadOnly="True" Grid.Column="1" AutoGenerateColumns="False" ColumnWidth="*" ItemsSource="{Binding Song.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID Композиции" Width="*" Binding="{Binding id_song}"/>
                             <DataGridTextColumn Header="Композиция" Width="*" Binding="{Binding song_title}"/>
@@ -85,10 +78,8 @@
                     <TextBox Grid.Column="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.id_album, Mode=TwoWay}"/>
                     <TextBlock Grid.Row="1" Text="ID Композиции" Style="{StaticResource textBlockStyle}"/>
                     <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.id_song, Mode=TwoWay}"/>
-                    <TextBlock Grid.Row="2" Text="ID Жанра" Style="{StaticResource textBlockStyle}"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.id_genre,Mode=TwoWay}"/>
-                    <TextBlock Grid.Row="3" Text="Номер трека" Style="{StaticResource textBlockStyle}"/>
-                    <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.track_number,Mode=TwoWay}"/>
+                    <TextBlock Grid.Row="2" Text="Номер трека" Style="{StaticResource textBlockStyle}"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.track_number,Mode=TwoWay}"/>
                     <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>
                     <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource DeleteStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
                 </Grid>

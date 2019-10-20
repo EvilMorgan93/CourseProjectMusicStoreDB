@@ -84,7 +84,7 @@ namespace MusicStoreDB_App.ViewModels {
                                      pr.purchase_price,
                                      p.purchase_amount
                                  }).ToList();
-                    int index = 0;
+                    int index = 1;
                     for (int i = 0; i < nameColumns.Length; i++) {
                         cell = new PdfPCell(new Phrase(nameColumns[i], font)) {
                             BackgroundColor = BaseColor.LIGHT_GRAY,
@@ -95,7 +95,8 @@ namespace MusicStoreDB_App.ViewModels {
                     }
                     for (int k = 0; k < query.Count; k++) {
                         table.AddCell(new PdfPCell(new Phrase(index++.ToString())) {
-                            HorizontalAlignment = Element.ALIGN_CENTER
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            BackgroundColor = BaseColor.LIGHT_GRAY
                         });
                         table.AddCell(new PdfPCell(new Phrase(query[k].employee_name, font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER

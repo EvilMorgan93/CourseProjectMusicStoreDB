@@ -13,7 +13,6 @@ namespace MusicStoreDB_App.ViewModels {
     public class AlbumSongsViewModel : BaseViewModel, IPageViewModel {
         public CollectionViewSource AlbumSongs { get; private set; }
         public CollectionViewSource Album { get; private set; }
-        public CollectionViewSource Genre { get; private set; }
         public CollectionViewSource Song { get; private set; }
         public string Name {
             get => "Альбомные композиции";
@@ -31,7 +30,6 @@ namespace MusicStoreDB_App.ViewModels {
         public AlbumSongsViewModel() {
             AlbumSongs = new CollectionViewSource();
             Album = new CollectionViewSource();
-            Genre = new CollectionViewSource();
             Song = new CollectionViewSource();
             RefreshData();
             SelectedItem = AlbumSongs.View.CurrentItem as Album_Songs;
@@ -58,12 +56,6 @@ namespace MusicStoreDB_App.ViewModels {
                                       a.album_name
                                   }).ToList();
                 Album.Source = albumQuery;
-                var genreQuery = (from g in dbContext.Genres
-                                  select new {
-                                      g.id_genre,
-                                      g.genre1
-                                  }).ToList();
-                Genre.Source = genreQuery;
             }
         }
         public void ExportAlbumSongsToPDF() {
@@ -78,10 +70,11 @@ namespace MusicStoreDB_App.ViewModels {
                     string[] nameColumns = new string[] {
                         "Название альбома",
                         "Название композиции",
-                        "Жанр",
                         "Номер трека"
                     };
-                    var table = new PdfPTable(nameColumns.Length);
+                    var table = new PdfPTable(nameColumns.Length) {
+                        WidthPercentage = 100
+                    };
                     PdfPCell cell = new PdfPCell(new Phrase("Отчёт по песням", font)) {
                         Colspan = nameColumns.Length,
                         HorizontalAlignment = 1,
@@ -91,12 +84,11 @@ namespace MusicStoreDB_App.ViewModels {
                     table.AddCell(cell);
                     var query = (from albs in dbContext.Album_Songs
                                  join a in dbContext.Albums on albs.id_album equals a.id_album
-                                 join s in dbContext.Songs on albs.id_song equals s.id_song 
-                                 join g in dbContext.Genres on albs.id_genre equals g.id_genre orderby a.album_name, albs.track_number
+                                 join s in dbContext.Songs on albs.id_song equals s.id_song
+                                 orderby a.album_name, albs.track_number
                                  select new {
                                      a.album_name,
                                      s.song_title,
-                                     g.genre1,
                                      albs.track_number
                                  }).ToList();
                     for (int i = 0; i < nameColumns.Length; i++) {
@@ -112,9 +104,6 @@ namespace MusicStoreDB_App.ViewModels {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
                         table.AddCell(new PdfPCell(new Phrase(query[k].song_title, font)) {
-                            HorizontalAlignment = Element.ALIGN_CENTER
-                        });
-                        table.AddCell(new PdfPCell(new Phrase(query[k].genre1, font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
                         table.AddCell(new PdfPCell(new Phrase(query[k].track_number.ToString(), font)) {

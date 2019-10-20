@@ -17,13 +17,13 @@ namespace MusicStoreDB_App.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Genre()
         {
-            this.Album_Songs = new HashSet<Album_Songs>();
+            this.Groups = new HashSet<Group>();
         }
     
         public int id_genre { get; set; }
         public string genre1 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Album_Songs> Album_Songs { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
     }
 }

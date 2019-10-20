@@ -20,6 +20,7 @@ namespace MusicStoreDB_App.Data
             this.Album_Songs = new HashSet<Album_Songs>();
             this.Purchases = new HashSet<Purchase>();
         }
+    
         public int id_album { get; set; }
         public int id_artist { get; set; }
         public string album_name { get; set; }

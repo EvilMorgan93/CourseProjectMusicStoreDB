@@ -46,7 +46,6 @@ namespace MusicStoreDB_App.Commands {
             if (albumViewModel != null) {
                 if (albumViewModel.ButtonAddContent == "Добавить") {
                     var album = new Album();
-                    album.album_year.ToString("d");
                     albumViewModel.SelectedItem = album;
                     albumViewModel.ButtonAddContent = "Отмена";
                 } else {

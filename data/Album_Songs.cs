@@ -17,11 +17,9 @@ namespace MusicStoreDB_App.Data
         public int id_album_song { get; set; }
         public int id_album { get; set; }
         public int id_song { get; set; }
-        public int id_genre { get; set; }
         public int track_number { get; set; }
     
         public virtual Album Album { get; set; }
-        public virtual Genre Genre { get; set; }
         public virtual Song Song { get; set; }
     }
 }
