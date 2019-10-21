@@ -4,23 +4,10 @@ using System.Windows.Input;
 
 namespace MusicStoreDB_App.Commands {
     public class SaveCommand : ICommand {
-        private SongViewModel songViewModel;
-        private AlbumViewModel albumViewModel;
-        private PurchaseViewModel purchaseViewModel;
-        private AlbumSongsViewModel albumSongsViewModel;
+        private readonly dynamic baseViewModel;
 
-        public SaveCommand(AlbumSongsViewModel albumSongsViewModel) {
-            this.albumSongsViewModel = albumSongsViewModel;
-        }
-
-        public SaveCommand(SongViewModel songViewModel) {           
-            this.songViewModel = songViewModel;
-        }
-        public SaveCommand(AlbumViewModel albumViewModel) {
-            this.albumViewModel = albumViewModel;
-        }
-        public SaveCommand(PurchaseViewModel purchaseViewModel) {
-            this.purchaseViewModel = purchaseViewModel;
+        public SaveCommand(BaseViewModel baseViewModel) {
+            this.baseViewModel = baseViewModel;
         }
 
         public event EventHandler CanExecuteChanged {
@@ -33,17 +20,19 @@ namespace MusicStoreDB_App.Commands {
         }
 
         public void Execute(object parameter) {
-            if (songViewModel != null) {
-                songViewModel.SaveChanges();
-            }  
-            if (albumViewModel != null) { 
-                albumViewModel.SaveChanges(); 
-            }           
-            if (purchaseViewModel != null) {
-                purchaseViewModel.SaveChanges();
-            }
-            if (albumSongsViewModel != null) {
-                albumSongsViewModel.SaveChanges();
+            switch (baseViewModel.Name) {
+                case "Композиции":
+                    baseViewModel.SaveChanges();
+                    break;
+                case "Альбомы":
+                    baseViewModel.SaveChanges();
+                    break;
+                case "Продажи":
+                    baseViewModel.SaveChanges();
+                    break;
+                case "Альбомные композиции":
+                    baseViewModel.SaveChanges();
+                    break;
             }
         }
     }

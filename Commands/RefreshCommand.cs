@@ -4,23 +4,10 @@ using System.Windows.Input;
 
 namespace MusicStoreDB_App.Commands {
     public class RefreshCommand : ICommand {
-        private SongViewModel songViewModel;
-        private AlbumViewModel albumViewModel;
-        private PurchaseViewModel purchaseViewModel;
-        private AlbumSongsViewModel albumSongsViewModel;
+        private readonly dynamic baseViewModel;
 
-        public RefreshCommand(AlbumSongsViewModel albumSongsViewModel) {
-            this.albumSongsViewModel = albumSongsViewModel;
-        }
-
-        public RefreshCommand(SongViewModel songViewModel) {
-            this.songViewModel = songViewModel;
-        }
-        public RefreshCommand(AlbumViewModel albumViewModel) {
-            this.albumViewModel = albumViewModel;
-        }
-        public RefreshCommand(PurchaseViewModel purchaseViewModel) {
-            this.purchaseViewModel = purchaseViewModel;
+        public RefreshCommand(BaseViewModel baseViewModel) {
+            this.baseViewModel = baseViewModel;
         }
 
         public event EventHandler CanExecuteChanged {
@@ -33,17 +20,19 @@ namespace MusicStoreDB_App.Commands {
         }
 
         public void Execute(object parameter) {
-            if (songViewModel != null) {
-                songViewModel.RefreshData();
-            } 
-            if (albumViewModel != null) { 
-                albumViewModel.RefreshData(); 
-            } 
-            if (purchaseViewModel != null) {
-                purchaseViewModel.RefreshData();
-            }
-            if (albumSongsViewModel != null) {
-                albumSongsViewModel.RefreshData();
+            switch (baseViewModel.Name) {
+                case "Композиции":
+                    baseViewModel.RefreshData();
+                    break;
+                case "Альбомы":
+                    baseViewModel.RefreshData();
+                    break;
+                case "Продажи":
+                    baseViewModel.RefreshData();
+                    break;
+                case "Альбомные композиции":
+                    baseViewModel.RefreshData();
+                    break;
             }
         }
     }

@@ -4,23 +4,10 @@ using System.Windows.Input;
 
 namespace MusicStoreDB_App.Commands {
     public class DeleteCommand : ICommand {
-        private SongViewModel songViewModel;
-        private AlbumViewModel albumViewModel;
-        private PurchaseViewModel purchaseViewModel;
-        private AlbumSongsViewModel albumSongsViewModel;
+        private readonly dynamic baseViewModel;
 
-        public DeleteCommand(AlbumSongsViewModel albumSongsViewModel) {
-            this.albumSongsViewModel = albumSongsViewModel;
-        }
-
-        public DeleteCommand(SongViewModel songViewModel) {
-            this.songViewModel = songViewModel;
-        }
-        public DeleteCommand(AlbumViewModel albumViewModel) {
-            this.albumViewModel = albumViewModel;
-        }
-        public DeleteCommand(PurchaseViewModel purchaseViewModel) {
-            this.purchaseViewModel = purchaseViewModel;
+        public DeleteCommand(BaseViewModel baseViewModel) {
+            this.baseViewModel = baseViewModel;
         }
 
         public event EventHandler CanExecuteChanged {
@@ -33,17 +20,19 @@ namespace MusicStoreDB_App.Commands {
         }
 
         public void Execute(object parameter) {
-            if (songViewModel != null) {
-                songViewModel.DeleteSongData();
-            }
-            if (albumViewModel != null) { 
-                albumViewModel.DeleteAlbumData(); 
-            }
-            if (purchaseViewModel != null) {
-                purchaseViewModel.DeletePurchaseData();
-            }
-            if (albumSongsViewModel != null) {
-                albumSongsViewModel.DeleteAlbumSongData();
+            switch (baseViewModel.Name) {
+                case "Композиции":
+                    baseViewModel.DeleteSongData();
+                    break;
+                case "Альбомы":
+                    baseViewModel.DeleteAlbumData();
+                    break;
+                case "Продажи":
+                    baseViewModel.DeletePurchaseData();
+                    break;
+                case "Альбомные композиции":
+                    baseViewModel.DeleteAlbumSongData();
+                    break;
             }
         }
     }
