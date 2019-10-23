@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="StyleDictionaries/TextBoxDictionary.xaml"/>
                 <ResourceDictionary Source="StyleDictionaries/DataGridDictionary.xaml"/>
                 <ResourceDictionary Source="StyleDictionaries/DatePickerDictionary.xaml"/>
+                <ResourceDictionary Source="StyleDictionaries/ComboBoxDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -38,8 +38,8 @@
                 </Grid>
             </StackPanel>
         </Border>
-        <Border Visibility="Visible" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,5.8,10" Background="White" Grid.Column="0" Grid.RowSpan="2">
-            <StackPanel x:Name="addStackPanel" Grid.Column="1">
+        <Border Visibility="Visible" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,5.8,10" Background="White" Grid.Column="0">
+            <StackPanel x:Name="addStackPanel">
                 <Grid Height="525">
                     <Grid.RowDefinitions>
                         <RowDefinition/>

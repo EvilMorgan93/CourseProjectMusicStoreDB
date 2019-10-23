@@ -1,6 +1,7 @@
 ﻿using MusicStoreDB_App.Commands;
 using MusicStoreDB_App.Data;
 using System;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Windows;
@@ -9,7 +10,7 @@ using System.Windows.Data;
 namespace MusicStoreDB_App.ViewModels {
     public class AlbumViewModel : BaseViewModel, IPageViewModel{
         public CollectionViewSource Albums { get; private set; }
-        public CollectionViewSource Groups { get; private set; }
+        public ObservableCollection<Group> Groups { get; private set; }
 
         private Album selectedItem;
         public Album SelectedItem {
@@ -27,19 +28,16 @@ namespace MusicStoreDB_App.ViewModels {
 
         public AlbumViewModel() {
             Albums = new CollectionViewSource();
-            Groups = new CollectionViewSource();
-            RefreshData();
-            
-            SelectedItem = Albums.View.CurrentItem as Album;
-            ButtonAddContent = "Добавить";
+            Groups = new ObservableCollection<Group>();
+            RefreshData();          
             SaveEvent = new SaveCommand(this);
             AddEvent = new AddCommand(this);
             RefreshEvent = new RefreshCommand(this);
             DeleteEvent = new DeleteCommand(this);           
         }
-        public void RefreshData() {
+        public void RefreshData() {            
             using (var dbContext = new MusicStoreDBEntities()) {
-                Albums.Source = dbContext.Albums.ToList();
+                Albums.Source = dbContext.Albums.Include(a => a.Group).Include(pr => pr.Price_List).ToList();
                 var query = (from g in dbContext.Groups
                              join c in dbContext.Countries on g.id_country equals c.id_country
                              select new {
@@ -47,7 +45,7 @@ namespace MusicStoreDB_App.ViewModels {
                                  g.group_name,
                                  c.country_name
                              }).ToList();
-                Groups.Source = query;
+                //Groups.AddRange(query);
             }
         }
         public void SaveChanges() {

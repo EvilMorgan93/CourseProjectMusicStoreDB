@@ -21,14 +21,16 @@ namespace MusicStoreDB_App.Commands {
         }
 
         public void Execute(object parameter) {
-            if (baseViewModel.ButtonAddContent == "Добавить") {
+            if (baseViewModel.ButtonAddContent == "Add") {
                 switch (baseViewModel.Name) {
                     case "Композиции":
                         var song = new Song();
                         baseViewModel.SelectedItem = song;
                         break;
                     case "Альбомы":
-                        var album = new Album();
+                        var album = new Album() {
+                            album_year = DateTime.Now
+                        };
                         baseViewModel.SelectedItem = album;
                         break;
                     case "Продажи":
@@ -42,7 +44,7 @@ namespace MusicStoreDB_App.Commands {
                         baseViewModel.SelectedItem = albumSong;
                         break;
                 }
-                baseViewModel.ButtonAddContent = "Отмена";
+                baseViewModel.ButtonAddContent = "Cancel";
             } else {
                 switch (baseViewModel.Name) {
                     case "Композиции":

@@ -34,7 +34,6 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <DataGrid IsReadOnly="True" AutoGenerateColumns="False" ColumnWidth="*" ItemsSource="{Binding Album.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                         <DataGrid.Columns>
@@ -59,8 +58,8 @@
                 </Grid>
             </StackPanel>
         </Border>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,5.8,10" Background="White" Grid.Column="0" Grid.RowSpan="2">
-            <StackPanel x:Name="addStackPanel" Grid.Column="1">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,5.8,10" Background="White" Grid.Column="0">
+            <StackPanel x:Name="addStackPanel" Margin="0.2,0.2,-0.2,-0.2">
                 <Grid Height="525">
                     <Grid.RowDefinitions>
                         <RowDefinition/>

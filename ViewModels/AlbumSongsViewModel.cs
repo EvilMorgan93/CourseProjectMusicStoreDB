@@ -33,7 +33,6 @@ namespace MusicStoreDB_App.ViewModels {
             Song = new CollectionViewSource();
             RefreshData();
             SelectedItem = AlbumSongs.View.CurrentItem as Album_Songs;
-            ButtonAddContent = "Добавить";
             SaveEvent = new SaveCommand(this);
             AddEvent = new AddCommand(this);
             RefreshEvent = new RefreshCommand(this);

@@ -17,13 +17,13 @@ namespace MusicStoreDB_App.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Price_List()
         {
-            this.Purchases = new HashSet<Purchase>();
+            this.Albums = new HashSet<Album>();
         }
     
         public int id_price { get; set; }
         public int purchase_price { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Purchase> Purchases { get; set; }
+        public virtual ICollection<Album> Albums { get; set; }
     }
 }

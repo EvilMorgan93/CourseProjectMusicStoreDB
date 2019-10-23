@@ -1,13 +1,5 @@
 ﻿using MusicStoreDB_App.Commands;
-using MusicStoreDB_App.Data;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MusicStoreDB_App.ViewModels {
     public abstract class BaseViewModel : INotifyPropertyChanged {
@@ -19,6 +11,9 @@ namespace MusicStoreDB_App.ViewModels {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string property) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+        public BaseViewModel() {
+            ButtonAddContent = "Добавить";
         }
         private string buttonAddContent;
         public string ButtonAddContent {

@@ -20,6 +20,7 @@
           </Key>
           <Property Name="id_album" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_artist" Type="int" Nullable="false" />
+          <Property Name="id_price" Type="int" Nullable="false" />
           <Property Name="album_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="album_year" Type="date" Nullable="false" />
         </EntityType>
@@ -69,7 +70,6 @@
           <Property Name="id_purchase" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_album" Type="int" Nullable="false" />
           <Property Name="id_employee" Type="int" Nullable="false" />
-          <Property Name="id_price" Type="int" Nullable="false" />
           <Property Name="purchase_amount" Type="int" Nullable="false" />
           <Property Name="purchase_date" Type="datetime" Nullable="false" />
         </EntityType>
@@ -133,6 +133,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Albums_Price_List">
+          <End Role="Price_List" Type="Self.Price_List" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Albums" Type="Self.Albums" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price_List">
+              <PropertyRef Name="id_price" />
+            </Principal>
+            <Dependent Role="Albums">
+              <PropertyRef Name="id_price" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Groups_Countries">
           <End Role="Countries" Type="Self.Countries" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -186,20 +200,6 @@
             </Principal>
             <Dependent Role="Purchases">
               <PropertyRef Name="id_employee" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Purchases_Price_List">
-          <End Role="Price_List" Type="Self.Price_List" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Purchases" Type="Self.Purchases" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Price_List">
-              <PropertyRef Name="id_price" />
-            </Principal>
-            <Dependent Role="Purchases">
-              <PropertyRef Name="id_price" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -257,6 +257,10 @@
             <End Role="Groups" EntitySet="Groups" />
             <End Role="Albums" EntitySet="Albums" />
           </AssociationSet>
+          <AssociationSet Name="FK_Albums_Price_List" Association="Self.FK_Albums_Price_List">
+            <End Role="Price_List" EntitySet="Price_List" />
+            <End Role="Albums" EntitySet="Albums" />
+          </AssociationSet>
           <AssociationSet Name="FK_Groups_Countries" Association="Self.FK_Groups_Countries">
             <End Role="Countries" EntitySet="Countries" />
             <End Role="Groups" EntitySet="Groups" />
@@ -271,10 +275,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_Purchases_Employees" Association="Self.FK_Purchases_Employees">
             <End Role="Employees" EntitySet="Employees" />
-            <End Role="Purchases" EntitySet="Purchases" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Purchases_Price_List" Association="Self.FK_Purchases_Price_List">
-            <End Role="Price_List" EntitySet="Price_List" />
             <End Role="Purchases" EntitySet="Purchases" />
           </AssociationSet>
         </EntityContainer>
@@ -335,6 +335,10 @@
             <End Role="Group" EntitySet="Groups" />
             <End Role="Album" EntitySet="Albums" />
           </AssociationSet>
+          <AssociationSet Name="FK_Albums_Price_List" Association="MusicStoreDBModel.FK_Albums_Price_List">
+            <End Role="Price_List" EntitySet="Price_List" />
+            <End Role="Album" EntitySet="Albums" />
+          </AssociationSet>
           <AssociationSet Name="FK_Purchases_Albums" Association="MusicStoreDBModel.FK_Purchases_Albums">
             <End Role="Album" EntitySet="Albums" />
             <End Role="Purchase" EntitySet="Purchases" />
@@ -350,10 +354,6 @@
           <AssociationSet Name="FK_Groups_Genres" Association="MusicStoreDBModel.FK_Groups_Genres">
             <End Role="Genre" EntitySet="Genres" />
             <End Role="Group" EntitySet="Groups" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Purchases_Price_List" Association="MusicStoreDBModel.FK_Purchases_Price_List">
-            <End Role="Price_List" EntitySet="Price_List" />
-            <End Role="Purchase" EntitySet="Purchases" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
@@ -384,10 +384,12 @@
           </Key>
           <Property Name="id_album" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="id_artist" Type="Int32" Nullable="false" />
+          <Property Name="id_price" Type="Int32" Nullable="false" />
           <Property Name="album_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="album_year" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Album_Songs" Relationship="MusicStoreDBModel.FK_Album_Songs_Albums" FromRole="Album" ToRole="Album_Songs" />
           <NavigationProperty Name="Group" Relationship="MusicStoreDBModel.FK_Albums_Groups" FromRole="Album" ToRole="Group" />
+          <NavigationProperty Name="Price_List" Relationship="MusicStoreDBModel.FK_Albums_Price_List" FromRole="Album" ToRole="Price_List" />
           <NavigationProperty Name="Purchases" Relationship="MusicStoreDBModel.FK_Purchases_Albums" FromRole="Album" ToRole="Purchase" />
         </EntityType>
         <EntityType Name="Country">
@@ -434,7 +436,7 @@
           </Key>
           <Property Name="id_price" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="purchase_price" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Purchases" Relationship="MusicStoreDBModel.FK_Purchases_Price_List" FromRole="Price_List" ToRole="Purchase" />
+          <NavigationProperty Name="Albums" Relationship="MusicStoreDBModel.FK_Albums_Price_List" FromRole="Price_List" ToRole="Album" />
         </EntityType>
         <EntityType Name="Purchase">
           <Key>
@@ -443,12 +445,10 @@
           <Property Name="id_purchase" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="id_album" Type="Int32" Nullable="false" />
           <Property Name="id_employee" Type="Int32" Nullable="false" />
-          <Property Name="id_price" Type="Int32" Nullable="false" />
           <Property Name="purchase_amount" Type="Int32" Nullable="false" />
           <Property Name="purchase_date" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Album" Relationship="MusicStoreDBModel.FK_Purchases_Albums" FromRole="Purchase" ToRole="Album" />
           <NavigationProperty Name="Employee" Relationship="MusicStoreDBModel.FK_Purchases_Employees" FromRole="Purchase" ToRole="Employee" />
-          <NavigationProperty Name="Price_List" Relationship="MusicStoreDBModel.FK_Purchases_Price_List" FromRole="Purchase" ToRole="Price_List" />
         </EntityType>
         <EntityType Name="Song">
           <Key>
@@ -511,6 +511,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Albums_Price_List">
+          <End Type="MusicStoreDBModel.Price_List" Role="Price_List" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="MusicStoreDBModel.Album" Role="Album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price_List">
+              <PropertyRef Name="id_price" />
+            </Principal>
+            <Dependent Role="Album">
+              <PropertyRef Name="id_price" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Purchases_Albums">
           <End Type="MusicStoreDBModel.Album" Role="Album" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -567,20 +581,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Purchases_Price_List">
-          <End Type="MusicStoreDBModel.Price_List" Role="Price_List" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="MusicStoreDBModel.Purchase" Role="Purchase" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Price_List">
-              <PropertyRef Name="id_price" />
-            </Principal>
-            <Dependent Role="Purchase">
-              <PropertyRef Name="id_price" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -626,6 +626,7 @@
               <MappingFragment StoreEntitySet="Albums">
                 <ScalarProperty Name="album_year" ColumnName="album_year" />
                 <ScalarProperty Name="album_name" ColumnName="album_name" />
+                <ScalarProperty Name="id_price" ColumnName="id_price" />
                 <ScalarProperty Name="id_artist" ColumnName="id_artist" />
                 <ScalarProperty Name="id_album" ColumnName="id_album" />
               </MappingFragment>
@@ -680,7 +681,6 @@
               <MappingFragment StoreEntitySet="Purchases">
                 <ScalarProperty Name="purchase_date" ColumnName="purchase_date" />
                 <ScalarProperty Name="purchase_amount" ColumnName="purchase_amount" />
-                <ScalarProperty Name="id_price" ColumnName="id_price" />
                 <ScalarProperty Name="id_employee" ColumnName="id_employee" />
                 <ScalarProperty Name="id_album" ColumnName="id_album" />
                 <ScalarProperty Name="id_purchase" ColumnName="id_purchase" />
