@@ -1,23 +1,20 @@
 ﻿using MusicStoreDB_App.Commands;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
 namespace MusicStoreDB_App.ViewModels {
-    public class ApplicationViewModel : INotifyPropertyChanged {
+    public class ApplicationViewModel : BaseViewModel {
         private ICommand changePageCommand;
         private IPageViewModel currentPageViewModel;
         private List<IPageViewModel> pageViewModels;
 
         public ApplicationViewModel() {
-            // Add available pages
             PageViewModels.Add(new SongViewModel());
             PageViewModels.Add(new AlbumSongsViewModel());
             PageViewModels.Add(new AlbumViewModel());
             PageViewModels.Add(new PurchaseViewModel());           
 
-            // Set starting page
             CurrentPageViewModel = PageViewModels[0];
         }
 
@@ -47,10 +44,6 @@ namespace MusicStoreDB_App.ViewModels {
                 }
             }
         }
-        protected void OnPropertyChanged(string property) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
         private void ChangeViewModel(IPageViewModel viewModel) {
             if (!PageViewModels.Contains(viewModel))
                 PageViewModels.Add(viewModel);

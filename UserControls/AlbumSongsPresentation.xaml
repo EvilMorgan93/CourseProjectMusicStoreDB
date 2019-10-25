@@ -15,39 +15,21 @@
             <RowDefinition Height="130*"/>
             <RowDefinition Height="57*"/>
         </Grid.RowDefinitions>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="10.2,10,8,9.8" Background="White" Grid.RowSpan="2" Grid.Column ="1">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,9.6" Background="White" Grid.Column ="1">
             <StackPanel Margin="0.2,9.2,0,9">
                 <TextBlock Text="Альбомные композиции" Style="{StaticResource textBlockStyle}" Margin="277,0,267.2,0" Width="231"/>
-                <DataGrid AutoGenerateColumns="False" ColumnWidth="*" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding AlbumSongs.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
+                <DataGrid AutoGenerateColumns="False" ColumnWidth="*" SelectedItem="{Binding SelectedAlbumSongItem}" ItemsSource="{Binding AlbumSongs.View}" IsReadOnly="True" CanUserAddRows="False" Background="#FFA5A5A5" Height="384" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
                             <MenuItem Header="Удалить" Command="{Binding DeleteEvent}"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID Альбома" Width="*" Binding="{Binding id_album}"/>
-                        <DataGridTextColumn Header="ID Композиции" Width="*" Binding="{Binding id_song}"/>
+                        <DataGridTextColumn Header="Альбом" Width="*" Binding="{Binding Album.album_name}"/>
+                        <DataGridTextColumn Header="Композиция" Width="*" Binding="{Binding Song.song_title}"/>
                         <DataGridTextColumn Header="Номер трека" Width="*" Binding="{Binding track_number}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Height="251" Margin="0,10,0.2,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid IsReadOnly="True" AutoGenerateColumns="False" ColumnWidth="*" ItemsSource="{Binding Album.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID Альбома" Width="*" Binding="{Binding id_album}"/>
-                            <DataGridTextColumn Header="Название альбома" Width="*" Binding="{Binding album_name}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <DataGrid IsReadOnly="True" Grid.Column="1" AutoGenerateColumns="False" ColumnWidth="*" ItemsSource="{Binding Song.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID Композиции" Width="*" Binding="{Binding id_song}"/>
-                            <DataGridTextColumn Header="Композиция" Width="*" Binding="{Binding song_title}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
                 <Grid Height="58" Margin="10,15,364.2,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -73,12 +55,12 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Text="ID Альбома" Style="{StaticResource textBlockStyle}"/>
-                    <TextBox Grid.Column="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.id_album, Mode=TwoWay}"/>
-                    <TextBlock Grid.Row="1" Text="ID Композиции" Style="{StaticResource textBlockStyle}"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.id_song, Mode=TwoWay}"/>
+                    <TextBlock Grid.Row="0" Text="Альбом" Style="{StaticResource textBlockStyle}"/>
+                    <ComboBox Grid.Column="1" Style="{StaticResource comboBoxEditStyle}" ItemsSource="{Binding Album.View}" SelectedItem="{Binding SelectedAlbumItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_album" DisplayMemberPath="album_name"/>
+                    <TextBlock Grid.Row="1" Text="Композиция" Style="{StaticResource textBlockStyle}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" Style="{StaticResource comboBoxEditStyle}" ItemsSource="{Binding Song.View}" SelectedItem="{Binding SelectedSongItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_song" DisplayMemberPath="song_title"/>
                     <TextBlock Grid.Row="2" Text="Номер трека" Style="{StaticResource textBlockStyle}"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.track_number,Mode=TwoWay}"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedAlbumSongItem.track_number,Mode=TwoWay}"/>
                     <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>
                     <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource DeleteStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
                 </Grid>

@@ -18,7 +18,7 @@
         <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="10.2,10,8,9.8" Background="White" Grid.RowSpan="2" Grid.Column ="1">
             <StackPanel Margin="0.2,9.2,0,9">
                 <TextBlock Text="Композиции" Style="{StaticResource textBlockStyle}"/>
-                <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" ColumnWidth="*" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding ListSongs.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
+                <DataGrid AutoGenerateColumns="False" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding ListSongs.View}" IsReadOnly="True" CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
                             <MenuItem Header="Удалить" x:Name="RemoveContextMenu" Command="{Binding DeleteEvent}"/>

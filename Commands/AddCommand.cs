@@ -21,7 +21,7 @@ namespace MusicStoreDB_App.Commands {
         }
 
         public void Execute(object parameter) {
-            if (baseViewModel.ButtonAddContent == "Add") {
+            if (baseViewModel.ButtonAddContent == "Добавить") {
                 switch (baseViewModel.Name) {
                     case "Композиции":
                         var song = new Song();
@@ -37,29 +37,20 @@ namespace MusicStoreDB_App.Commands {
                         var purchase = new Purchase {
                             purchase_date = DateTime.Now
                         };
-                        baseViewModel.SelectedItem = purchase;
+                        baseViewModel.SelectedPurchaseItem = purchase;
+                        baseViewModel.SelectedAlbumItem = baseViewModel.Album.View.CurrentItem as Album;
+                        baseViewModel.SelectedEmployeeItem = baseViewModel.Employee.View.CurrentItem as Employee;
                         break;
                     case "Альбомные композиции":
                         var albumSong = new Album_Songs();
-                        baseViewModel.SelectedItem = albumSong;
+                        baseViewModel.SelectedAlbumSongItem = albumSong;
+                        baseViewModel.SelectedAlbumItem = baseViewModel.Album.View.CurrentItem as Album;
+                        baseViewModel.SelectedSongItem = baseViewModel.Song.View.CurrentItem as Song;
                         break;
                 }
-                baseViewModel.ButtonAddContent = "Cancel";
+                baseViewModel.ButtonAddContent = "Отмена";
             } else {
-                switch (baseViewModel.Name) {
-                    case "Композиции":
-                        baseViewModel.SelectedItem = baseViewModel.ListSongs.View.CurrentItem as Song;
-                        break;
-                    case "Альбомы":
-                        baseViewModel.SelectedItem = baseViewModel.Albums.View.CurrentItem as Album;
-                        break;
-                    case "Продажи":
-                        baseViewModel.SelectedItem = baseViewModel.Purchase.View.CurrentItem as Purchase;
-                        break;
-                    case "Альбомные композиции":
-                        baseViewModel.SelectedItem = baseViewModel.AlbumSongs.View.CurrentItem as Album_Songs;
-                        break;
-                }
+                baseViewModel.ButtonAddContent = "Добавить";
             }
         }
     }

@@ -17,13 +17,31 @@ namespace MusicStoreDB_App.ViewModels {
         public string Name {
             get => "Альбомные композиции";
         }
-        private Album_Songs selectedItem;
-        public Album_Songs SelectedItem {
-            get => selectedItem;
+        private Album_Songs selectedAlbumSongItem;
+        public Album_Songs SelectedAlbumSongItem {
+            get => selectedAlbumSongItem;
             set {
-                selectedItem = value;
-                OnPropertyChanged("SelectedItem");
+                selectedAlbumSongItem = value;
+                SelectedAlbumItem = selectedAlbumSongItem.Album;
+                SelectedSongItem = selectedAlbumSongItem.Song;
+                OnPropertyChanged("SelectedAlbumSongItem");
                 ButtonAddContent = "Добавить";
+            }
+        }
+        private Album selectedAlbumItem;
+        public Album SelectedAlbumItem {
+            get => selectedAlbumItem;
+            set {
+                selectedAlbumItem = value;
+                OnPropertyChanged("SelectedAlbumItem");
+            }
+        }
+        private Song selectedSongItem;
+        public Song SelectedSongItem {
+            get => selectedSongItem;
+            set {
+                selectedSongItem = value;
+                OnPropertyChanged("SelectedSongItem");
             }
         }
 
@@ -32,7 +50,6 @@ namespace MusicStoreDB_App.ViewModels {
             Album = new CollectionViewSource();
             Song = new CollectionViewSource();
             RefreshData();
-            SelectedItem = AlbumSongs.View.CurrentItem as Album_Songs;
             SaveEvent = new SaveCommand(this);
             AddEvent = new AddCommand(this);
             RefreshEvent = new RefreshCommand(this);
@@ -42,19 +59,12 @@ namespace MusicStoreDB_App.ViewModels {
 
         public void RefreshData() {
             using (var dbContext = new MusicStoreDBEntities()) {
-                AlbumSongs.Source = dbContext.Album_Songs.ToList();
-                var songQuery = (from s in dbContext.Songs
-                                 select new {
-                                     s.id_song,
-                                     s.song_title
-                                 }).ToList();
-                Song.Source = songQuery;
-                var albumQuery = (from a in dbContext.Albums
-                                  select new {
-                                      a.id_album,
-                                      a.album_name
-                                  }).ToList();
-                Album.Source = albumQuery;
+                AlbumSongs.Source = dbContext.Album_Songs
+                    .Include(a => a.Album)
+                    .Include(s => s.Song)
+                    .ToList();
+                Song.Source = dbContext.Songs.ToList();
+                Album.Source = dbContext.Albums.ToList();
             }
         }
         public void ExportAlbumSongsToPDF() {
@@ -127,6 +137,7 @@ namespace MusicStoreDB_App.ViewModels {
                     } else {
                         EditAlbumSongData(dbContext);
                     }
+                    dbContext.SaveChanges();
                 }
                 RefreshData();
             } catch (Exception ex) {
@@ -134,18 +145,21 @@ namespace MusicStoreDB_App.ViewModels {
             }
         }
         public void AddAlbumSongData(MusicStoreDBEntities dbContext) {
-            dbContext.Album_Songs.Add(SelectedItem);
-            dbContext.SaveChanges();
+            SelectedAlbumSongItem.id_album = SelectedAlbumItem.id_album;
+            SelectedAlbumSongItem.id_song = SelectedSongItem.id_song;
+            dbContext.Album_Songs.Add(SelectedAlbumSongItem);
         }
         public void EditAlbumSongData(MusicStoreDBEntities dbContext) {
-            dbContext.Entry(SelectedItem).State = EntityState.Modified;
-            dbContext.SaveChanges();
+            dbContext.Albums.Attach(SelectedAlbumItem);
+            dbContext.Songs.Attach(SelectedSongItem);
+            SelectedAlbumSongItem.id_album = SelectedAlbumItem.id_album;
+            SelectedAlbumSongItem.id_song = SelectedSongItem.id_song;
+            dbContext.Entry(SelectedAlbumSongItem).State = EntityState.Modified;
         }
         public void DeleteAlbumSongData() {
             try {
                 using (var dbContext = new MusicStoreDBEntities()) {
-                    var entity = SelectedItem;
-                    dbContext.Entry(entity).State = EntityState.Deleted;
+                    dbContext.Entry(SelectedAlbumSongItem).State = EntityState.Deleted;
                     dbContext.SaveChanges();
                     RefreshData();
                 }

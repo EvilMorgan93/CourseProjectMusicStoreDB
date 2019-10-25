@@ -15,35 +15,36 @@
             <RowDefinition Height="130*"/>
             <RowDefinition Height="57*"/>
         </Grid.RowDefinitions>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="10.2,10,8,9.8" Background="White" Grid.RowSpan="2" Grid.Column ="1">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,9.6" Background="White" Grid.Column ="1">
             <StackPanel Margin="0.2,9.2,0,9">
-                <TextBlock Text="Sales" Style="{StaticResource textBlockStyle}"/>
-                <DataGrid AutoGenerateColumns="False" ColumnWidth="*" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding Purchase.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
+                <TextBlock Text="Продажи" Style="{StaticResource textBlockStyle}"/>
+                <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedPurchaseItem}" ItemsSource="{Binding Purchase.View}" CanUserAddRows="False" Background="#FFA5A5A5" Height="384" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
                             <MenuItem Header="Удалить" Command="{Binding DeleteEvent}"/>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Album" Width="*" Binding="{Binding Album.album_name}"/>
-                        <DataGridTextColumn Header="Seller" Width="*" Binding="{Binding Employee.employee_name}"/>
-                        <DataGridTextColumn Header="Number of copies" Width="160" Binding="{Binding purchase_amount}"/>
-                        <DataGridTextColumn Header="Date" Width="*" Binding="{Binding purchase_date, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Альбом" Width="*" Binding="{Binding Album.album_name}"/>
+                        <DataGridTextColumn Header="Продавец" Width="*">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="Employee.employee_surname"/>
+                                    <Binding Path="Employee.employee_name"/>
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Количество копий" Width="160" Binding="{Binding purchase_amount}"/>
+                        <DataGridTextColumn Header="Дата покупки" Width="*" Binding="{Binding purchase_date, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Height="251" Margin="0,10,0.2,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
                 <Grid Height="58" Margin="10,15,364.2,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Refresh" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
-                    <!--<Button Grid.Column="1" Style="{StaticResource SaveStyle}" Content="Отчёт по продажам" Command="{Binding ExportEvent}" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>-->
+                    <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
+                    <Button Grid.Column="1" Style="{StaticResource SaveStyle}" Content="Отчёт по продажам" Command="{Binding ExportEvent}" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
                 </Grid>
             </StackPanel>
         </Border>
@@ -62,14 +63,27 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Text="Album" Style="{StaticResource textBlockStyle}"/>
-                    <ComboBox Grid.Column="1" Style="{StaticResource comboBoxStyle}" ItemsSource="{Binding Album.View}" SelectedItem="{Binding SelectedItem.id_album, Mode=TwoWay}" SelectedValuePath="id_album" DisplayMemberPath="album_name" IsSynchronizedWithCurrentItem="True"/>
-                    <TextBlock Grid.Row="1" Text="Seller" Style="{StaticResource textBlockStyle}"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.id_employee, Mode=TwoWay}"/>
-                    <TextBlock Grid.Row="2" Text="Number of copies" Style="{StaticResource textBlockStyle}" Margin="10,34.8,10.4,34.4" Width="194"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.purchase_amount,Mode=TwoWay}"/>
+                    <TextBlock Grid.Row="0" Text="Альбом" Style="{StaticResource textBlockStyle}"/>
+                    <ComboBox Grid.Column="1" Style="{StaticResource comboBoxEditStyle}" ItemsSource="{Binding Album.View}" SelectedItem="{Binding SelectedAlbumItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_album" DisplayMemberPath="album_name"/>
+                    <TextBlock Grid.Row="1" Text="Продавец" Style="{StaticResource textBlockStyle}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" Style="{StaticResource comboBoxStyle}" ItemsSource="{Binding Employee.View}" SelectedItem="{Binding SelectedEmployeeItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_employee">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="employee_surname"/>
+                                            <Binding Path="employee_name"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock Grid.Row="2" Text="Количество копий" Style="{StaticResource textBlockStyle}" Margin="10,34.8,10.4,34.4" Width="194"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedPurchaseItem.purchase_amount, Mode=TwoWay}"/>
                     <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>
-                    <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource DeleteStyle}" Content="Save" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
+                    <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource DeleteStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
                 </Grid>
             </StackPanel>
         </Border>

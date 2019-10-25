@@ -68,6 +68,8 @@
                     <DatePicker Grid.Column="1" Style="{StaticResource datePickerStyle}" Grid.Row="1" SelectedDate="{Binding SelectedItem.album_year, Mode=TwoWay, StringFormat=\{0:dd.MM.yyyy\}}"/>
                     <TextBlock Grid.Row="2" Text="ID Исполнителя" Style="{StaticResource textBlockStyle}"/>
                     <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.id_artist,Mode=TwoWay}"/>
+                    <TextBlock Grid.Row="3" Text="ID прайс листа" Style="{StaticResource textBlockStyle}"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedItem.id_price,Mode=TwoWay}"/>
                     <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>
                     <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource DeleteStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
                 </Grid>
