@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:MusicStoreDB_App.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="790" d:DesignWidth="1238">
@@ -17,7 +18,14 @@
         </Grid.RowDefinitions>
         <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,9.6" Background="White" Grid.Column ="1">
             <StackPanel Margin="0.2,9.2,0,9">
-                <TextBlock Text="Продажи" Style="{StaticResource textBlockStyle}"/>
+                <Grid Height="23" Margin="1,0,-0.8,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Продажи" Style="{StaticResource textBlockStyle}"/>
+                    <xctk:WatermarkTextBox Watermark="Поиск" Grid.Column="1" Style="{StaticResource textBoxStyle}" HorizontalAlignment="Right" Margin="0,0,35.2,-3" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" Height="26"/>
+                </Grid>
                 <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedPurchaseItem}" ItemsSource="{Binding Purchase.View}" CanUserAddRows="False" Background="#FFA5A5A5" Height="384" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
@@ -78,7 +86,7 @@
                                     </TextBlock.Text>
                                 </TextBlock>
                             </DataTemplate>
-                            </ComboBox.ItemTemplate>
+                        </ComboBox.ItemTemplate>
                     </ComboBox>
                     <TextBlock Grid.Row="2" Text="Количество копий" Style="{StaticResource textBlockStyle}" Margin="10,34.8,10.4,34.4" Width="194"/>
                     <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource textBoxStyle}" Text="{Binding SelectedPurchaseItem.purchase_amount, Mode=TwoWay}"/>

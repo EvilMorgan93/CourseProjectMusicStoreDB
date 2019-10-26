@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
     public class SongViewModel : BaseViewModel, IPageViewModel {
-        public ObservableCollection<Song> Songs { get; private set; }      
+        public CollectionViewSource Songs { get; private set; }      
         public CollectionViewSource ListSongs { get; set; }
         private Song selectedItem;
         public Song SelectedItem {
@@ -26,19 +26,18 @@ namespace MusicStoreDB_App.ViewModels {
         }
 
         public SongViewModel() {
-            Songs = new ObservableCollection<Song>();
+            Songs = new CollectionViewSource();
             ListSongs = new CollectionViewSource();
-            RefreshData();
-            ListSongs.Source = Songs;           
+            RefreshData();       
             SaveEvent = new SaveCommand(this);
             AddEvent = new AddCommand(this);
             RefreshEvent = new RefreshCommand(this);
             DeleteEvent = new DeleteCommand(this);
         }
         public void RefreshData() {
-            Songs.Clear();
             using (var dbContext = new MusicStoreDBEntities()) {
-                Songs.AddRange(dbContext.Songs.ToList());
+                Songs.Source = dbContext.Songs
+                    .ToList();
             }
         }
         public void SaveChanges() {
@@ -50,6 +49,7 @@ namespace MusicStoreDB_App.ViewModels {
                     } else {
                         EditSongData(dbContext);
                     }
+                    dbContext.SaveChanges();
                 }
                 RefreshData();
             } catch (Exception ex) {
@@ -58,11 +58,9 @@ namespace MusicStoreDB_App.ViewModels {
         }
         public void AddSongData(MusicStoreDBEntities dbContext) {
             dbContext.Songs.Add(SelectedItem as Song);
-            dbContext.SaveChanges();
         }
         public void EditSongData(MusicStoreDBEntities dbContext) {
             dbContext.Entry(SelectedItem).State = EntityState.Modified;
-            dbContext.SaveChanges();
         }
         public void DeleteSongData() {
             try {

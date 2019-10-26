@@ -1,5 +1,6 @@
 ﻿using MusicStoreDB_App.Commands;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace MusicStoreDB_App.ViewModels {
     public abstract class BaseViewModel : INotifyPropertyChanged {
@@ -9,7 +10,7 @@ namespace MusicStoreDB_App.ViewModels {
         public RefreshCommand RefreshEvent { get; set; }
         public DeleteCommand DeleteEvent { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string property) {
+        protected void OnPropertyChanged([CallerMemberName] string property="") {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
         public BaseViewModel() {

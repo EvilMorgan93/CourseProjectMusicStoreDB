@@ -37,7 +37,10 @@ namespace MusicStoreDB_App.ViewModels {
         }
         public void RefreshData() {            
             using (var dbContext = new MusicStoreDBEntities()) {
-                Albums.Source = dbContext.Albums.Include(a => a.Group).Include(pr => pr.Price_List).ToList();
+                Albums.Source = dbContext.Albums
+                    .Include(a => a.Group)
+                    .Include(pr => pr.Price_List)
+                    .ToList();
                 var query = (from g in dbContext.Groups
                              join c in dbContext.Countries on g.id_country equals c.id_country
                              select new {
@@ -45,7 +48,6 @@ namespace MusicStoreDB_App.ViewModels {
                                  g.group_name,
                                  c.country_name
                              }).ToList();
-                //Groups.AddRange(query);
             }
         }
         public void SaveChanges() {

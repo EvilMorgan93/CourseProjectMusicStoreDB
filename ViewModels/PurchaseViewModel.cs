@@ -21,11 +21,15 @@ namespace MusicStoreDB_App.ViewModels {
         public Purchase SelectedPurchaseItem {
             get => selectedPurchaseItem;
             set {
-                selectedPurchaseItem = value;               
-                SelectedAlbumItem = selectedPurchaseItem.Album;
-                SelectedEmployeeItem = selectedPurchaseItem.Employee;
-                OnPropertyChanged("SelectedPurchaseItem");
-                ButtonAddContent = "Добавить";
+                selectedPurchaseItem = value;
+                if (selectedPurchaseItem == null) {
+                    SelectedAlbumItem = Album.View.CurrentItem as Album;
+                    SelectedEmployeeItem = Employee.View.CurrentItem as Employee;
+                } else {
+                    SelectedAlbumItem = selectedPurchaseItem.Album;
+                    SelectedEmployeeItem = selectedPurchaseItem.Employee;
+                }
+                OnPropertyChanged();
             }
         }
         private Album selectedAlbumItem;
@@ -33,7 +37,7 @@ namespace MusicStoreDB_App.ViewModels {
             get => selectedAlbumItem;
             set {
                 selectedAlbumItem = value;
-                OnPropertyChanged("SelectedAlbumItem");
+                OnPropertyChanged();
             }
         }
         private Employee selectedEmployeeItem;
@@ -41,7 +45,16 @@ namespace MusicStoreDB_App.ViewModels {
             get => selectedEmployeeItem;
             set {
                 selectedEmployeeItem = value;
-                OnPropertyChanged("SelectedEmployeeItem");
+                OnPropertyChanged();
+            }
+        }
+        private string filterString;
+        public string FilterString {
+            get => filterString;
+            set {
+                filterString = value;
+                OnPropertyChanged();
+                Purchase.View.Refresh();
             }
         }
 
@@ -54,7 +67,18 @@ namespace MusicStoreDB_App.ViewModels {
             AddEvent = new AddCommand(this);
             RefreshEvent = new RefreshCommand(this);
             DeleteEvent = new DeleteCommand(this);
-            ExportEvent = new ExportCommand(this);
+            ExportEvent = new ExportCommand(this);           
+        }
+
+        public bool Filter(object obj) {
+            var data = obj as Purchase;
+            if(data != null) {
+                if (!string.IsNullOrEmpty(filterString)) {
+                    return data.Album.album_name.Contains(filterString) || data.purchase_date.ToString().Contains(filterString);
+                }
+                return true;
+            }
+            return false;
         }
         public void ExportPucrhasesToPDF() {
             try {
@@ -147,6 +171,7 @@ namespace MusicStoreDB_App.ViewModels {
                     .ToList();
                 Employee.Source = dbContext.Employees.ToList();
                 Album.Source = dbContext.Albums.ToList();
+                Purchase.View.Filter = new Predicate<object>(Filter);
             }
         }
         public void SaveChanges() {
