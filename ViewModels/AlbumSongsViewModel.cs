@@ -10,39 +10,30 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
-    public class AlbumSongsViewModel : BaseViewModel, IPageViewModel {
-        public CollectionViewSource AlbumSongs { get; private set; }
-        public CollectionViewSource Album { get; private set; }
-        public CollectionViewSource Song { get; private set; }
-        public string Name {
-            get => "Альбомные композиции";
-        }
+    public class AlbumSongsViewModel : BaseViewModel {
+        public CollectionViewSource AlbumSongs { get; }
+        public CollectionViewSource Album { get; }
+        public CollectionViewSource Song { get; }
+        public string Name => "Альбомные композиции";
         private Album_Songs selectedAlbumSongItem;
         public Album_Songs SelectedAlbumSongItem {
             get => selectedAlbumSongItem;
-            set {
-                selectedAlbumSongItem = value;
+            set
+            {
+                SetProperty(ref selectedAlbumSongItem, value);
                 SelectedAlbumItem = selectedAlbumSongItem.Album;
                 SelectedSongItem = selectedAlbumSongItem.Song;
-                OnPropertyChanged("SelectedAlbumSongItem");
-                ButtonAddContent = "Добавить";
             }
         }
         private Album selectedAlbumItem;
         public Album SelectedAlbumItem {
             get => selectedAlbumItem;
-            set {
-                selectedAlbumItem = value;
-                OnPropertyChanged("SelectedAlbumItem");
-            }
+            set => SetProperty(ref selectedAlbumItem, value);
         }
         private Song selectedSongItem;
         public Song SelectedSongItem {
             get => selectedSongItem;
-            set {
-                selectedSongItem = value;
-                OnPropertyChanged("SelectedSongItem");
-            }
+            set => SetProperty(ref selectedSongItem, value);
         }
 
         public AlbumSongsViewModel() {
@@ -67,7 +58,7 @@ namespace MusicStoreDB_App.ViewModels {
                 Album.Source = dbContext.Albums.ToList();
             }
         }
-        public void ExportAlbumSongsToPDF() {
+        public void ExportAlbumSongsToPdf() {
             try {
                 var document = new Document();
                 var writer = PdfWriter.GetInstance(document, new FileStream("Отчёт по песням.pdf", FileMode.Create));

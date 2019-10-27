@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MusicStoreDB_App.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,12 +14,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MusicStoreDB_App.UserControls {
-    /// <summary>
-    /// Логика взаимодействия для AlbumPresentation.xaml
-    /// </summary>
-    public partial class AlbumPresentation : UserControl {
-        public AlbumPresentation() {
+namespace MusicStoreDB_App.Views {
+    public partial class SongView
+    {
+        public SongView() {
             InitializeComponent();
         }
     }

@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-namespace MusicStoreDB_App {
-    public partial class MainView : Window {
-        public MainView() {
+namespace MusicStoreDB_App.Views {
+    public partial class MainWindow : Window {
+        public MainWindow() {
             InitializeComponent();
         }
 

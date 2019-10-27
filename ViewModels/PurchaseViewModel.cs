@@ -4,24 +4,24 @@ using MusicStoreDB_App.Commands;
 using MusicStoreDB_App.Data;
 using System;
 using System.Data.Entity;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
-    public class PurchaseViewModel : BaseViewModel, IPageViewModel {
-        public CollectionViewSource Purchase { get; private set; }
-        public CollectionViewSource Album { get; private set; }
-        public CollectionViewSource Employee { get; private set; }
-        public string Name {
-            get => "Продажи";
-        }
+    public class PurchaseViewModel : BaseViewModel {
+        public CollectionViewSource Purchase { get; }
+        public CollectionViewSource Album { get; }
+        public CollectionViewSource Employee { get; }
+
+        public string Name => "Продажи";
         private Purchase selectedPurchaseItem;
         public Purchase SelectedPurchaseItem {
             get => selectedPurchaseItem;
             set {
-                selectedPurchaseItem = value;
+                SetProperty(ref selectedPurchaseItem, value);
                 if (selectedPurchaseItem == null) {
                     SelectedAlbumItem = Album.View.CurrentItem as Album;
                     SelectedEmployeeItem = Employee.View.CurrentItem as Employee;
@@ -29,31 +29,23 @@ namespace MusicStoreDB_App.ViewModels {
                     SelectedAlbumItem = selectedPurchaseItem.Album;
                     SelectedEmployeeItem = selectedPurchaseItem.Employee;
                 }
-                OnPropertyChanged();
             }
         }
         private Album selectedAlbumItem;
         public Album SelectedAlbumItem {
             get => selectedAlbumItem;
-            set {
-                selectedAlbumItem = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref selectedAlbumItem, value);
         }
         private Employee selectedEmployeeItem;
         public Employee SelectedEmployeeItem {
             get => selectedEmployeeItem;
-            set {
-                selectedEmployeeItem = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref selectedEmployeeItem, value);
         }
         private string filterString;
         public string FilterString {
             get => filterString;
             set {
-                filterString = value;
-                OnPropertyChanged();
+                SetProperty(ref filterString, value);
                 Purchase.View.Refresh();
             }
         }
@@ -71,25 +63,22 @@ namespace MusicStoreDB_App.ViewModels {
         }
 
         public bool Filter(object obj) {
-            var data = obj as Purchase;
-            if(data != null) {
-                if (!string.IsNullOrEmpty(filterString)) {
-                    return data.Album.album_name.Contains(filterString) || data.purchase_date.ToString().Contains(filterString);
-                }
-                return true;
+            if (!(obj is Purchase data)) return false;
+            if (!string.IsNullOrEmpty(filterString)) {
+                return data.Album.album_name.Contains(filterString) || data.purchase_date.ToString(CultureInfo.CurrentCulture).Contains(filterString);
             }
-            return false;
+            return true;
         }
-        public void ExportPucrhasesToPDF() {
+        public void ExportPurchasesToPdf() {
             try {
                 var document = new Document();
                 var writer = PdfWriter.GetInstance(document, new FileStream("Отчёт по продажам.pdf", FileMode.Create));
                 document.Open();
                 using (var dbContext = new MusicStoreDBEntities()) {
-                    string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
+                    var ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
                     var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
                     var font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
-                    string[] nameColumns = new string[] {
+                    var nameColumns = new[] {
                         "№",
                         "Имя продавца",
                         "Название альбома",
@@ -101,7 +90,7 @@ namespace MusicStoreDB_App.ViewModels {
                     var table = new PdfPTable(nameColumns.Length) {
                         WidthPercentage = 100
                     };
-                    PdfPCell cell = new PdfPCell(new Phrase("Отчёт по продажам", font)) {
+                    var cell = new PdfPCell(new Phrase("Отчёт по продажам", font)) {
                         Colspan = nameColumns.Length,
                         HorizontalAlignment = 1,
                         Border = 0,
@@ -121,36 +110,38 @@ namespace MusicStoreDB_App.ViewModels {
                                      pr.purchase_price,
                                      p.purchase_amount
                                  }).ToList();
-                    int index = 1;
-                    for (int i = 0; i < nameColumns.Length; i++) {
-                        cell = new PdfPCell(new Phrase(nameColumns[i], font)) {
+                    var index = 1;
+                    foreach (var t in nameColumns)
+                    {
+                        cell = new PdfPCell(new Phrase(t, font)) {
                             BackgroundColor = BaseColor.LIGHT_GRAY,
                             HorizontalAlignment = Element.ALIGN_CENTER,
                             Padding = 3
                         };
                         table.AddCell(cell);
                     }
-                    for (int k = 0; k < query.Count; k++) {
+                    foreach (var t in query)
+                    {
                         table.AddCell(new PdfPCell(new Phrase(index++.ToString())) {
                             HorizontalAlignment = Element.ALIGN_CENTER,
                             BackgroundColor = BaseColor.LIGHT_GRAY
                         });
-                        table.AddCell(new PdfPCell(new Phrase(query[k].employee_name, font)) {
+                        table.AddCell(new PdfPCell(new Phrase(t.employee_name, font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
-                        table.AddCell(new PdfPCell(new Phrase(query[k].album_name, font)) {
+                        table.AddCell(new PdfPCell(new Phrase(t.album_name, font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
-                        table.AddCell(new PdfPCell(new Phrase(query[k].group_name, font)) {
+                        table.AddCell(new PdfPCell(new Phrase(t.group_name, font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
-                        table.AddCell(new PdfPCell(new Phrase(query[k].purchase_date.ToString("G"), font)) {
+                        table.AddCell(new PdfPCell(new Phrase(t.purchase_date.ToString("G"), font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
-                        table.AddCell(new PdfPCell(new Phrase(query[k].purchase_amount.ToString(), font)) {
+                        table.AddCell(new PdfPCell(new Phrase(t.purchase_amount.ToString(), font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER,
                         });
-                        table.AddCell(new PdfPCell(new Phrase((query[k].purchase_price * query[k].purchase_amount).ToString(), font)) {
+                        table.AddCell(new PdfPCell(new Phrase((t.purchase_price * t.purchase_amount).ToString(), font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
                     }
@@ -171,7 +162,7 @@ namespace MusicStoreDB_App.ViewModels {
                     .ToList();
                 Employee.Source = dbContext.Employees.ToList();
                 Album.Source = dbContext.Albums.ToList();
-                Purchase.View.Filter = new Predicate<object>(Filter);
+                Purchase.View.Filter = Filter;
             }
         }
         public void SaveChanges() {

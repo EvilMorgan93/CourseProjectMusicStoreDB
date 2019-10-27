@@ -1,28 +1,21 @@
 ﻿using MusicStoreDB_App.Commands;
 using MusicStoreDB_App.Data;
 using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
-    public class SongViewModel : BaseViewModel, IPageViewModel {
-        public CollectionViewSource Songs { get; private set; }      
+    public class SongViewModel : BaseViewModel {
+        public CollectionViewSource Songs { get; set; }      
         public CollectionViewSource ListSongs { get; set; }
-        private Song selectedItem;
-        public Song SelectedItem {
-            get { return selectedItem; }
-            set {
-                selectedItem = value;
-                OnPropertyChanged("SelectedItem");
-                ButtonAddContent = "Добавить";
-            }
-        }
-        public string Name {
-            get => "Композиции";
+
+        public string Name => "Композиции";
+        private Song selectedSongItem;
+        public Song SelectedSongItem {
+            get => selectedSongItem;
+            set => SetProperty(ref selectedSongItem, value);
         }
 
         public SongViewModel() {
@@ -57,15 +50,15 @@ namespace MusicStoreDB_App.ViewModels {
             }
         }
         public void AddSongData(MusicStoreDBEntities dbContext) {
-            dbContext.Songs.Add(SelectedItem as Song);
+            dbContext.Songs.Add(SelectedSongItem);
         }
         public void EditSongData(MusicStoreDBEntities dbContext) {
-            dbContext.Entry(SelectedItem).State = EntityState.Modified;
+            dbContext.Entry(SelectedSongItem).State = EntityState.Modified;
         }
         public void DeleteSongData() {
             try {
                 using (var dbContext = new MusicStoreDBEntities()) {
-                    var entity = SelectedItem;
+                    var entity = SelectedSongItem;
                     dbContext.Entry(entity).State = EntityState.Deleted;
                     dbContext.SaveChanges();
                     RefreshData();

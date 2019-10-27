@@ -8,27 +8,19 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace MusicStoreDB_App.ViewModels {
-    public class AlbumViewModel : BaseViewModel, IPageViewModel{
-        public CollectionViewSource Albums { get; private set; }
-        public ObservableCollection<Group> Groups { get; private set; }
-
-        private Album selectedItem;
-        public Album SelectedItem {
-            get => selectedItem; 
-            set {
-                selectedItem = value;
-                OnPropertyChanged("SelectedItem");
-                ButtonAddContent = "Добавить";
-            }
-        }
-
-        public string Name {
-            get => "Альбомы";
+    public class AlbumViewModel : BaseViewModel {
+        public CollectionViewSource Albums { get; }
+        public CollectionViewSource Groups { get; }
+        public string Name => "Альбомы";
+        private Album selectedAlbumItem;
+        public Album SelectedAlbumItem {
+            get => selectedAlbumItem; 
+            set => SetProperty(ref selectedAlbumItem, value);
         }
 
         public AlbumViewModel() {
             Albums = new CollectionViewSource();
-            Groups = new ObservableCollection<Group>();
+            Groups = new CollectionViewSource();
             RefreshData();          
             SaveEvent = new SaveCommand(this);
             AddEvent = new AddCommand(this);
@@ -59,6 +51,7 @@ namespace MusicStoreDB_App.ViewModels {
                     } else {
                         EditAlbumData(dbContext);
                     }
+                    dbContext.SaveChanges();
                 }
                 RefreshData();
             } catch (Exception ex) {
@@ -66,18 +59,15 @@ namespace MusicStoreDB_App.ViewModels {
             }            
         }
         public void AddAlbumData(MusicStoreDBEntities dbContext) {
-            dbContext.Albums.Add(SelectedItem as Album);
-            dbContext.SaveChanges();
+            dbContext.Albums.Add(SelectedAlbumItem);
         }
         public void EditAlbumData(MusicStoreDBEntities dbContext) {
-            dbContext.Entry(SelectedItem).State = EntityState.Modified;
-            dbContext.SaveChanges();
+            dbContext.Entry(SelectedAlbumItem).State = EntityState.Modified;
         }
         public void DeleteAlbumData() {
             try {
                 using (var dbContext = new MusicStoreDBEntities()) {
-                    var entity = SelectedItem;
-                    dbContext.Entry(entity).State = EntityState.Deleted;
+                    dbContext.Entry(SelectedAlbumItem).State = EntityState.Deleted;
                     dbContext.SaveChanges();
                     RefreshData();
                 }
