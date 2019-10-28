@@ -3,18 +3,24 @@ using iTextSharp.text.pdf;
 using MusicStoreDB_App.Commands;
 using MusicStoreDB_App.Data;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
+using Prism.Commands;
 
 namespace MusicStoreDB_App.ViewModels {
     public class PurchaseViewModel : BaseViewModel {
         public CollectionViewSource Purchase { get; }
         public CollectionViewSource Album { get; }
         public CollectionViewSource Employee { get; }
+        public ICommand AddPurchaseEvent { get; set; }
+
+        private List<Purchase> purchases;
 
         public string Name => "Продажи";
         private Purchase selectedPurchaseItem;
@@ -49,17 +55,56 @@ namespace MusicStoreDB_App.ViewModels {
                 Purchase.View.Refresh();
             }
         }
+        private string buttonStartPurchaseContent;
+        public string ButtonStartPurchaseContent {
+            get => buttonStartPurchaseContent;
+            set => SetProperty(ref buttonStartPurchaseContent, value);
+        }
 
         public PurchaseViewModel() {
             Purchase = new CollectionViewSource();
             Album = new CollectionViewSource();
             Employee = new CollectionViewSource();
+            ButtonStartPurchaseContent = "Начать заказ";
+            ButtonAddContent = "Добавить";
             RefreshData();
-            SaveEvent = new SaveCommand(this);
-            AddEvent = new AddCommand(this);
+            PurchaseEvent = new DelegateCommand(Execute, () => true);
+            AddPurchaseEvent = new DelegateCommand(AddCommandExecute, () => true);
+            EditEvent = new EditCommand(this);
             RefreshEvent = new RefreshCommand(this);
             DeleteEvent = new DeleteCommand(this);
-            ExportEvent = new ExportCommand(this);           
+            ExportEvent = new ExportCommand(this);
+        }
+        private void AddCommandExecute()
+        {
+            try {
+                SelectedPurchaseItem.id_album = SelectedAlbumItem.id_album;
+                SelectedPurchaseItem.id_employee = SelectedEmployeeItem.id_employee;
+                purchases.Add(selectedPurchaseItem);
+                RestartItemPosition();
+                MessageBox.Show("Альбом добавлен в заказ", "Покупка", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+            } catch (Exception) {
+                MessageBox.Show("Необходимо нажать 'Начать заказ'");
+            }
+        }
+
+        private void Execute() {
+            if (buttonStartPurchaseContent == "Сохранить") {
+                AddPurchaseData();
+                ButtonStartPurchaseContent = "Начать заказ";
+            } else {
+                RestartItemPosition();
+                purchases = new List<Purchase>();
+                ButtonStartPurchaseContent = "Сохранить";
+            }
+        }
+
+        private void RestartItemPosition()
+        {
+            var purchase = new Purchase {
+                purchase_date = DateTime.Now
+            };
+            SelectedPurchaseItem = purchase;
         }
 
         public bool Filter(object obj) {
@@ -165,15 +210,11 @@ namespace MusicStoreDB_App.ViewModels {
                 Purchase.View.Filter = Filter;
             }
         }
-        public void SaveChanges() {
+
+        public void AddPurchaseData() {
             try {
                 using (var dbContext = new MusicStoreDBEntities()) {
-                    if (ButtonAddContent == "Отмена") {
-                        AddPurchaseData(dbContext);
-                        ButtonAddContent = "Добавить";
-                    } else {
-                        EditPurchaseData(dbContext);
-                    }
+                    dbContext.Purchases.AddRange(purchases);
                     dbContext.SaveChanges();
                 }
                 RefreshData();
@@ -181,25 +222,28 @@ namespace MusicStoreDB_App.ViewModels {
                 MessageBox.Show(ex.Message);
             }
         }
-        public void AddPurchaseData(MusicStoreDBEntities dbContext) {
-            SelectedPurchaseItem.id_album = SelectedAlbumItem.id_album;
-            SelectedPurchaseItem.id_employee = SelectedEmployeeItem.id_employee;
-            dbContext.Purchases.Add(SelectedPurchaseItem);
-        }
-        public void EditPurchaseData(MusicStoreDBEntities dbContext) {           
-            dbContext.Albums.Attach(SelectedAlbumItem);
-            dbContext.Employees.Attach(SelectedEmployeeItem);
-            SelectedPurchaseItem.id_album = SelectedAlbumItem.id_album;
-            SelectedPurchaseItem.id_employee = SelectedEmployeeItem.id_employee;
-            dbContext.Entry(SelectedPurchaseItem).State = EntityState.Modified;
+        public void EditPurchaseData() {
+            try {
+                using (var dbContext = new MusicStoreDBEntities()) {
+                    dbContext.Albums.Attach(SelectedAlbumItem);
+                    dbContext.Employees.Attach(SelectedEmployeeItem);
+                    SelectedPurchaseItem.id_album = SelectedAlbumItem.id_album;
+                    SelectedPurchaseItem.id_employee = SelectedEmployeeItem.id_employee;
+                    dbContext.Entry(SelectedPurchaseItem).State = EntityState.Modified;
+                    dbContext.SaveChanges();
+                }
+                RefreshData();
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
         public void DeletePurchaseData() {
             try {
                 using (var dbContext = new MusicStoreDBEntities()) {
                     dbContext.Entry(SelectedPurchaseItem).State = EntityState.Deleted;
                     dbContext.SaveChanges();
-                    RefreshData();
                 }
+                RefreshData();
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }

@@ -52,8 +52,8 @@
             <PropertyRef Name="id_artist" />
           </Key>
           <Property Name="id_artist" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="id_country" Type="int" Nullable="false" />
           <Property Name="id_genre" Type="int" Nullable="false" />
+          <Property Name="id_country" Type="int" Nullable="false" />
           <Property Name="group_name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Price_List">
@@ -71,6 +71,7 @@
           <Property Name="id_album" Type="int" Nullable="false" />
           <Property Name="id_employee" Type="int" Nullable="false" />
           <Property Name="purchase_amount" Type="int" Nullable="false" />
+          <Property Name="purchase_number" Type="int" />
           <Property Name="purchase_date" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Songs">
@@ -423,8 +424,8 @@
             <PropertyRef Name="id_artist" />
           </Key>
           <Property Name="id_artist" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_country" Type="Int32" Nullable="false" />
           <Property Name="id_genre" Type="Int32" Nullable="false" />
+          <Property Name="id_country" Type="Int32" Nullable="false" />
           <Property Name="group_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Albums" Relationship="MusicStoreDBModel.FK_Albums_Groups" FromRole="Group" ToRole="Album" />
           <NavigationProperty Name="Country" Relationship="MusicStoreDBModel.FK_Groups_Countries" FromRole="Group" ToRole="Country" />
@@ -446,6 +447,7 @@
           <Property Name="id_album" Type="Int32" Nullable="false" />
           <Property Name="id_employee" Type="Int32" Nullable="false" />
           <Property Name="purchase_amount" Type="Int32" Nullable="false" />
+          <Property Name="purchase_number" Type="Int32" />
           <Property Name="purchase_date" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Album" Relationship="MusicStoreDBModel.FK_Purchases_Albums" FromRole="Purchase" ToRole="Album" />
           <NavigationProperty Name="Employee" Relationship="MusicStoreDBModel.FK_Purchases_Employees" FromRole="Purchase" ToRole="Employee" />
@@ -662,8 +664,8 @@
             <EntityTypeMapping TypeName="MusicStoreDBModel.Group">
               <MappingFragment StoreEntitySet="Groups">
                 <ScalarProperty Name="group_name" ColumnName="group_name" />
-                <ScalarProperty Name="id_genre" ColumnName="id_genre" />
                 <ScalarProperty Name="id_country" ColumnName="id_country" />
+                <ScalarProperty Name="id_genre" ColumnName="id_genre" />
                 <ScalarProperty Name="id_artist" ColumnName="id_artist" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -680,6 +682,7 @@
             <EntityTypeMapping TypeName="MusicStoreDBModel.Purchase">
               <MappingFragment StoreEntitySet="Purchases">
                 <ScalarProperty Name="purchase_date" ColumnName="purchase_date" />
+                <ScalarProperty Name="purchase_number" ColumnName="purchase_number" />
                 <ScalarProperty Name="purchase_amount" ColumnName="purchase_amount" />
                 <ScalarProperty Name="id_employee" ColumnName="id_employee" />
                 <ScalarProperty Name="id_album" ColumnName="id_album" />

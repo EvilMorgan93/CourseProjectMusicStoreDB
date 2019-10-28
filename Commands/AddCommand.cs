@@ -1,6 +1,7 @@
 ﻿using MusicStoreDB_App.Data;
 using MusicStoreDB_App.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace MusicStoreDB_App.Commands {
@@ -33,14 +34,6 @@ namespace MusicStoreDB_App.Commands {
                             album_year = DateTime.Now
                         };
                         currentViewModel.SelectedAlbumItem = album;
-                        break;
-                    case "Продажи":
-                        var purchase = new Purchase {
-                            purchase_date = DateTime.Now
-                        };
-                        currentViewModel.SelectedPurchaseItem = purchase;
-                        currentViewModel.SelectedAlbumItem = currentViewModel.Album.View.CurrentItem as Album;
-                        currentViewModel.SelectedEmployeeItem = currentViewModel.Employee.View.CurrentItem as Employee;
                         break;
                     case "Альбомные композиции":
                         var albumSong = new Album_Songs();

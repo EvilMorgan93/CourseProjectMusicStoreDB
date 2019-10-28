@@ -64,10 +64,10 @@ namespace MusicStoreDB_App.ViewModels {
                 var writer = PdfWriter.GetInstance(document, new FileStream("Отчёт по песням.pdf", FileMode.Create));
                 document.Open();
                 using (var dbContext = new MusicStoreDBEntities()) {
-                    string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
+                    var ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
                     var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
                     var font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
-                    string[] nameColumns = new string[] {
+                    string[] nameColumns = {
                         "Название альбома",
                         "Название композиции",
                         "Номер трека"
@@ -75,7 +75,7 @@ namespace MusicStoreDB_App.ViewModels {
                     var table = new PdfPTable(nameColumns.Length) {
                         WidthPercentage = 100
                     };
-                    PdfPCell cell = new PdfPCell(new Phrase("Отчёт по песням", font)) {
+                    var cell = new PdfPCell(new Phrase("Отчёт по песням", font)) {
                         Colspan = nameColumns.Length,
                         HorizontalAlignment = 1,
                         Border = 0,

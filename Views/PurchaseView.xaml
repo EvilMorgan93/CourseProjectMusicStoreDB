@@ -45,16 +45,19 @@
                             </DataGridTextColumn.Binding>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Количество копий" Width="160" Binding="{Binding purchase_amount}"/>
-                        <DataGridTextColumn Header="Дата покупки" Width="*" Binding="{Binding purchase_date, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}"/>
+                        <DataGridTextColumn Header="Дата" Width="*" Binding="{Binding purchase_date, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}"/>
+                        <DataGridTextColumn Header="Номер заказа" Width="auto"  Binding="{Binding purchase_number}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Height="58" Margin="10,15,364.2,0">
+                <Grid Height="58" Margin="10,15,159.2,0">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
-                    <Button Grid.Column="1" Style="{StaticResource SaveStyle}" Content="Отчёт по продажам" Command="{Binding ExportEvent}" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
+                    <Button Grid.Column="2" Style="{StaticResource SaveStyle}" Content="Отчёт по продажам" Command="{Binding ExportEvent}" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
+                    <Button Grid.Column="1" Style="{StaticResource EditStyle}" Content="Изменить" Command="{Binding EditEvent}" Margin="25.6,8,24,8" Height="Auto" Width="Auto"/>
                 </Grid>
             </StackPanel>
         </Border>
@@ -92,8 +95,8 @@
                     </ComboBox>
                     <TextBlock Grid.Row="2" Text="Количество копий" Style="{StaticResource TextBlockStyle}" Margin="10,34.8,10.4,34.4" Width="194"/>
                     <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBoxStyle}" Text="{Binding SelectedPurchaseItem.purchase_amount, Mode=TwoWay}"/>
-                    <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>
-                    <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource BaseButtonStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
+                    <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddPurchaseEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>
+                    <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource BaseButtonStyle}" Content="{Binding ButtonStartPurchaseContent}" Command="{Binding PurchaseEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
                 </Grid>
             </StackPanel>
         </Border>

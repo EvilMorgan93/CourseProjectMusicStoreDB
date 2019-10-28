@@ -32,13 +32,15 @@
                         <DataGridTextColumn Header="Номер трека" Width="*" Binding="{Binding track_number}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Height="58" Margin="10,15,364.2,0">
+                <Grid Height="58" Margin="10,15,159.2,0">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
-                    <Button Grid.Column="1" Style="{StaticResource SaveStyle}" Content="Отчёт по песням" Command="{Binding ExportEvent}" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
+                    <Button Grid.Column="2" Style="{StaticResource SaveStyle}" Content="Отчёт по продажам" Command="{Binding ExportEvent}" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
+                    <Button Grid.Column="1" Style="{StaticResource EditStyle}" Content="Изменить" Command="{Binding EditEvent}" Margin="25.6,8,24,8" Height="Auto" Width="Auto"/>
                 </Grid>
             </StackPanel>
         </Border>
