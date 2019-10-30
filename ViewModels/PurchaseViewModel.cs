@@ -19,8 +19,8 @@ namespace MusicStoreDB_App.ViewModels {
         public CollectionViewSource Album { get; }
         public CollectionViewSource Employee { get; }
         public ICommand AddPurchaseEvent { get; set; }
-
         private List<Purchase> purchases;
+        private long nextUniquePurchaseNumber;
 
         public string Name => "Продажи";
         private Purchase selectedPurchaseItem;
@@ -75,25 +75,34 @@ namespace MusicStoreDB_App.ViewModels {
             DeleteEvent = new DeleteCommand(this);
             ExportEvent = new ExportCommand(this);
         }
-        private void AddCommandExecute()
-        {
+        private void AddCommandExecute() {
+            if (ButtonStartPurchaseContent != "Сохранить") return;
             try {
                 SelectedPurchaseItem.id_album = SelectedAlbumItem.id_album;
                 SelectedPurchaseItem.id_employee = SelectedEmployeeItem.id_employee;
+                SelectedPurchaseItem.purchase_number = nextUniquePurchaseNumber;
                 purchases.Add(selectedPurchaseItem);
                 RestartItemPosition();
-                MessageBox.Show("Альбом добавлен в заказ", "Покупка", MessageBoxButton.OK, MessageBoxImage.Asterisk);
-            } catch (Exception) {
+                MessageBox.Show($"Альбом добавлен в заказ\n Всего в заказе {purchases.Count}", "Заказ",
+                    MessageBoxButton.OK, MessageBoxImage.Asterisk);
+            }
+            catch (Exception) {
                 MessageBox.Show("Необходимо нажать 'Начать заказ'");
             }
         }
 
         private void Execute() {
             if (buttonStartPurchaseContent == "Сохранить") {
+                if (purchases.Count == 0) {
+                    ButtonStartPurchaseContent = "Начать заказ";
+                    return;
+                }
                 AddPurchaseData();
+                MessageBox.Show($"Добавлено {purchases.Count} в итоговый заказ\n Номер заказа {nextUniquePurchaseNumber}");
                 ButtonStartPurchaseContent = "Начать заказ";
             } else {
                 RestartItemPosition();
+                nextUniquePurchaseNumber = GenerateUniquePurchaseNumber();
                 purchases = new List<Purchase>();
                 ButtonStartPurchaseContent = "Сохранить";
             }
@@ -123,7 +132,7 @@ namespace MusicStoreDB_App.ViewModels {
                     var ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
                     var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
                     var font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
-                    var nameColumns = new[] {
+                    string[] nameColumns = {
                         "№",
                         "Имя продавца",
                         "Название альбома",
@@ -209,6 +218,21 @@ namespace MusicStoreDB_App.ViewModels {
                 Album.Source = dbContext.Albums.ToList();
                 Purchase.View.Filter = Filter;
             }
+        }
+        public long GenerateUniquePurchaseNumber() {
+            using (var dbContext = new MusicStoreDBEntities()) {
+                var numbers = dbContext.Purchases
+                    .Select(num => num.purchase_number)
+                    .ToList();
+                nextUniquePurchaseNumber = numbers.Count;
+                for (int i = 0; i < numbers.Count; i++) {
+                    if (nextUniquePurchaseNumber == numbers[i]) {
+                        nextUniquePurchaseNumber++;
+                        i = 0;
+                    }
+                }
+            }
+            return nextUniquePurchaseNumber;
         }
 
         public void AddPurchaseData() {

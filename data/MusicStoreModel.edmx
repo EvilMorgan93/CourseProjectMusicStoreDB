@@ -71,7 +71,7 @@
           <Property Name="id_album" Type="int" Nullable="false" />
           <Property Name="id_employee" Type="int" Nullable="false" />
           <Property Name="purchase_amount" Type="int" Nullable="false" />
-          <Property Name="purchase_number" Type="int" />
+          <Property Name="purchase_number" Type="bigint" />
           <Property Name="purchase_date" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Songs">
@@ -447,7 +447,7 @@
           <Property Name="id_album" Type="Int32" Nullable="false" />
           <Property Name="id_employee" Type="Int32" Nullable="false" />
           <Property Name="purchase_amount" Type="Int32" Nullable="false" />
-          <Property Name="purchase_number" Type="Int32" />
+          <Property Name="purchase_number" Type="Int64" />
           <Property Name="purchase_date" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Album" Relationship="MusicStoreDBModel.FK_Purchases_Albums" FromRole="Purchase" ToRole="Album" />
           <NavigationProperty Name="Employee" Relationship="MusicStoreDBModel.FK_Purchases_Employees" FromRole="Purchase" ToRole="Employee" />

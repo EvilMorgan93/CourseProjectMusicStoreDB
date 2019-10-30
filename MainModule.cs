@@ -11,6 +11,7 @@ using Unity;
 namespace MusicStoreDB_App {
     public class MainModule : IModule {
         public void OnInitialized(IContainerProvider containerProvider) {
+            var regionManager = containerProvider.Resolve<IRegionManager>();
             regionManager.RegisterViewWithRegion("ContentRegion", typeof(SongView));
             regionManager.RegisterViewWithRegion("ContentRegion", typeof(PurchaseView));
             regionManager.RegisterViewWithRegion("ContentRegion", typeof(AlbumSongsView));
@@ -18,12 +19,7 @@ namespace MusicStoreDB_App {
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
-        }
 
-        readonly IRegionManager regionManager;
-
-        public MainModule(RegionManager regionManager) {
-            this.regionManager = regionManager;
         }
     }
 }
