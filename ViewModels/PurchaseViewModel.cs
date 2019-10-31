@@ -83,7 +83,7 @@ namespace MusicStoreDB_App.ViewModels {
                 SelectedPurchaseItem.purchase_number = nextUniquePurchaseNumber;
                 purchases.Add(selectedPurchaseItem);
                 RestartItemPosition();
-                MessageBox.Show($"Альбом добавлен в заказ\n Всего в заказе {purchases.Count}", "Заказ",
+                MessageBox.Show($"Альбом добавлен в заказ\nВсего в заказе: {purchases.Count}", "Заказ",
                     MessageBoxButton.OK, MessageBoxImage.Asterisk);
             }
             catch (Exception) {
@@ -98,13 +98,28 @@ namespace MusicStoreDB_App.ViewModels {
                     return;
                 }
                 AddPurchaseData();
-                MessageBox.Show($"Добавлено {purchases.Count} в итоговый заказ\n Номер заказа {nextUniquePurchaseNumber}");
+                MessageBox.Show($"Добавлено {purchases.Count} в итоговый заказ\nНомер заказа: {nextUniquePurchaseNumber}\nСумма заказа: {TotalPriceQuery()}");
                 ButtonStartPurchaseContent = "Начать заказ";
             } else {
                 RestartItemPosition();
                 nextUniquePurchaseNumber = GenerateUniquePurchaseNumber();
                 purchases = new List<Purchase>();
                 ButtonStartPurchaseContent = "Сохранить";
+            }
+        }
+
+        private int TotalPriceQuery() {
+            using (var dbContext = new MusicStoreDBEntities()) {
+                var totalPrice = (from a in dbContext.Albums
+                                  join p in dbContext.Purchases on a.id_album equals p.id_album
+                                  join pr in dbContext.Price_List on a.id_price equals pr.id_price
+                                  select new {
+                                      p.purchase_number,
+                                      pr.purchase_price,
+                                      p.purchase_amount
+                                  }).Where(p => p.purchase_number == nextUniquePurchaseNumber)
+                    .Sum(pr => pr.purchase_price * pr.purchase_amount);
+                return totalPrice;
             }
         }
 
@@ -133,7 +148,7 @@ namespace MusicStoreDB_App.ViewModels {
                     var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
                     var font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
                     string[] nameColumns = {
-                        "№",
+                        "№ заказа",
                         "Имя продавца",
                         "Название альбома",
                         "Название группы",
@@ -158,13 +173,20 @@ namespace MusicStoreDB_App.ViewModels {
                                  join emp in dbContext.Employees on p.id_employee equals emp.id_employee orderby p.purchase_date
                                  select new {
                                      emp.employee_name,
+                                     p.purchase_number,
                                      a.album_name,
                                      g.group_name,
                                      p.purchase_date,
                                      pr.purchase_price,
                                      p.purchase_amount
                                  }).ToList();
-                    var index = 1;
+                    //var totalPrice = (from a in dbContext.Albums
+                    //                  join pr in dbContext.Price_List on a.id_price equals pr.id_price
+                    //                  join p in dbContext.Purchases on a.id_album equals p.id_album
+                    //                  group pr by new { pr.purchase_price, p.purchase_number} into purchaseGroup
+                    //                  select new {
+                    //                      TotalPrice = purchaseGroup.Sum(x => x.purchase_price * purchaseGroup.Key.purchase_number)
+                    //                  }).ToList();
                     foreach (var t in nameColumns)
                     {
                         cell = new PdfPCell(new Phrase(t, font)) {
@@ -174,28 +196,27 @@ namespace MusicStoreDB_App.ViewModels {
                         };
                         table.AddCell(cell);
                     }
-                    foreach (var t in query)
-                    {
-                        table.AddCell(new PdfPCell(new Phrase(index++.ToString())) {
+                    foreach (var q in query) {
+                        table.AddCell(new PdfPCell(new Phrase(q.purchase_number.ToString())) {
                             HorizontalAlignment = Element.ALIGN_CENTER,
                             BackgroundColor = BaseColor.LIGHT_GRAY
                         });
-                        table.AddCell(new PdfPCell(new Phrase(t.employee_name, font)) {
+                        table.AddCell(new PdfPCell(new Phrase(q.employee_name, font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
-                        table.AddCell(new PdfPCell(new Phrase(t.album_name, font)) {
+                        table.AddCell(new PdfPCell(new Phrase(q.album_name, font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
-                        table.AddCell(new PdfPCell(new Phrase(t.group_name, font)) {
+                        table.AddCell(new PdfPCell(new Phrase(q.group_name, font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
-                        table.AddCell(new PdfPCell(new Phrase(t.purchase_date.ToString("G"), font)) {
+                        table.AddCell(new PdfPCell(new Phrase(q.purchase_date.ToString("G"), font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
-                        table.AddCell(new PdfPCell(new Phrase(t.purchase_amount.ToString(), font)) {
+                        table.AddCell(new PdfPCell(new Phrase(q.purchase_amount.ToString(), font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER,
                         });
-                        table.AddCell(new PdfPCell(new Phrase((t.purchase_price * t.purchase_amount).ToString(), font)) {
+                        table.AddCell(new PdfPCell(new Phrase((q.purchase_price * q.purchase_amount).ToString(), font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
                     }
