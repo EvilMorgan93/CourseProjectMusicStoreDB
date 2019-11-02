@@ -36,7 +36,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Style="{StaticResource AddStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
+                    <Button Grid.Column="0" Style="{DynamicResource EditStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
                 </Grid>
             </StackPanel>
         </Border>

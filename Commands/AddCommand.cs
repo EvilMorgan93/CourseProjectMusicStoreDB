@@ -1,7 +1,6 @@
 ﻿using MusicStoreDB_App.Data;
 using MusicStoreDB_App.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace MusicStoreDB_App.Commands {

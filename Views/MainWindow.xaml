@@ -15,13 +15,13 @@
             </Grid.ColumnDefinitions>
             <Border>
                 <UniformGrid Rows="1" Margin="5">
-                <Button Content="Композиции" Style="{StaticResource TextMenuStyle}" Command="{Binding NavigateCommand}" CommandParameter="SongView"/>
-                <Button Content="Альбомные композиции" Style="{StaticResource TextMenuStyle}" Command="{Binding NavigateCommand}" CommandParameter="AlbumSongsView"/>
-                <Button Content="Альбомы" Style="{StaticResource TextMenuStyle}" Command="{Binding NavigateCommand}" CommandParameter="AlbumView"/>
-                <Button Content="Продажи" Style="{StaticResource TextMenuStyle}" Command="{Binding NavigateCommand}" CommandParameter="PurchaseView"/>
+                <Button Content="Композиции" Style="{StaticResource TextMenuStyle}" Command="{Binding NavigateCommand}" CommandParameter="SongView" Template="{DynamicResource ButtonBaseControlTemplate}"/>
+                <Button Content="Альбомные композиции" Style="{StaticResource TextMenuStyle}" Command="{Binding NavigateCommand}" CommandParameter="AlbumSongsView" Template="{DynamicResource ButtonBaseControlTemplate}"/>
+                <Button Content="Альбомы" Style="{StaticResource TextMenuStyle}" Command="{Binding NavigateCommand}" CommandParameter="AlbumView" Template="{DynamicResource ButtonBaseControlTemplate}"/>
+                <Button Content="Продажи" Style="{StaticResource TextMenuStyle}" Command="{Binding NavigateCommand}" CommandParameter="PurchaseView" Template="{DynamicResource ButtonBaseControlTemplate}"/>
             </UniformGrid>
             </Border>
-            <Button Grid.Column="1" Style="{StaticResource TextMenuStyle}" Content="Выход" Click="Exit_Click" Margin="141.2,6,15,5" Height="Auto" Width="Auto" />
+            <Button Grid.Column="1" Style="{StaticResource TextMenuStyle}" Content="Выход" Click="Exit_Click" Margin="141.2,6,15,5" Height="Auto" Width="Auto" Template="{DynamicResource ButtonBaseControlTemplate}" />
         </Grid>
         <ContentControl prism:RegionManager.RegionName="ContentRegion"/>
     </StackPanel>

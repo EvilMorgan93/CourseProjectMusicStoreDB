@@ -4,6 +4,7 @@ using MusicStoreDB_App.Commands;
 using MusicStoreDB_App.Data;
 using System;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -113,8 +114,9 @@ namespace MusicStoreDB_App.ViewModels {
                     document.Add(table);
                 }
                 document.Close();
-                writer.Close();
                 MessageBox.Show("Отчёт сформирован!", "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Information);
+                Process.Start("Отчёт по песням.pdf");
+                writer.Close();
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Error);
             }
