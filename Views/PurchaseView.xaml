@@ -14,25 +14,20 @@
             <ColumnDefinition Width="63*"/>
             <ColumnDefinition Width="113*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="465*"/>
-            <RowDefinition Height="84*"/>
-            <RowDefinition Height="241*"/>
-        </Grid.RowDefinitions>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,9.6" Background="White" Grid.Column ="1" Grid.RowSpan="2">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,5" Background="White" Grid.Column ="1">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="25" Direction="305" ShadowDepth="6" Opacity="0.46"/>
             </Border.Effect>
-            <StackPanel Margin="0.2,9.2,0,9">
+            <StackPanel Margin="0.2,9.2,0,9.4">
                 <Grid Height="23" Margin="1,0,-0.8,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Продажи" Style="{StaticResource TextBlockStyle}"/>
+                    <TextBlock Text="История продаж" Style="{StaticResource TextBlockStyle}"/>
                     <xctk:WatermarkTextBox Watermark="Поиск" Grid.Column="1" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Right" Margin="0,0,35.2,-3" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" Height="26"/>
                 </Grid>
-                <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedPurchaseItem}" ItemsSource="{Binding Purchase.View}" CanUserAddRows="False" Background="#FFA5A5A5" Height="381" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
+                <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedPurchaseItem}" ItemsSource="{Binding PurchaseCollectionView.View}" CanUserAddRows="False" Background="#FFA5A5A5" Height="526" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
                             <MenuItem Header="Удалить" Command="{Binding DeleteEvent}"/>
@@ -48,9 +43,9 @@
                                 </MultiBinding>
                             </DataGridTextColumn.Binding>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Количество копий" Width="160" Binding="{Binding purchase_amount}"/>
+                        <DataGridTextColumn Header="Количество копий" Width="auto" Binding="{Binding purchase_amount}"/>
                         <DataGridTextColumn Header="Дата" Width="*" Binding="{Binding purchase_date, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}"/>
-                        <DataGridTextColumn Header="Номер заказа" Width="auto"  Binding="{Binding purchase_number}"/>
+                        <DataGridTextColumn Header="Номер заказа" Width="100" Binding="{Binding purchase_number}"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Grid Height="58" Margin="10,15,117.2,0">
@@ -65,14 +60,13 @@
                 </Grid>
             </StackPanel>
         </Border>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,5.8,10" Background="White" Grid.Column="0" Grid.RowSpan="2">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,6.2,5" Background="White" Grid.Column="0">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="25" Direction="305" ShadowDepth="6" Opacity="0.46"/>
             </Border.Effect>
-            <StackPanel x:Name="AddStackPanel">
-                <Grid Height="379.4">
+            <StackPanel x:Name="AddStackPanel" Margin="0.2,0.2,0,9.4">
+                <Grid Height="275">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -99,15 +93,25 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <TextBlock Grid.Row="2" Text="Количество копий" Style="{StaticResource TextBlockStyle}" Margin="-0.623,34.86,0.781,34.46" Width="194" Height="18.18"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBoxStyle}" Text="{Binding SelectedPurchaseItem.purchase_amount, Mode=TwoWay}" Height="20.4" Margin="0,33.55"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBoxStyle}" MaxLength="4" Text="{Binding SelectedPurchaseItem.purchase_amount, Mode=TwoWay}" Height="20.4" Margin="0,33.55"/>
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="1" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddPurchaseEvent}" Margin="5" Width="Auto" Height="Auto"/>
-                    <Button Grid.Column="0" Style="{StaticResource BaseButtonStyle}"  Content="{Binding ButtonStartPurchaseContent}" Command="{Binding PurchaseEvent}" Margin="5" Width="Auto" VerticalAlignment="Bottom"/>
+                    <Button Grid.Column="1" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding PurchaseAddEvent}" Margin="15" Width="Auto" Height="Auto"/>
+                    <Button Grid.Column="0" Style="{StaticResource BaseButtonStyle}"  Content="{Binding ButtonStartPurchaseContent}" Command="{Binding PurchaseSaveEvent}" Margin="15" Width="Auto" VerticalAlignment="Bottom"/>
+                </Grid>
+                <TextBlock Style="{StaticResource TextBlockStyle}" Text="Предварительный чек" Margin="0,10,0,0"/>
+                <TextBox IsReadOnly="True" Height="261" Margin="5,5,5.2,5" Background="LightCoral" Text="{Binding BuyTicketText}" Style="{DynamicResource TextBoxTicketStyle}"/>
+                <Grid Height="34" Margin="0,0,0.2,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="284*"/>
+                        <ColumnDefinition Width="143*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding BuyTicketTotalPriceText}" FontFamily="TimesNewRoman" Margin="5,8,0,8" HorizontalAlignment="Left" TextAlignment="Left" Style="{StaticResource TextBlockStyle}" Height="18" Width="269"/>
+                    <Button Grid.Column="1" Margin="7,5,5.2,5" Content="Отмена заказа" Command="{Binding CancelPurchaseTicketEvent}" Style="{DynamicResource CancelTicketButtonStyle}"/>
                 </Grid>
             </StackPanel>
         </Border>

@@ -3,12 +3,13 @@ using iTextSharp.text.pdf;
 using MusicStoreDB_App.Commands;
 using MusicStoreDB_App.Data;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -16,12 +17,15 @@ using Prism.Commands;
 
 namespace MusicStoreDB_App.ViewModels {
     public class PurchaseViewModel : BaseViewModel {
-        public CollectionViewSource Purchase { get; }
+        public CollectionViewSource PurchaseCollectionView { get; }
         public CollectionViewSource Album { get; }
         public CollectionViewSource Employee { get; }
-        public ICommand AddPurchaseEvent { get; set; }
-        private List<Purchase> purchases;
+        public ICommand PurchaseAddEvent { get; set; }
+        public ICommand PurchaseSaveEvent { get; set; }
+        public ICommand CancelPurchaseTicketEvent { get; set; }
+        public ObservableCollection<Purchase> PurchaseReceiptTicket { get; set; } = new ObservableCollection<Purchase>();
         private long nextUniquePurchaseNumber;
+        private int totalBuyTicketPrice;
         private DateTime timeNow;
 
         public string Name => "Продажи";
@@ -54,9 +58,20 @@ namespace MusicStoreDB_App.ViewModels {
             get => filterString;
             set {
                 SetProperty(ref filterString, value);
-                Purchase.View.Refresh();
+                PurchaseCollectionView.View.Refresh();
             }
         }
+        private string buyTicketText;
+        public string BuyTicketText {
+            get => buyTicketText;
+            set => SetProperty(ref buyTicketText, value);
+        }
+        private string buyTicketTotalPriceText;
+        public string BuyTicketTotalPriceText {
+            get => buyTicketTotalPriceText;
+            set => SetProperty(ref buyTicketTotalPriceText, value);
+        }
+
         private string buttonStartPurchaseContent;
         public string ButtonStartPurchaseContent {
             get => buttonStartPurchaseContent;
@@ -64,29 +79,48 @@ namespace MusicStoreDB_App.ViewModels {
         }
 
         public PurchaseViewModel() {
-            Purchase = new CollectionViewSource();
+            PurchaseCollectionView = new CollectionViewSource();
             Album = new CollectionViewSource();
             Employee = new CollectionViewSource();
             ButtonStartPurchaseContent = "Начать заказ";
-            ButtonAddContent = "Добавить";
+            ButtonAddContent = "Добавить в заказ";
+            BuyTicketTotalPriceText = "Общая сумма заказа: ";
             RefreshData();
-            PurchaseEvent = new DelegateCommand(Execute, () => true);
-            AddPurchaseEvent = new DelegateCommand(AddCommandExecute, () => true);
+            PurchaseSaveEvent = new DelegateCommand(ExecuteSaveCommand, () => true);
+            PurchaseAddEvent = new DelegateCommand(ExecuteAddCommand, () => true);
+            CancelPurchaseTicketEvent = new DelegateCommand(ExecuteCancelCommand, () => true);
             EditEvent = new EditCommand(this);
             RefreshEvent = new RefreshCommand(this);
             DeleteEvent = new DeleteCommand(this);
             ExportEvent = new ExportCommand(this);
         }
-        private void AddCommandExecute() {
-            if (ButtonStartPurchaseContent != "Сохранить") return;
+
+        private void ExecuteCancelCommand() {
+            PurchaseReceiptTicket.Clear();
+            BuyTicketText = "";
+            ButtonStartPurchaseContent = "Начать заказ";
+            BuyTicketTotalPriceText = "Общая сумма заказа: ";
+            totalBuyTicketPrice = 0;
+        }
+
+        private void ExecuteAddCommand() {
+            if (ButtonStartPurchaseContent != "Завершить заказ") return;
             try {
+                if (SelectedPurchaseItem.purchase_amount == 0) {
+                    MessageBox.Show("Введите правильное значение числа копий");
+                    return;
+                }
                 SelectedPurchaseItem.id_album = SelectedAlbumItem.id_album;
                 SelectedPurchaseItem.id_employee = SelectedEmployeeItem.id_employee;
                 SelectedPurchaseItem.purchase_number = nextUniquePurchaseNumber;
                 SelectedPurchaseItem.purchase_date = timeNow;
-                purchases.Add(selectedPurchaseItem);
+                PurchaseReceiptTicket.Add(SelectedPurchaseItem);
+                var currentPrice = CurrentPriceQuery();
+                BuyTicketText += $"Альбом: {SelectedAlbumItem.album_name}, {SelectedPurchaseItem.purchase_amount}шт., {currentPrice}р.\n";
+                totalBuyTicketPrice += currentPrice;
+                BuyTicketTotalPriceText = $"Общая сумма заказа: {totalBuyTicketPrice}р.";
                 CreatePurchaseItem();
-                MessageBox.Show($"Альбом добавлен в заказ\nВсего в заказе: {purchases.Count}", "Заказ",
+                MessageBox.Show($"Альбом добавлен в заказ\nВсего в заказе: {PurchaseReceiptTicket.Count}", "Заказ",
                     MessageBoxButton.OK, MessageBoxImage.Asterisk);
             }
             catch (Exception) {
@@ -94,21 +128,23 @@ namespace MusicStoreDB_App.ViewModels {
             }
         }
 
-        private void Execute() {
-            if (buttonStartPurchaseContent == "Сохранить") {
-                if (purchases.Count == 0) {
+        private void ExecuteSaveCommand() {
+            if (buttonStartPurchaseContent == "Завершить заказ") {
+                if (PurchaseReceiptTicket.Count == 0) {
                     ButtonStartPurchaseContent = "Начать заказ";
                     return;
                 }
                 AddPurchaseData();
-                MessageBox.Show($"Добавлено {purchases.Count} в итоговый заказ\nНомер заказа: {nextUniquePurchaseNumber}\nСумма заказа: {TotalPriceQuery()}");
+                MessageBox.Show($"Добавлено {PurchaseReceiptTicket.Count} в итоговый заказ\nНомер заказа: {nextUniquePurchaseNumber}\nСумма заказа: {TotalPriceQuery()}");
+                BuyTicketText = "";
+                BuyTicketTotalPriceText = "Общая сумма заказа: ";
                 ButtonStartPurchaseContent = "Начать заказ";
             } else {
                 CreatePurchaseItem();
+                PurchaseReceiptTicket.Clear();
                 nextUniquePurchaseNumber = GenerateUniquePurchaseNumber();
-                purchases = new List<Purchase>();
                 timeNow = DateTime.Now;
-                ButtonStartPurchaseContent = "Сохранить";
+                ButtonStartPurchaseContent = "Завершить заказ";
             }
         }
 
@@ -126,20 +162,29 @@ namespace MusicStoreDB_App.ViewModels {
                 return totalPrice;
             }
         }
-
+        private int CurrentPriceQuery() {
+            using (var dbContext = new MusicStoreDBEntities()) {
+                var currentPriceQuery = dbContext.Albums
+                    .Include(pr => pr.Price_List)
+                    .Where(currentPrice => currentPrice.id_price == SelectedAlbumItem.id_price)
+                    .Select(pr => pr.Price_List.purchase_price).First();
+                return currentPriceQuery * SelectedPurchaseItem.purchase_amount;
+            }
+        }
         private void CreatePurchaseItem() {
             var purchase = new Purchase();
             SelectedPurchaseItem = purchase;
         }
-
         public bool Filter(object obj) {
             if (!(obj is Purchase data)) return false;
             if (!string.IsNullOrEmpty(filterString)) {
-                return data.Album.album_name.Contains(filterString) || data.purchase_date.ToString(CultureInfo.CurrentCulture).Contains(filterString);
+                return data.purchase_number.ToString().Contains(filterString) ||
+                       data.purchase_date.ToString(CultureInfo.CurrentCulture).Contains(filterString) ||
+                       data.Album.album_name.Contains(filterString);
             }
             return true;
         }
-        public void ExportPurchasesToPdf() {
+        public async Task ExportPurchasesPdfAsync() {
             try {
                 var document = new Document();
                 var writer = PdfWriter.GetInstance(document, new FileStream("Отчёт по продажам.pdf", FileMode.Create));
@@ -150,13 +195,12 @@ namespace MusicStoreDB_App.ViewModels {
                     var font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
                     string[] nameColumns = {
                         "№ заказа",
+                        "Дата покупки",
+                        "Сумма заказа",
                         "Имя продавца",
                         "Название альбома",
                         "Название группы",
-                        "Число копий",
-                        "Цена",
-                        "Дата покупки",
-                        "Сумма заказа"
+                        "Число копий"
                     };
                     var table = new PdfPTable(nameColumns.Length) {
                         WidthPercentage = 100
@@ -168,7 +212,7 @@ namespace MusicStoreDB_App.ViewModels {
                         PaddingBottom = 10
                     };
                     table.AddCell(cell);
-                    var query = (from a in dbContext.Albums
+                    var query = await (from a in dbContext.Albums
                                  join g in dbContext.Groups on a.id_artist equals g.id_artist
                                  join p in dbContext.Purchases on a.id_album equals p.id_album
                                  join pr in dbContext.Price_List on a.id_price equals pr.id_price
@@ -181,7 +225,7 @@ namespace MusicStoreDB_App.ViewModels {
                                      p.purchase_date,
                                      pr.purchase_price,
                                      p.purchase_amount
-                                 }).ToList();
+                                 }).ToListAsync();
                     var totalPrice = query
                         .GroupBy(x => new {
                             x.purchase_number,
@@ -202,28 +246,16 @@ namespace MusicStoreDB_App.ViewModels {
                         };
                         table.AddCell(cell);
                     }
+
                     var isOnlyOne = true;
                     for (int i = 0, j = 0; i < query.Count; i++) {
-                        table.AddCell(new PdfPCell(new Phrase(query[i].purchase_number.ToString())) {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                            BackgroundColor = BaseColor.LIGHT_GRAY
-                        });
-                        table.AddCell(new PdfPCell(new Phrase(query[i].employee_name, font)) {
-                            HorizontalAlignment = Element.ALIGN_CENTER
-                        });
-                        table.AddCell(new PdfPCell(new Phrase(query[i].album_name, font)) {
-                            HorizontalAlignment = Element.ALIGN_CENTER
-                        });
-                        table.AddCell(new PdfPCell(new Phrase(query[i].group_name, font)) {
-                            HorizontalAlignment = Element.ALIGN_CENTER
-                        });
-                        table.AddCell(new PdfPCell(new Phrase(query[i].purchase_amount.ToString(), font)) {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                        });
-                        table.AddCell(new PdfPCell(new Phrase((query[i].purchase_price * query[i].purchase_amount).ToString(), font)) {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                        });
                         if (query[i].purchase_number == totalPrice[j].purchase_number && isOnlyOne) {
+                            table.AddCell(new PdfPCell(new Phrase(totalPrice[j].purchase_number.ToString(), font)) {
+                                HorizontalAlignment = Element.ALIGN_CENTER,
+                                BackgroundColor = BaseColor.LIGHT_GRAY,
+                                BorderColor = BaseColor.BLACK,
+                                BorderWidth = 1.6f
+                            });
                             table.AddCell(new PdfPCell(new Phrase(totalPrice[j].purchase_date.ToString(CultureInfo.InvariantCulture), font)) {
                                 HorizontalAlignment = Element.ALIGN_CENTER,
                                 BackgroundColor = BaseColor.LIGHT_GRAY
@@ -238,14 +270,26 @@ namespace MusicStoreDB_App.ViewModels {
                                 isOnlyOne = true;
                             }
                         } else {
-                            table.AddCell(new PdfPCell());
-                            table.AddCell(new PdfPCell());
+                            for (int k = 0; k < 3; k++) {
+                                table.AddCell(new PdfPCell());
+                            }
                         }
+                        table.AddCell(new PdfPCell(new Phrase(query[i].employee_name, font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                        table.AddCell(new PdfPCell(new Phrase(query[i].album_name, font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                        table.AddCell(new PdfPCell(new Phrase(query[i].group_name, font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER
+                        });
+                        table.AddCell(new PdfPCell(new Phrase(query[i].purchase_amount.ToString(), font)) {
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                        });
                     }
                     document.Add(table);
                 }
                 document.Close();
-                MessageBox.Show("Отчёт сформирован!", "Информация об отчёте", MessageBoxButton.OK, MessageBoxImage.Information);
                 Process.Start("Отчёт по продажам.pdf");
                 writer.Close();
             } catch (Exception ex) {
@@ -254,16 +298,15 @@ namespace MusicStoreDB_App.ViewModels {
         }
         public void RefreshData() {
             using (var dbContext = new MusicStoreDBEntities()) {
-                Purchase.Source = dbContext.Purchases
+                PurchaseCollectionView.Source = dbContext.Purchases
                     .Include(a => a.Album)
                     .Include(emp => emp.Employee)
                     .ToList();
                 Employee.Source = dbContext.Employees.ToList();
                 Album.Source = dbContext.Albums.ToList();
-                Purchase.View.Filter = Filter;
+                PurchaseCollectionView.View.Filter = Filter;
             }
         }
-
         private long GenerateUniquePurchaseNumber() {
             using (var dbContext = new MusicStoreDBEntities()) {
                 var numbers = dbContext.Purchases
@@ -279,11 +322,10 @@ namespace MusicStoreDB_App.ViewModels {
             }
             return nextUniquePurchaseNumber;
         }
-
         public void AddPurchaseData() {
             try {
                 using (var dbContext = new MusicStoreDBEntities()) {
-                    dbContext.Purchases.AddRange(purchases);
+                    dbContext.Purchases.AddRange(PurchaseReceiptTicket);
                     dbContext.SaveChanges();
                 }
                 RefreshData();

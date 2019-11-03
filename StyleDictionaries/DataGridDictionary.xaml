@@ -1,6 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MusicStoreDB_App">
+    <Style TargetType="DataGrid">
+        <Setter Property="EnableColumnVirtualization" Value="True"/>
+        <Setter Property="EnableRowVirtualization" Value="True"/>
+        <Setter Property="AlternatingRowBackground" Value="LightGray"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+    </Style>
     <Style TargetType="DataGridCell">
         <Style.Setters>
             <Setter Property="TextBlock.TextAlignment" Value="Center" />

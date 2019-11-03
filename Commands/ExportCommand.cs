@@ -25,7 +25,7 @@ namespace MusicStoreDB_App.Commands {
 
         public void Execute(object parameter)
         {
-            purchaseViewModel?.ExportPurchasesToPdf();
+            purchaseViewModel?.ExportPurchasesPdfAsync();
             albumSongsViewModel?.ExportAlbumSongsToPdf();
         }
     }

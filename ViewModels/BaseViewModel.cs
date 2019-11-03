@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using MusicStoreDB_App.Commands;
+﻿using MusicStoreDB_App.Commands;
 using Prism.Mvvm;
 
 namespace MusicStoreDB_App.ViewModels {
@@ -10,7 +9,6 @@ namespace MusicStoreDB_App.ViewModels {
         public RefreshCommand RefreshEvent { get; set; }
         public DeleteCommand DeleteEvent { get; set; }
         public EditCommand EditEvent { get; set; }
-        public  ICommand PurchaseEvent { get; set; }
 
         protected BaseViewModel() {
             ButtonAddContent = "Добавить";
