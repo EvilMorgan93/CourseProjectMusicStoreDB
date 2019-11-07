@@ -26,8 +26,8 @@ namespace MusicStoreDB_App.ViewModels {
         public ObservableCollection<Purchase> PurchaseReceiptTicket { get; set; } = new ObservableCollection<Purchase>();
         private long nextUniquePurchaseNumber;
         private int totalBuyTicketPrice;
+        private int indexBuyTicketPurchase;
         private DateTime timeNow;
-
         public string Name => "Продажи";
         private Purchase selectedPurchaseItem;
         public Purchase SelectedPurchaseItem {
@@ -71,13 +71,11 @@ namespace MusicStoreDB_App.ViewModels {
             get => buyTicketTotalPriceText;
             set => SetProperty(ref buyTicketTotalPriceText, value);
         }
-
         private string buttonStartPurchaseContent;
         public string ButtonStartPurchaseContent {
             get => buttonStartPurchaseContent;
             set => SetProperty(ref buttonStartPurchaseContent, value);
         }
-
         public PurchaseViewModel() {
             PurchaseCollectionView = new CollectionViewSource();
             Album = new CollectionViewSource();
@@ -94,7 +92,6 @@ namespace MusicStoreDB_App.ViewModels {
             DeleteEvent = new DeleteCommand(this);
             ExportEvent = new ExportCommand(this);
         }
-
         private void ExecuteCancelCommand() {
             PurchaseReceiptTicket.Clear();
             BuyTicketText = "";
@@ -102,7 +99,6 @@ namespace MusicStoreDB_App.ViewModels {
             BuyTicketTotalPriceText = "Общая сумма заказа: ";
             totalBuyTicketPrice = 0;
         }
-
         private void ExecuteAddCommand() {
             if (ButtonStartPurchaseContent != "Завершить заказ") return;
             try {
@@ -116,7 +112,7 @@ namespace MusicStoreDB_App.ViewModels {
                 SelectedPurchaseItem.purchase_date = timeNow;
                 PurchaseReceiptTicket.Add(SelectedPurchaseItem);
                 var currentPrice = CurrentPriceQuery();
-                BuyTicketText += $"Альбом: {SelectedAlbumItem.album_name}, {SelectedPurchaseItem.purchase_amount}шт., {currentPrice}р.\n";
+                BuyTicketText += $"{++indexBuyTicketPurchase}: {SelectedAlbumItem.album_name}, {SelectedPurchaseItem.purchase_amount}шт., {currentPrice}р.\n";
                 totalBuyTicketPrice += currentPrice;
                 BuyTicketTotalPriceText = $"Общая сумма заказа: {totalBuyTicketPrice}р.";
                 CreatePurchaseItem();
@@ -127,7 +123,6 @@ namespace MusicStoreDB_App.ViewModels {
                 MessageBox.Show("Необходимо заполнить все поля","Ошибка",MessageBoxButton.OK,MessageBoxImage.Error);
             }
         }
-
         private void ExecuteSaveCommand() {
             if (buttonStartPurchaseContent == "Завершить заказ") {
                 if (PurchaseReceiptTicket.Count == 0) {
@@ -135,7 +130,7 @@ namespace MusicStoreDB_App.ViewModels {
                     return;
                 }
                 AddPurchaseData();
-                MessageBox.Show($"Добавлено {PurchaseReceiptTicket.Count} в итоговый заказ\nНомер заказа: {nextUniquePurchaseNumber}\nСумма заказа: {TotalPriceQuery()}");
+                MessageBox.Show($"Добавлено {PurchaseReceiptTicket.Count} в итоговый заказ\nID заказа: {nextUniquePurchaseNumber}\nСумма заказа: {TotalPriceQuery()}");
                 BuyTicketText = "";
                 BuyTicketTotalPriceText = "Общая сумма заказа: ";
                 ButtonStartPurchaseContent = "Начать заказ";
@@ -144,10 +139,10 @@ namespace MusicStoreDB_App.ViewModels {
                 PurchaseReceiptTicket.Clear();
                 nextUniquePurchaseNumber = GenerateUniquePurchaseNumber();
                 timeNow = DateTime.Now;
+                indexBuyTicketPurchase = 0;
                 ButtonStartPurchaseContent = "Завершить заказ";
             }
         }
-
         private int TotalPriceQuery() {
             using (var dbContext = new MusicStoreDBEntities()) {
                 var totalPrice = (from a in dbContext.Albums
@@ -194,7 +189,7 @@ namespace MusicStoreDB_App.ViewModels {
                     var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
                     var font = new Font(baseFont, Font.DEFAULTSIZE, Font.NORMAL);
                     string[] nameColumns = {
-                        "№ заказа",
+                        "ID заказа",
                         "Дата покупки",
                         "Сумма заказа",
                         "Имя продавца",

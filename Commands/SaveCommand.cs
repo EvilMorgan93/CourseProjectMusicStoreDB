@@ -27,7 +27,7 @@ namespace MusicStoreDB_App.Commands {
                 case "Альбомы":
                     baseViewModel.SaveChanges();
                     break;
-                case "Альбомные композиции":
+                case "Композиции по альбомам":
                     baseViewModel.SaveChanges();
                     break;
             }

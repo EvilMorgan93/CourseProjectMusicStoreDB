@@ -30,7 +30,7 @@ namespace MusicStoreDB_App.Commands {
                 case "Продажи":
                     baseViewModel.DeletePurchaseData();
                     break;
-                case "Альбомные композиции":
+                case "Композиции по альбомам":
                     baseViewModel.DeleteAlbumSongData();
                     break;
             }

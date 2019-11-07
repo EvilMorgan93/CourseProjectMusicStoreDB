@@ -34,11 +34,9 @@ namespace MusicStoreDB_App.Commands {
                         };
                         currentViewModel.SelectedAlbumItem = album;
                         break;
-                    case "Альбомные композиции":
+                    case "Композиции по альбомам":
                         var albumSong = new Album_Songs();
                         currentViewModel.SelectedAlbumSongItem = albumSong;
-                        currentViewModel.SelectedAlbumItem = currentViewModel.Album.View.CurrentItem as Album;
-                        currentViewModel.SelectedSongItem = currentViewModel.Song.View.CurrentItem as Song;
                         break;
                 }
                 currentViewModel.ButtonAddContent = "Отмена";

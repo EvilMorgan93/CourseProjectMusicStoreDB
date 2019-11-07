@@ -6,6 +6,7 @@
              xmlns:prism ="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:local="clr-namespace:MusicStoreDB_App.Views"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="790" d:DesignWidth="1238">
     <Grid>
@@ -13,13 +14,19 @@
             <ColumnDefinition Width="63*"/>
             <ColumnDefinition Width="113*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="130*"/>
-            <RowDefinition Height="57*"/>
-        </Grid.RowDefinitions>
         <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,9.6" Background="White" Grid.Column ="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="25" Direction="305" ShadowDepth="6" Opacity="0.46"/>
+            </Border.Effect>
             <StackPanel Margin="0.2,9.2,0,9">
-                <TextBlock Text="Альбомные композиции" Style="{StaticResource TextBlockStyle}" Margin="277,0,267.2,0" Width="231"/>
+                <Grid Height="23" Margin="1,0,-0.8,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Композиции по альбомам" Style="{StaticResource TextBlockStyle}" Margin="98,2,74,2" Width="216"/>
+                    <xctk:WatermarkTextBox Watermark="Поиск" Grid.Column="1" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Right" Margin="0,0,35.2,-3" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" Height="26"/>
+                </Grid>
                 <DataGrid AutoGenerateColumns="False" ColumnWidth="*" SelectedItem="{Binding SelectedAlbumSongItem}" ItemsSource="{Binding AlbumSongs.View}" IsReadOnly="True" CanUserAddRows="False" Background="#FFA5A5A5" Height="384" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
@@ -32,41 +39,47 @@
                         <DataGridTextColumn Header="Номер трека" Width="*" Binding="{Binding track_number}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Height="58" Margin="10,15,159.2,0">
+                <Grid Height="58" Margin="10,15,117.2,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Style="{DynamicResource EditStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
-                    <Button Grid.Column="2" Style="{DynamicResource EditStyle}" Content="Отчёт по продажам" Command="{Binding ExportEvent}" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
+                    <Button Grid.Column="2" Style="{DynamicResource EditStyle}" Content="Отчёт по песням" Command="{Binding ExportEvent}" Width="Auto" Margin="25.2,7.6,24.8,7.6" Height="Auto"/>
                     <Button Grid.Column="1" Style="{StaticResource EditStyle}" Content="Изменить" Command="{Binding EditEvent}" Margin="25.6,8,24,8" Height="Auto" Width="Auto"/>
                 </Grid>
             </StackPanel>
         </Border>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,5.8,10" Background="White" Grid.Column="0">
-            <StackPanel x:Name="AddStackPanel" Margin="0.2,0.2,-0.2,-0.2">
-                <Grid Height="525">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,6.2,5" Background="White" Grid.Column="0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="25" Direction="305" ShadowDepth="6" Opacity="0.46"/>
+            </Border.Effect>
+            <StackPanel x:Name="AddStackPanel" Margin="0.2,0.2,0,9.4">
+                <Grid Height="275">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200*"/>
+                        <ColumnDefinition Width="233*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Text="Альбом" Style="{StaticResource TextBlockStyle}"/>
-                    <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxEditStyle}" ItemsSource="{Binding Album.View}" SelectedItem="{Binding SelectedAlbumItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_album" DisplayMemberPath="album_name"/>
-                    <TextBlock Grid.Row="1" Text="Композиция" Style="{StaticResource TextBlockStyle}"/>
-                    <ComboBox Grid.Column="1" Grid.Row="1" Style="{StaticResource ComboBoxEditStyle}" ItemsSource="{Binding Song.View}" SelectedItem="{Binding SelectedSongItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_song" DisplayMemberPath="song_title"/>
-                    <TextBlock Grid.Row="2" Text="Номер трека" Style="{StaticResource TextBlockStyle}"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBoxStyle}" Text="{Binding SelectedAlbumSongItem.track_number,Mode=TwoWay}"/>
-                    <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>
-                    <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource BaseButtonStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
+                    <TextBlock Grid.Row="0" Text="Альбом" Style="{StaticResource TextBlockStyle}" Height="18.18" Margin="7.077,34.66,7.081,34.66"/>
+                    <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxEditStyle}" ItemsSource="{Binding Album.View}" SelectedItem="{Binding SelectedAlbumItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_album" DisplayMemberPath="album_name" Height="24.4" Margin="0,31.55"/>
+                    <TextBlock Grid.Row="1" Text="Композиция" Style="{StaticResource TextBlockStyle}" Height="18.18" Margin="7.077,34.66,7.081,34.66"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" Style="{StaticResource ComboBoxEditStyle}" ItemsSource="{Binding Song.View}" SelectedItem="{Binding SelectedSongItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_song" DisplayMemberPath="song_title" Height="24.4" Margin="0,31.55"/>
+                    <TextBlock Grid.Row="2" Text="Номер трека" Style="{StaticResource TextBlockStyle}" Margin="-0.623,34.86,0.781,34.46" Width="194" Height="18.18"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBoxStyle}" MaxLength="2" Text="{Binding SelectedAlbumSongItem.track_number, Mode=TwoWay}" Height="20.4" Margin="0,33.55"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" Style="{StaticResource EditStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Margin="15" Width="Auto" Height="Auto"/>
+                    <Button Grid.Column="0" Style="{StaticResource BaseButtonStyle}"  Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Margin="15" Width="Auto" VerticalAlignment="Bottom"/>
                 </Grid>
             </StackPanel>
         </Border>

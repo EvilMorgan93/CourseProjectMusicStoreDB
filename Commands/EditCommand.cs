@@ -27,14 +27,14 @@ namespace MusicStoreDB_App.Commands
                 currentViewModel.EditSongData();
             }
             else if (currentViewModel.Name == "Альбомы") {
-
+                currentViewModel.EditeAlbumData();
             }
             else if (currentViewModel.Name == "Продажи") {
                 currentViewModel.EditPurchaseData();
             }
-            else if (currentViewModel.Name == "Альбомные композиции")
+            else if (currentViewModel.Name == "Композиции по альбомам")
             {
-                currentViewModel.EditAlbumSongsData();
+                currentViewModel.EditAlbumSongData();
             }
         }
     }
