@@ -66,16 +66,25 @@ namespace MusicStoreDB_App.ViewModels {
             get => buyTicketText;
             set => SetProperty(ref buyTicketText, value);
         }
+
         private string buyTicketTotalPriceText;
         public string BuyTicketTotalPriceText {
             get => buyTicketTotalPriceText;
             set => SetProperty(ref buyTicketTotalPriceText, value);
         }
+
         private string buttonStartPurchaseContent;
         public string ButtonStartPurchaseContent {
             get => buttonStartPurchaseContent;
             set => SetProperty(ref buttonStartPurchaseContent, value);
         }
+
+        public bool enableStackPanel;
+        public bool EnableStackPanel {
+            get => enableStackPanel;
+            set => SetProperty(ref enableStackPanel, value);
+        }
+
         public PurchaseViewModel() {
             PurchaseCollectionView = new CollectionViewSource();
             Album = new CollectionViewSource();
@@ -83,6 +92,7 @@ namespace MusicStoreDB_App.ViewModels {
             ButtonStartPurchaseContent = "Начать заказ";
             ButtonAddContent = "Добавить в заказ";
             BuyTicketTotalPriceText = "Общая сумма заказа: ";
+            EnableStackPanel = true;
             RefreshData();
             PurchaseSaveEvent = new DelegateCommand(ExecuteSaveCommand, () => true);
             PurchaseAddEvent = new DelegateCommand(ExecuteAddCommand, () => true);
@@ -125,6 +135,7 @@ namespace MusicStoreDB_App.ViewModels {
         }
         private void ExecuteSaveCommand() {
             if (buttonStartPurchaseContent == "Завершить заказ") {
+                EnableStackPanel = true;
                 if (PurchaseReceiptTicket.Count == 0) {
                     ButtonStartPurchaseContent = "Начать заказ";
                     return;
@@ -141,6 +152,7 @@ namespace MusicStoreDB_App.ViewModels {
                 timeNow = DateTime.Now;
                 indexBuyTicketPurchase = 0;
                 ButtonStartPurchaseContent = "Завершить заказ";
+                EnableStackPanel = false;
             }
         }
         private int TotalPriceQuery() {
