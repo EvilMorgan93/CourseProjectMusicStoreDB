@@ -63,16 +63,15 @@ namespace MusicStoreDB_App.ViewModels {
             ExportEvent = new ExportCommand(this);
         }
         public void RefreshData() {
-            using (var dbContext = new MusicStoreDBEntities()) {
-                AlbumSongs.SortDescriptions.Add(new SortDescription("id_album", ListSortDirection.Ascending));
-                AlbumSongs.Source = dbContext.Album_Songs
-                    .Include(a => a.Album)
-                    .Include(s => s.Song)
-                    .ToList();
-                Song.Source = dbContext.Songs.ToList();
-                Album.Source = dbContext.Albums.ToList();
-                AlbumSongs.View.Filter = Filter;
-            }
+            using var dbContext = new MusicStoreDBEntities();
+            AlbumSongs.SortDescriptions.Add(new SortDescription("id_album", ListSortDirection.Ascending));
+            AlbumSongs.Source = dbContext.Album_Songs
+                .Include(a => a.Album)
+                .Include(s => s.Song)
+                .ToList();
+            Song.Source = dbContext.Songs.ToList();
+            Album.Source = dbContext.Albums.ToList();
+            AlbumSongs.View.Filter = Filter;
         }
         private bool Filter(object obj) {
             if (!(obj is Album_Songs data)) return false;
@@ -178,12 +177,11 @@ namespace MusicStoreDB_App.ViewModels {
         }
         public void AddAlbumSongData() {
             try {
-                using (var dbContext = new MusicStoreDBEntities()) {
-                    SelectedAlbumSongItem.id_album = SelectedAlbumItem.id_album;
-                    SelectedAlbumSongItem.id_song = SelectedSongItem.id_song;
-                    dbContext.Album_Songs.Add(SelectedAlbumSongItem);
-                    dbContext.SaveChanges();
-                }
+                using var dbContext = new MusicStoreDBEntities();
+                SelectedAlbumSongItem.id_album = SelectedAlbumItem.id_album;
+                SelectedAlbumSongItem.id_song = SelectedSongItem.id_song;
+                dbContext.Album_Songs.Add(SelectedAlbumSongItem);
+                dbContext.SaveChanges();
                 RefreshData();
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
@@ -191,14 +189,13 @@ namespace MusicStoreDB_App.ViewModels {
         }
         public void EditAlbumSongData() {
             try {
-                using (var dbContext = new MusicStoreDBEntities()) {
-                    dbContext.Albums.Attach(SelectedAlbumItem);
-                    dbContext.Songs.Attach(SelectedSongItem);
-                    SelectedAlbumSongItem.id_album = SelectedAlbumItem.id_album;
-                    SelectedAlbumSongItem.id_song = SelectedSongItem.id_song;
-                    dbContext.Entry(SelectedAlbumSongItem).State = EntityState.Modified;
-                    dbContext.SaveChanges();
-                }
+                using var dbContext = new MusicStoreDBEntities();
+                dbContext.Albums.Attach(SelectedAlbumItem);
+                dbContext.Songs.Attach(SelectedSongItem);
+                SelectedAlbumSongItem.id_album = SelectedAlbumItem.id_album;
+                SelectedAlbumSongItem.id_song = SelectedSongItem.id_song;
+                dbContext.Entry(SelectedAlbumSongItem).State = EntityState.Modified;
+                dbContext.SaveChanges();
                 RefreshData();
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
@@ -206,10 +203,9 @@ namespace MusicStoreDB_App.ViewModels {
         }
         public void DeleteAlbumSongData() {
             try {
-                using (var dbContext = new MusicStoreDBEntities()) {
-                    dbContext.Entry(SelectedAlbumSongItem).State = EntityState.Deleted;
-                    dbContext.SaveChanges();
-                }
+                using var dbContext = new MusicStoreDBEntities();
+                dbContext.Entry(SelectedAlbumSongItem).State = EntityState.Deleted;
+                dbContext.SaveChanges();
                 RefreshData();
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);

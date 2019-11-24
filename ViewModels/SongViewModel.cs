@@ -28,10 +28,9 @@ namespace MusicStoreDB_App.ViewModels {
             DeleteEvent = new DeleteCommand(this);
         }
         public void RefreshData() {
-            using (var dbContext = new MusicStoreDBEntities()) {
-                Songs.Source = dbContext.Songs
-                    .ToList();
-            }
+            using var dbContext = new MusicStoreDBEntities();
+            Songs.Source = dbContext.Songs
+                .ToList();
         }
         public void SaveChanges() {
             try {
@@ -57,12 +56,11 @@ namespace MusicStoreDB_App.ViewModels {
         }
         public void DeleteSongData() {
             try {
-                using (var dbContext = new MusicStoreDBEntities()) {
-                    var entity = SelectedSongItem;
-                    dbContext.Entry(entity).State = EntityState.Deleted;
-                    dbContext.SaveChanges();
-                    RefreshData();
-                }
+                using var dbContext = new MusicStoreDBEntities();
+                var entity = SelectedSongItem;
+                dbContext.Entry(entity).State = EntityState.Deleted;
+                dbContext.SaveChanges();
+                RefreshData();
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }

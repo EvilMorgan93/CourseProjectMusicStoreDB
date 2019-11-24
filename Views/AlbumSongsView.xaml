@@ -14,7 +14,7 @@
             <ColumnDefinition Width="63*"/>
             <ColumnDefinition Width="113*"/>
         </Grid.ColumnDefinitions>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,9.6" Background="White" Grid.Column ="1">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,5.4" Background="White" Grid.Column ="1">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="25" Direction="305" ShadowDepth="6" Opacity="0.46"/>
             </Border.Effect>

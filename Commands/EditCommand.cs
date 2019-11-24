@@ -27,7 +27,7 @@ namespace MusicStoreDB_App.Commands
                 currentViewModel.EditSongData();
             }
             else if (currentViewModel.Name == "Альбомы") {
-                currentViewModel.EditeAlbumData();
+                currentViewModel.EditAlbumData();
             }
             else if (currentViewModel.Name == "Продажи") {
                 currentViewModel.EditPurchaseData();

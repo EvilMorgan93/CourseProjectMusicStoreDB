@@ -17,10 +17,13 @@
             <RowDefinition Height="130*"/>
             <RowDefinition Height="57*"/>
         </Grid.RowDefinitions>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="10.2,10,8,9.8" Background="White" Grid.RowSpan="2" Grid.Column ="1">
-            <StackPanel Margin="0.2,9.2,0,9">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,10.4,9.6" Background="White" Grid.Column ="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="25" Direction="305" ShadowDepth="6" Opacity="0.46"/>
+            </Border.Effect>
+            <StackPanel Margin="0.2,9.2,0.4,8.8">
                 <TextBlock Text="Альбомы" Style="{StaticResource TextBlockStyle}"/>
-                <DataGrid AutoGenerateColumns="False" ColumnWidth="*" SelectedItem="{Binding SelectedAlbumItem}" ItemsSource="{Binding Albums.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
+                <DataGrid AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" SelectedItem="{Binding SelectedAlbumItem}" ItemsSource="{Binding Albums.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="384" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
                             <MenuItem Header="Удалить" Command="{Binding DeleteEvent}"/>
@@ -33,47 +36,48 @@
                         <DataGridTextColumn Header="Исполнитель" Width="*" Binding="{Binding Group.group_name}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid x:Name="DataGrid" AutoGenerateColumns="False" ColumnWidth="*" ItemsSource="{Binding Groups.View}" CanUserReorderColumns="False" EnableRowVirtualization="false" EnableColumnVirtualization="false"  CanUserAddRows="False" Background="#FFA5A5A5" Height="208" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID Исполнителя" Width="*" Binding="{Binding id_artist}"/>
-                        <DataGridTextColumn Header="Название исполнителя" Width="*" Binding="{Binding group_name}"/>
-                        <DataGridTextColumn Header="Страна" Width="*" Binding="{Binding country_name}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <Grid Height="58" Margin="10,15,364.2,0">
+                <Grid Height="58" Margin="10,15,327.8,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Style="{StaticResource EditStyle}" Content="Обновить" Command="{Binding RefreshEvent}" Width="Auto" Margin="25,8,24.6,8.2" Height="Auto"/>
+                    <Button Grid.Column="1" Style="{StaticResource EditStyle}" Content="Изменить" Command="{Binding EditEvent}" Margin="25.6,8,24,8" Height="Auto" Width="Auto"/>
                 </Grid>
             </StackPanel>
         </Border>
-        <Border Visibility="Visible" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,6.2,0" Background="White" Grid.Column="0" Height="530" VerticalAlignment="Top">
-            <StackPanel x:Name="AddStackPanel">
-                <Grid Height="525">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,6.2,9.6" Background="White" Grid.Column="0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="25" Direction="305" ShadowDepth="6" Opacity="0.46"/>
+            </Border.Effect>
+            <StackPanel x:Name="AddStackPanel" Margin="0.2,0.2,0,9.4">
+                <Grid Height="358" Margin="0,0,0.2,0">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200*"/>
+                        <ColumnDefinition Width="233*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Text="Название альбома" Style="{StaticResource TextBlockStyle}"/>
-                    <TextBox Grid.Column="1" Style="{StaticResource TextBoxStyle}" Text="{Binding SelectedAlbumItem.album_name, Mode=TwoWay}"/>
-                    <TextBlock Grid.Row="1" Text="Дата выхода" Style="{StaticResource TextBlockStyle}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBoxStyle}" Text="{Binding SelectedAlbumItem.album_name, Mode=TwoWay}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата выхода" Style="{StaticResource TextBlockStyle}"/>
                     <DatePicker Grid.Column="1" Style="{StaticResource DatePickerStyle}" Grid.Row="1" SelectedDate="{Binding SelectedAlbumItem.album_year, Mode=TwoWay, StringFormat=\{0:dd.MM.yyyy\}}"/>
-                    <TextBlock Grid.Row="2" Text="ID Исполнителя" Style="{StaticResource TextBlockStyle}"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TextBoxStyle}" Text="{Binding SelectedAlbumItem.id_artist,Mode=TwoWay}"/>
-                    <TextBlock Grid.Row="3" Text="ID прайс листа" Style="{StaticResource TextBlockStyle}"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TextBoxStyle}" Text="{Binding SelectedAlbumItem.id_price,Mode=TwoWay}"/>
-                    <Button Grid.Row="5" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="25,17.4,24.4,26.8" Height="Auto"/>
-                    <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource BaseButtonStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="25.4,0,25.2,26.8" Height="42.534" VerticalAlignment="Bottom"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Исполнитель" Style="{StaticResource TextBlockStyle}"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1" Style="{StaticResource ComboBoxEditStyle}" ItemsSource="{Binding Groups.View}" SelectedItem="{Binding SelectedGroupItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_group" DisplayMemberPath="group_name"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Прайс лист" Style="{StaticResource TextBlockStyle}"/>
+                    <ComboBox Grid.Row="3" Grid.Column="1" Style="{StaticResource ComboBoxEditStyle}" ItemsSource="{Binding PriceList.View}" SelectedItem="{Binding SelectedPriceListItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_price" DisplayMemberPath="purchase_price"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Row="0" Style="{StaticResource EditStyle}" Content="{Binding ButtonAddContent}" Command="{Binding AddEvent}" Width="Auto" Margin="15" Height="Auto"/>
+                    <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource BaseButtonStyle}" Content="Сохранить" Command="{Binding SaveEvent}" Width="Auto" Margin="15" Height="42.534" VerticalAlignment="Bottom"/>
                 </Grid>
             </StackPanel>
         </Border>
