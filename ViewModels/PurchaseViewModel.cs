@@ -20,6 +20,7 @@ namespace MusicStoreDB_App.ViewModels {
         public CollectionViewSource PurchaseCollectionView { get; }
         public CollectionViewSource Album { get; }
         public CollectionViewSource Employee { get; }
+        public CollectionViewSource Price { get; }
         public ICommand PurchaseAddEvent { get; set; }
         public ICommand PurchaseSaveEvent { get; set; }
         public ICommand CancelPurchaseTicketEvent { get; set; }
@@ -27,8 +28,14 @@ namespace MusicStoreDB_App.ViewModels {
         private long nextUniquePurchaseNumber;
         private int totalBuyTicketPrice;
         private int indexBuyTicketPurchase;
+        private int currentIdEmployee;
         private DateTime timeNow;
         public string Name => "Продажи";
+        private Price_List selectedPriceList;
+        public Price_List SelectedPriceList {
+            get => selectedPriceList;
+            set => SetProperty(ref selectedPriceList, value);
+        }
         private Purchase selectedPurchaseItem;
         public Purchase SelectedPurchaseItem {
             get => selectedPurchaseItem;
@@ -37,9 +44,11 @@ namespace MusicStoreDB_App.ViewModels {
                 if (selectedPurchaseItem == null) {
                     SelectedAlbumItem = Album.View.CurrentItem as Album;
                     SelectedEmployeeItem = Employee.View.CurrentItem as Employee;
+                    SelectedPriceList = Price.View.CurrentItem as Price_List;
                 } else {
                     SelectedAlbumItem = selectedPurchaseItem.Album;
                     SelectedEmployeeItem = selectedPurchaseItem.Employee;
+                    SelectedPriceList = selectedPurchaseItem.Price_List;
                 }
             }
         }
@@ -89,6 +98,7 @@ namespace MusicStoreDB_App.ViewModels {
             PurchaseCollectionView = new CollectionViewSource();
             Album = new CollectionViewSource();
             Employee = new CollectionViewSource();
+            Price = new CollectionViewSource();
             ButtonStartPurchaseContent = "Начать заказ";
             ButtonAddContent = "Добавить в заказ";
             BuyTicketTotalPriceText = "Общая сумма заказа: ";
@@ -116,10 +126,18 @@ namespace MusicStoreDB_App.ViewModels {
                     MessageBox.Show("Введите правильное значение числа копий");
                     return;
                 }
+                if (currentIdEmployee == 0) {
+                    currentIdEmployee = SelectedEmployeeItem.id_employee;
+                }
+                if (currentIdEmployee != SelectedEmployeeItem.id_employee) {
+                    MessageBox.Show($"Выберите правильного продавца!");
+                    return;
+                }
                 SelectedPurchaseItem.id_album = SelectedAlbumItem.id_album;
                 SelectedPurchaseItem.id_employee = SelectedEmployeeItem.id_employee;
                 SelectedPurchaseItem.purchase_number = nextUniquePurchaseNumber;
                 SelectedPurchaseItem.purchase_date = timeNow;
+                SelectedPurchaseItem.id_price = SelectedPriceList.id_price;
                 PurchaseReceiptTicket.Add(SelectedPurchaseItem);
                 var currentPrice = CurrentPriceQuery();
                 BuyTicketText += $"{++indexBuyTicketPurchase}: {SelectedAlbumItem.album_name}, {SelectedPurchaseItem.purchase_amount}шт., {currentPrice}р.\n";
@@ -145,6 +163,7 @@ namespace MusicStoreDB_App.ViewModels {
                 BuyTicketText = "";
                 BuyTicketTotalPriceText = "Общая сумма заказа: ";
                 ButtonStartPurchaseContent = "Начать заказ";
+                currentIdEmployee = 0;
             } else {
                 CreatePurchaseItem();
                 PurchaseReceiptTicket.Clear();
@@ -156,27 +175,20 @@ namespace MusicStoreDB_App.ViewModels {
             }
         }
         private int TotalPriceQuery() {
-            using (var dbContext = new MusicStoreDBEntities()) {
-                var totalPrice = (from a in dbContext.Albums
-                                  join p in dbContext.Purchases on a.id_album equals p.id_album
-                                  join pr in dbContext.Price_List on a.id_price equals pr.id_price
-                                  select new {
-                                      p.purchase_number,
-                                      pr.purchase_price,
-                                      p.purchase_amount
-                                  }).Where(p => p.purchase_number == nextUniquePurchaseNumber)
-                    .Sum(pr => pr.purchase_price * pr.purchase_amount);
-                return totalPrice;
-            }
+            using var dbContext = new MusicStoreDBEntities();
+            var totalPrice = (from a in dbContext.Albums
+                    join p in dbContext.Purchases on a.id_album equals p.id_album
+                    join pr in dbContext.Price_List on p.id_price equals pr.id_price
+                    select new {
+                        p.purchase_number,
+                        pr.purchase_price,
+                        p.purchase_amount
+                    }).Where(p => p.purchase_number == nextUniquePurchaseNumber)
+                .Sum(pr => pr.purchase_price * pr.purchase_amount);
+            return totalPrice;
         }
         private int CurrentPriceQuery() {
-            using (var dbContext = new MusicStoreDBEntities()) {
-                var currentPriceQuery = dbContext.Albums
-                    .Include(pr => pr.Price_List)
-                    .Where(currentPrice => currentPrice.id_price == SelectedAlbumItem.id_price)
-                    .Select(pr => pr.Price_List.purchase_price).First();
-                return currentPriceQuery * SelectedPurchaseItem.purchase_amount;
-            }
+            return SelectedPriceList.purchase_price * SelectedPurchaseItem.purchase_amount;
         }
         private void CreatePurchaseItem() {
             var purchase = new Purchase();
@@ -222,7 +234,7 @@ namespace MusicStoreDB_App.ViewModels {
                     var query = await (from a in dbContext.Albums
                                  join g in dbContext.Groups on a.id_artist equals g.id_artist
                                  join p in dbContext.Purchases on a.id_album equals p.id_album
-                                 join pr in dbContext.Price_List on a.id_price equals pr.id_price
+                                 join pr in dbContext.Price_List on p.id_price equals pr.id_price
                                  join emp in dbContext.Employees on p.id_employee equals emp.id_employee orderby p.purchase_date
                                  select new {
                                      emp.employee_name,
@@ -236,12 +248,14 @@ namespace MusicStoreDB_App.ViewModels {
                     var totalPrice = query
                         .GroupBy(x => new {
                             x.purchase_number,
-                            x.purchase_date
+                            x.purchase_date,
+                            x.employee_name
                         })
                         .Select(x => new {
                             x.Key.purchase_number,
                             x.Key.purchase_date,
-                            purchase_prise = x.Sum(z => z.purchase_amount * z.purchase_price)
+                            x.Key.employee_name,
+                            price = x.Sum(z => z.purchase_amount * z.purchase_price)
                         }).ToArray();
 
                     foreach (var t in nameColumns)
@@ -267,9 +281,12 @@ namespace MusicStoreDB_App.ViewModels {
                                 HorizontalAlignment = Element.ALIGN_CENTER,
                                 BackgroundColor = BaseColor.LIGHT_GRAY
                             });
-                            table.AddCell(new PdfPCell(new Phrase(totalPrice[j].purchase_prise.ToString(), font)) {
+                            table.AddCell(new PdfPCell(new Phrase(totalPrice[j].price.ToString(), font)) {
                                 HorizontalAlignment = Element.ALIGN_CENTER,
                                 BackgroundColor = BaseColor.RED
+                            });
+                            table.AddCell(new PdfPCell(new Phrase(totalPrice[j].employee_name, font)) {
+                                HorizontalAlignment = Element.ALIGN_CENTER
                             });
                             isOnlyOne = false;
                             if (totalPrice.Length - 1 != j) {
@@ -277,13 +294,10 @@ namespace MusicStoreDB_App.ViewModels {
                                 isOnlyOne = true;
                             }
                         } else {
-                            for (int k = 0; k < 3; k++) {
+                            for (int k = 0; k < 4; k++) {
                                 table.AddCell(new PdfPCell());
                             }
                         }
-                        table.AddCell(new PdfPCell(new Phrase(query[i].employee_name, font)) {
-                            HorizontalAlignment = Element.ALIGN_CENTER
-                        });
                         table.AddCell(new PdfPCell(new Phrase(query[i].album_name, font)) {
                             HorizontalAlignment = Element.ALIGN_CENTER
                         });
@@ -304,15 +318,16 @@ namespace MusicStoreDB_App.ViewModels {
             }
         }
         public void RefreshData() {
-            using (var dbContext = new MusicStoreDBEntities()) {
-                PurchaseCollectionView.Source = dbContext.Purchases
-                    .Include(a => a.Album)
-                    .Include(emp => emp.Employee)
-                    .ToList();
-                Employee.Source = dbContext.Employees.ToList();
-                Album.Source = dbContext.Albums.ToList();
-                PurchaseCollectionView.View.Filter = Filter;
-            }
+            using var dbContext = new MusicStoreDBEntities();
+            PurchaseCollectionView.Source = dbContext.Purchases
+                .Include(a => a.Album)
+                .Include(emp => emp.Employee)
+                .Include(pr => pr.Price_List)
+                .ToList();
+            Employee.Source = dbContext.Employees.ToList();
+            Album.Source = dbContext.Albums.ToList();
+            Price.Source = dbContext.Price_List.ToList();
+            PurchaseCollectionView.View.Filter = Filter;
         }
         private long GenerateUniquePurchaseNumber() {
             using (var dbContext = new MusicStoreDBEntities()) {
@@ -345,8 +360,10 @@ namespace MusicStoreDB_App.ViewModels {
                 using (var dbContext = new MusicStoreDBEntities()) {
                     dbContext.Albums.Attach(SelectedAlbumItem);
                     dbContext.Employees.Attach(SelectedEmployeeItem);
+                    dbContext.Price_List.Attach(SelectedPriceList);
                     SelectedPurchaseItem.id_album = SelectedAlbumItem.id_album;
                     SelectedPurchaseItem.id_employee = SelectedEmployeeItem.id_employee;
+                    SelectedPurchaseItem.id_price = SelectedPriceList.id_price;
                     dbContext.Entry(SelectedPurchaseItem).State = EntityState.Modified;
                     dbContext.SaveChanges();
                 }

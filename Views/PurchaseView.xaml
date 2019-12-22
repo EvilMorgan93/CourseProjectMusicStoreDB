@@ -8,13 +8,13 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:local="clr-namespace:MusicStoreDB_App.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="790" d:DesignWidth="1238">
+             d:DesignHeight="840" d:DesignWidth="1238">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="63*"/>
             <ColumnDefinition Width="113*"/>
         </Grid.ColumnDefinitions>
-        <Border IsEnabled="{Binding EnableStackPanel, UpdateSourceTrigger=PropertyChanged}" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,5" Background="White" Grid.Column ="1">
+        <Border IsEnabled="{Binding EnableStackPanel, UpdateSourceTrigger=PropertyChanged}" BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="9.8,10,8.4,10.4" Background="White" Grid.Column ="1">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="25" Direction="305" ShadowDepth="6" Opacity="0.46"/>
             </Border.Effect>
@@ -27,7 +27,7 @@
                     <TextBlock Text="История продаж" Style="{StaticResource TextBlockStyle}"/>
                     <xctk:WatermarkTextBox Watermark="Поиск" Grid.Column="1" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Right" Margin="0,0,35.2,-3" Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" Height="26"/>
                 </Grid>
-                <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedPurchaseItem}" ItemsSource="{Binding PurchaseCollectionView.View}" CanUserAddRows="False" Background="#FFA5A5A5" Height="526" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
+                <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedPurchaseItem}" ItemsSource="{Binding PurchaseCollectionView.View}" CanUserAddRows="False" Background="#FFA5A5A5" Height="568" Margin="10,20,10.2,0" VerticalAlignment="Top" BorderBrush="#FFA5A5A5">
                     <DataGrid.ContextMenu>
                         <ContextMenu StaysOpen="True" Background="WhiteSmoke">
                             <MenuItem Header="Удалить" Command="{Binding DeleteEvent}"/>
@@ -44,6 +44,7 @@
                             </DataGridTextColumn.Binding>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Количество копий" Width="auto" Binding="{Binding purchase_amount}"/>
+                        <DataGridTextColumn Header="Цена" Width="auto" Binding="{Binding Price_List.purchase_price}"/>
                         <DataGridTextColumn Header="Дата" Width="*" Binding="{Binding purchase_date, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}"/>
                         <DataGridTextColumn Header="ID заказа" Width="100" Binding="{Binding purchase_number}"/>
                     </DataGrid.Columns>
@@ -60,13 +61,14 @@
                 </Grid>
             </StackPanel>
         </Border>
-        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,6.2,5" Background="White" Grid.Column="0">
+        <Border BorderThickness="1" BorderBrush="LightGray" CornerRadius="8" Margin="8,10,6.2,10.4" Background="White" Grid.Column="0">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="25" Direction="305" ShadowDepth="6" Opacity="0.46"/>
             </Border.Effect>
             <StackPanel x:Name="AddStackPanel" Margin="0.2,0.2,0,9.4">
-                <Grid Height="275">
+                <Grid Height="353" Margin="0,0,0.2,0">
                     <Grid.RowDefinitions>
+                        <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -94,6 +96,8 @@
                     </ComboBox>
                     <TextBlock Grid.Row="2" Text="Количество копий" Style="{StaticResource TextBlockStyle}" Margin="-0.623,34.86,0.781,34.46" Width="194" Height="18.18"/>
                     <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBoxStyle}" MaxLength="4" Text="{Binding SelectedPurchaseItem.purchase_amount, Mode=TwoWay}" Height="20.4" Margin="0,33.55"/>
+                    <TextBlock Grid.Row="3" Text="Цена" Style="{StaticResource TextBlockStyle}" Margin="-0.623,34.86,0.781,34.46" Width="194" Height="18.18"/>
+                    <ComboBox Grid.Column="1" Grid.Row="3" Style="{StaticResource ComboBoxEditStyle}" ItemsSource="{Binding Price.View}" SelectedItem="{Binding SelectedPriceList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="id_price" DisplayMemberPath="purchase_price" Height="24.4" Margin="0,31.55"/>
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -104,7 +108,7 @@
                     <Button Grid.Column="0" Style="{StaticResource BaseButtonStyle}"  Content="{Binding ButtonStartPurchaseContent}" Command="{Binding PurchaseSaveEvent}" Margin="15" Width="Auto" VerticalAlignment="Bottom"/>
                 </Grid>
                 <TextBlock Style="{StaticResource TextBlockStyle}" Text="Предварительный чек" Margin="0,10,0,0"/>
-                <TextBox IsReadOnly="True" Height="261" Margin="5,5,5.2,5" Padding="5,5,0,5" Background="LightCoral" Text="{Binding BuyTicketText}" Style="{DynamicResource TextBoxTicketStyle}"/>
+                <TextBox IsReadOnly="True" Height="219" Margin="5,5,5.2,5" Padding="5,5,0,5" Background="LightCoral" Text="{Binding BuyTicketText}" Style="{DynamicResource TextBoxTicketStyle}"/>
                 <Grid Height="34" Margin="0,0,0.2,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="284*"/>

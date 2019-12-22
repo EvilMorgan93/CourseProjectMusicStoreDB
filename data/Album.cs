@@ -23,14 +23,12 @@ namespace MusicStoreDB_App.Data
     
         public int id_album { get; set; }
         public int id_artist { get; set; }
-        public int id_price { get; set; }
         public string album_name { get; set; }
         public System.DateTime album_year { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Album_Songs> Album_Songs { get; set; }
         public virtual Group Group { get; set; }
-        public virtual Price_List Price_List { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Purchase> Purchases { get; set; }
     }

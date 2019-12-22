@@ -4,26 +4,26 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6a60301fdca848c7b6e0d399aed70f74" Name="Diagram1" ZoomLevel="94">
+      <Diagram DiagramId="6a60301fdca848c7b6e0d399aed70f74" Name="Diagram1" ZoomLevel="62">
         <AssociationConnector Association="MusicStoreDBModel.FK_Albums_Album_Songs1" />
-        <EntityTypeShape EntityType="MusicStoreDBModel.Album_Songs" Width="1.5" PointX="7.5" PointY="3.625" />
-        <EntityTypeShape EntityType="MusicStoreDBModel.Album" Width="1.5" PointX="5.25" PointY="3.375" />
-        <EntityTypeShape EntityType="MusicStoreDBModel.Country" Width="1.5" PointX="0.75" PointY="1" />
-        <EntityTypeShape EntityType="MusicStoreDBModel.Employee" Width="1.5" PointX="8.25" PointY="0.75" />
-        <EntityTypeShape EntityType="MusicStoreDBModel.Genre" Width="1.5" PointX="0.75" PointY="4" />
-        <EntityTypeShape EntityType="MusicStoreDBModel.Group" Width="1.5" PointX="3" PointY="3.5" />
-        <EntityTypeShape EntityType="MusicStoreDBModel.Price_List" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Album_Songs" Width="1.5" PointX="7.5" PointY="3.875" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Album" Width="1.5" PointX="5.25" PointY="3.75" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Country" Width="1.5" PointX="0.75" PointY="4.125" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Employee" Width="1.5" PointX="8.25" PointY="7.125" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Genre" Width="1.5" PointX="0.75" PointY="1.125" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Group" Width="1.5" PointX="3" PointY="3.75" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Price_List" Width="1.5" PointX="8.25" PointY="0.75" />
         <EntityTypeShape EntityType="MusicStoreDBModel.Purchase" Width="1.5" PointX="10.5" PointY="3.5" />
-        <EntityTypeShape EntityType="MusicStoreDBModel.Song" Width="1.5" PointX="5.25" PointY="6.625" />
+        <EntityTypeShape EntityType="MusicStoreDBModel.Song" Width="1.5" PointX="5.25" PointY="1" />
         <EntityTypeShape EntityType="MusicStoreDBModel.sysdiagram" Width="1.5" PointX="0.75" PointY="7.625" />
         <AssociationConnector Association="MusicStoreDBModel.Album_Songs_Albums__fk" />
         <AssociationConnector Association="MusicStoreDBModel.Album_Songs_Songs_id_song_fk" />
         <AssociationConnector Association="MusicStoreDBModel.FK_Albums_Groups" />
-        <AssociationConnector Association="MusicStoreDBModel.FK_Albums_Price_List" />
         <AssociationConnector Association="MusicStoreDBModel.FK_Purchases_Albums" />
         <AssociationConnector Association="MusicStoreDBModel.FK_Groups_Countries" />
         <AssociationConnector Association="MusicStoreDBModel.FK_Purchases_Employees" />
         <AssociationConnector Association="MusicStoreDBModel.FK_Groups_Genres" />
+        <AssociationConnector Association="MusicStoreDBModel.Purchases_Price_List_id_price_fk" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

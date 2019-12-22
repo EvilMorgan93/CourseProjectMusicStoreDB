@@ -6,7 +6,7 @@
         xmlns:prism ="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Music Store Database" Height="790" Width="1238" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Background="LightGray" Icon="../Resources/music.ico">
+        Title="Music Store Database" Height="840" Width="1400" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Background="LightGray" Icon="../Resources/music.ico">
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
